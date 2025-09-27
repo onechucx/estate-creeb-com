@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creeb Community Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      html.light {
+        --brand-primary: #1E3A8A;
+        --brand-secondary: #3B82F6;
+        --brand-accent: #10B981;
+        --brand-background: #F9FAFB;
+        --brand-surface: #FFFFFF;
+        --brand-text-primary: #1F2937;
+        --brand-text-secondary: #64748B;
+        --brand-border: #E5E7EB;
+      }
+      html.dark {
+        --brand-primary: #3B82F6;
+        --brand-secondary: #1E3A8A;
+        --brand-accent: #10B981;
+        --brand-background: #111827;
+        --brand-surface: #1F2937;
+        --brand-text-primary: #F9FAFB;
+        --brand-text-secondary: #94A3B8;
+        --brand-border: #374151;
+      }
+      html.ocean {
+        --brand-primary: #006d77;
+        --brand-secondary: #83c5be;
+        --brand-accent: #ffddd2;
+        --brand-background: #edf6f9;
+        --brand-surface: #ffffff;
+        --brand-text-primary: #2c3e50;
+        --brand-text-secondary: #8e9aaf;
+        --brand-border: #e0fbfc;
+      }
+      html.forest {
+        --brand-primary: #2d6a4f;
+        --brand-secondary: #74c69d;
+        --brand-accent: #d95f02;
+        --brand-background: #fdf0d5;
+        --brand-surface: #f8f9fa;
+        --brand-text-primary: #403d39;
+        --brand-text-secondary: #7f7f7f;
+        --brand-border: #d8f3dc;
+      }
+      html.sunset {
+        --brand-primary: #d90429;
+        --brand-secondary: #ff9e00;
+        --brand-accent: #ffc300;
+        --brand-background: #fff1e6;
+        --brand-surface: #ffffff;
+        --brand-text-primary: #212529;
+        --brand-text-secondary: #6c757d;
+        --brand-border: #fae0e4;
+      }
+      html.rose {
+        --brand-primary: #be185d;
+        --brand-secondary: #f9a8d4;
+        --brand-accent: #6ee7b7;
+        --brand-background: #fdf2f8;
+        --brand-surface: #ffffff;
+        --brand-text-primary: #374151;
+        --brand-text-secondary: #9ca3af;
+        --brand-border: #fbcfe8;
+      }
+      html.royal {
+        --brand-primary: #f59e0b;
+        --brand-secondary: #fcd34d;
+        --brand-accent: #a855f7;
+        --brand-background: #1e1b4b;
+        --brand-surface: #312e81;
+        --brand-text-primary: #e5e7eb;
+        --brand-text-secondary: #9ca3af;
+        --brand-border: #4338ca;
+      }
+      html.mint {
+        --brand-primary: #059669;
+        --brand-secondary: #6ee7b7;
+        --brand-accent: #fb923c;
+        --brand-background: #f0fdf4;
+        --brand-surface: #ffffff;
+        --brand-text-primary: #1e293b;
+        --brand-text-secondary: #64748b;
+        --brand-border: #d1fae5;
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        darkMode: 'class', // Enable class-based dark mode
+        theme: {
+          extend: {
+            colors: {
+              'brand-primary': 'var(--brand-primary)',
+              'brand-secondary': 'var(--brand-secondary)',
+              'brand-accent': 'var(--brand-accent)',
+              'brand-background': 'var(--brand-background)',
+              'brand-surface': 'var(--brand-surface)',
+              'brand-text-primary': 'var(--brand-text-primary)',
+              'brand-text-secondary': 'var(--brand-text-secondary)',
+              'brand-border': 'var(--brand-border)',
+            },
+          },
+        },
+      }
+    </script>
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+    "@heroicons/react/24/outline": "https://esm.sh/@heroicons/react@2.1.1/24/outline?deps=react@18.2.0",
+    "recharts": "https://esm.sh/recharts@2.12.2?deps=react@18.2.0",
+    "@google/genai": "https://esm.sh/@google/genai",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "@heroicons/react/": "https://aistudiocdn.com/@heroicons/react@^2.2.0/",
+    "@sveltejs/adapter-auto": "https://aistudiocdn.com/@sveltejs/adapter-auto@^6.1.0",
+    "@sveltejs/vite-plugin-svelte": "https://aistudiocdn.com/@sveltejs/vite-plugin-svelte@^6.2.0",
+    "@sveltejs/kit/": "https://aistudiocdn.com/@sveltejs/kit@^2.42.2/",
+    "vite": "https://aistudiocdn.com/vite@^7.1.6",
+    "svelte": "https://aistudiocdn.com/svelte@^5.39.3",
+    "svelte/": "https://aistudiocdn.com/svelte@^5.39.3/"
+  }
+}
+</script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
