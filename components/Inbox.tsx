@@ -3,37 +3,7 @@ import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { UserConversation, UserMessage } from '../types';
 import { PaperAirplaneIcon, MagnifyingGlassIcon, InboxIcon } from '@heroicons/react/24/outline';
-
-const initialConversations: UserConversation[] = [
-    {
-        id: 'CONV001',
-        participantId: 'd_admin1',
-        participantName: 'Demo Partner',
-        participantAvatar: 'https://picsum.photos/seed/d-admin1/48/48',
-        lastMessage: "Okay, sounds good. I'll review the project details.",
-        lastMessageTime: '11:30 AM',
-        unreadCount: 0,
-        messages: [
-            { id: 'UMSG001', senderId: 'd_admin1', text: 'Hi John, can you take a look at the latest project update?', timestamp: '11:28 AM' },
-            { id: 'UMSG002', senderId: 'currentUser', text: "Sure, I'll check it out now.", timestamp: '11:29 AM' },
-            { id: 'UMSG003', senderId: 'd_admin1', text: "Okay, sounds good. I'll review the project details.", timestamp: '11:30 AM' },
-        ],
-    },
-    {
-        id: 'CONV002',
-        participantId: 'd_user2',
-        participantName: 'Scott Summers',
-        participantAvatar: 'https://picsum.photos/seed/d-user2/48/48',
-        lastMessage: 'Got it, thanks for the heads up!',
-        lastMessageTime: 'Yesterday',
-        unreadCount: 2,
-        messages: [
-            { id: 'UMSG004', senderId: 'currentUser', text: "Hey Scott, just a reminder about the monthly dues.", timestamp: 'Yesterday' },
-            { id: 'UMSG005', senderId: 'd_user2', text: 'Got it, thanks for the heads up!', timestamp: 'Yesterday' },
-        ],
-    },
-];
-
+import { initialConversations as initialConversationsData } from '../data';
 
 interface InboxProps {
     recipient: { id: string; name: string } | null;
@@ -41,8 +11,8 @@ interface InboxProps {
 }
 
 export const Inbox: React.FC<InboxProps> = ({ recipient, setRecipient }) => {
-    const [conversations, setConversations] = useState<UserConversation[]>(initialConversations);
-    const [activeConvId, setActiveConvId] = useState<string | null>(initialConversations[0]?.id || null);
+    const [conversations, setConversations] = useState<UserConversation[]>(initialConversationsData);
+    const [activeConvId, setActiveConvId] = useState<string | null>(initialConversationsData[0]?.id || null);
     const [newMessage, setNewMessage] = useState('');
     const chatEndRef = useRef<HTMLDivElement>(null);
 

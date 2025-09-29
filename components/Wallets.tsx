@@ -3,53 +3,16 @@ import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { Wallet, Transaction, VirtualCard, ToastMessage, PayoutAccount } from '../types';
 import { PlusIcon, ArrowPathIcon, PaperAirplaneIcon, CurrencyDollarIcon, CreditCardIcon, ArrowUpCircleIcon, ArrowDownCircleIcon, ChevronDownIcon, EyeIcon, EyeSlashIcon, TrashIcon, LockClosedIcon, LockOpenIcon, ClipboardDocumentIcon, QrCodeIcon, ArrowUpRightIcon, XMarkIcon, MapPinIcon, ArrowsUpDownIcon } from '@heroicons/react/24/outline';
+import { initialWallets, mockTransactions, mockPayoutAccounts, initialCards } from '../data';
 
-const UsdtIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2.34c1.1.2 1.95.83 2.45 1.66h-1.9c-.39-.55-1.02-.8-1.55-.8s-1.16.25-1.55.8h-1.9c.5-1.3 1.85-2-3.45-2V7h-2v2h-2V7z M8.55 12.5c-.5.83-1.35 1.46-2.45 1.66V15h2v2h2v-2h2v-2.34c-1.1-.2-1.95-.83-2.45-1.66h1.9c.39.55 1.02.8 1.55.8s1.16-.25 1.55.8h1.9c-.5 1.3-1.85 2-3.45 2V17h2v-2h2v-2h-3.45z"/>
+
+const ChipIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+        <rect x="3" y="6" width="18" height="12" rx="2" ry="2" fill="#d4af37" stroke="none" />
+        <line x1="7" y1="12" x2="17" y2="12" stroke="#a88b2c" />
+        <line x1="12" y1="9" x2="12" y2="15" stroke="#a88b2c" />
     </svg>
 );
-
-const initialWallets: Wallet[] = [
-  { id: 'naira', currency: 'Naira', balance: 500000, icon: <CurrencyDollarIcon className="h-6 w-6"/>, color: 'blue' },
-  { id: 'dollar', currency: 'Dollar', balance: 250.00, icon: <CurrencyDollarIcon className="h-6 w-6"/>, color: 'green' },
-  { id: 'usdt', currency: 'USDT', balance: 1250.75, icon: <UsdtIcon />, color: 'yellow' },
-  { id: 'card', currency: 'Card', balance: 0, icon: <CreditCardIcon className="h-6 w-6"/>, color: 'indigo' },
-];
-
-const mockTransactions: Transaction[] = [
-  { id: 'TXN741852', type: 'Credit', description: 'Funded from Wema Bank', amount: 150000, date: '2023-10-26', status: 'Completed', details: { "Payment Method": "Bank Transfer", "Sender": "John Doe" } },
-  { id: 'TXN951753', type: 'Debit', description: 'Project Alpha Investment', amount: 75000, date: '2023-10-25', status: 'Completed', details: { "Project": "Project Alpha", "Recipient": "Community Wallet" } },
-];
-
-const mockPayoutAccounts: PayoutAccount[] = [
-    { id: 'acc1', bankName: 'GTBank', accountNumber: '0123456789', accountName: 'John Doe' },
-    { id: 'acc2', bankName: 'Kuda Bank', accountNumber: '0987654321', accountName: 'John Doe' },
-    { id: 'usd_acc1', bankName: 'Chase Bank', accountNumber: '9876543210', accountName: 'John Doe' },
-];
-
-
-// Helper functions
-const generateCardNumber = () => `4${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(1000 + Math.random() * 9000)}`;
-const generateCVV = () => `${Math.floor(100 + Math.random() * 900)}`;
-const generateExpiry = () => {
-    const month = String(Math.floor(1 + Math.random() * 12)).padStart(2, '0');
-    const year = new Date().getFullYear() + Math.floor(3 + Math.random() * 3);
-    return `${month}/${String(year).slice(2)}`;
-};
-
-const defaultBillingAddress = {
-    line1: '123 Creeb Lane',
-    city: 'Innovation City',
-    state: 'Lagos',
-    postalCode: '100001',
-    country: 'Nigeria',
-};
-
-const initialCards: VirtualCard[] = [
-    { id: 'VC-1', vendor: 'Visa', cardNumber: generateCardNumber(), expiry: generateExpiry(), cvv: generateCVV(), isFrozen: false, balance: 150.25, billingAddress: defaultBillingAddress },
-    { id: 'VC-2', vendor: 'Mastercard', cardNumber: generateCardNumber(), expiry: generateExpiry(), cvv: generateCVV(), isFrozen: true, balance: 25.50, billingAddress: defaultBillingAddress },
-];
 
 const WalletCard: React.FC<{ wallet: Wallet, isSelected: boolean, onClick: () => void }> = ({ wallet, isSelected, onClick }) => {
     const colorClasses = {
@@ -103,13 +66,6 @@ const WalletCard: React.FC<{ wallet: Wallet, isSelected: boolean, onClick: () =>
     </Card>
 )};
 
-const ChipIcon = () => (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-        <rect x="3" y="6" width="18" height="12" rx="2" ry="2" fill="#d4af37" stroke="none" />
-        <line x1="7" y1="12" x2="17" y2="12" stroke="#a88b2c" />
-        <line x1="12" y1="9" x2="12" y2="15" stroke="#a88b2c" />
-    </svg>
-);
 
 const VirtualCardDisplay: React.FC<{ card: VirtualCard; onToggleDetails: (id: string) => void; onToggleFreeze: (id: string) => void; onDelete: (id: string) => void; detailsVisible: boolean; }> = ({ card, onToggleDetails, onToggleFreeze, onDelete, detailsVisible }) => {
     const cardBgClasses = {
@@ -302,7 +258,7 @@ export const Wallets: React.FC<WalletsProps> = ({ showToast }) => {
     
     // Handlers
     const handleCreateCard = (vendor: 'Visa' | 'Mastercard') => {
-        const newCard: VirtualCard = { id: `VC-${Date.now()}`, vendor, cardNumber: generateCardNumber(), expiry: generateExpiry(), cvv: generateCVV(), isFrozen: false, balance: 0, billingAddress: defaultBillingAddress };
+        const newCard: VirtualCard = { id: `VC-${Date.now()}`, vendor, cardNumber: '**** **** **** ****', expiry: '**/**', cvv: '***', isFrozen: false, balance: 0, billingAddress: {line1:'', city:'', state:'', postalCode:'', country:''} };
         setVirtualCards([newCard, ...virtualCards]);
         showToast(`New ${vendor} card created successfully!`);
     };

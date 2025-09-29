@@ -4,12 +4,8 @@ import { Button } from './common/Button';
 import { AtSymbolIcon, PhoneIcon, HomeIcon, UserIcon, BellAlertIcon, ArchiveBoxIcon, DocumentTextIcon, BanknotesIcon, ShieldCheckIcon, CreditCardIcon, CheckCircleIcon, UserGroupIcon, IdentificationIcon, ArrowUpOnSquareIcon, ClockIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CreationRequest, RequestStatus, PayoutAccount, UserRole, KYCStatus, ToastMessage, UserSubscriptions } from '../types';
 import { mockFullCommunities } from './Community';
+import { mockApplications as mockApplicationsData } from '../data';
 
-const mockApplications: CreationRequest[] = [
-    { id: 'APP001', type: 'Community', name: 'My New Coop', applicantName: 'John Doe', applicantEmail: 'john.doe@example.com', dateSubmitted: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), status: 'Pending', details: {} },
-    { id: 'APP002', type: 'Estate', name: 'My Dream Estate', applicantName: 'John Doe', applicantEmail: 'john.doe@example.com', dateSubmitted: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), status: 'Approved', details: {} },
-    { id: 'APP003', type: 'Community', name: 'Future Investments', applicantName: 'John Doe', applicantEmail: 'john.doe@example.com', dateSubmitted: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), status: 'Rejected', details: { }, adminNotes: 'Registration certificate was not valid.' },
-];
 
 const InfoField: React.FC<{ icon: React.ElementType, label: string, value: string }> = ({ icon: Icon, label, value }) => (
     <div>
@@ -75,7 +71,7 @@ const ApplicationsTab: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody className="divide-y dark:divide-dark-border">
-                        {mockApplications.map(app => (
+                        {mockApplicationsData.map(app => (
                             <React.Fragment key={app.id}>
                                 <tr>
                                     <td className="p-2 font-semibold dark:text-dark-text-primary">{app.name}</td>

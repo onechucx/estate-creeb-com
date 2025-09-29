@@ -1,0 +1,22 @@
+{
+  "name": "creeb-community-platform",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "echo \"'dev' script not configured. Please use a bundler like Vite.\"",
+    "build": "echo \"'build' script not configured. Please use a bundler like Vite.\"",
+    "preview": "echo \"'preview' script not configured. Please use a bundler like Vite.\""
+  },
+  "dependencies": {
+    "@google/genai": "^0.1.0",
+    "@heroicons/react": "^2.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.12.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "typescript": "^5.0.0"
+  }
+}

@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { GlobalAd, UserRole, ToastMessage, AdPricing, CreationRequest, RequestStatus, RequestType, KYCSubmission, Listing, Vendor, ManagedUser, SubscriptionPricing } from '../types';
-import { CurrencyDollarIcon, BuildingOffice2Icon, XMarkIcon, BellAlertIcon, CheckCircleIcon, XCircleIcon, FunnelIcon, CheckBadgeIcon, PencilIcon, PauseIcon, PlayIcon, TrashIcon, UserMinusIcon, UserPlusIcon, CreditCardIcon } from '@heroicons/react/24/outline';
+import { CurrencyDollarIcon, BuildingOffice2Icon, XMarkIcon, BellAlertIcon, CheckCircleIcon, XCircleIcon, FunnelIcon, CheckBadgeIcon, PencilIcon, PauseIcon, PlayIcon, TrashIcon, UserMinusIcon, UserPlusIcon, CreditCardIcon, ShieldExclamationIcon } from '@heroicons/react/24/outline';
+import { initialGlobalAds as initialGlobalAdsData } from '../data';
 
 enum AdminTab { REQUESTS, GLOBAL_ADS, MARKETPLACE, KYC_VERIFICATION, SUBSCRIPTIONS }
 
@@ -207,11 +208,6 @@ const KYCManagement: React.FC<{
     );
 };
 
-const initialGlobalAds: GlobalAd[] = [
-    { id: 'GAD001', title: 'Upgrade to Partner', content: 'Unlock advanced management tools by upgrading your account.', imageUrl: 'https://picsum.photos/seed/ad1/400/200', targetUrl: '#/profile/subscription', status: 'Active', impressions: 12540, clicks: 830 },
-    { id: 'GAD002', title: 'New Marketplace Feature', content: 'You can now create listings for services. Check it out!', imageUrl: 'https://picsum.photos/seed/ad2/400/200', targetUrl: '#/marketplace', status: 'Paused', impressions: 5600, clicks: 120 },
-];
-
 const AdFormModal: React.FC<{ ad: GlobalAd | null; onClose: () => void; onSave: (ad: GlobalAd) => void; }> = ({ ad, onClose, onSave }) => {
     const [formData, setFormData] = useState<Omit<GlobalAd, 'id' | 'impressions' | 'clicks'>>({
         title: ad?.title || '',
@@ -252,7 +248,7 @@ const AdFormModal: React.FC<{ ad: GlobalAd | null; onClose: () => void; onSave: 
 };
 
 const GlobalAdsManagement: React.FC<{ showToast: (message: string, type?: ToastMessage['type']) => void; }> = ({ showToast }) => {
-    const [ads, setAds] = useState<GlobalAd[]>(initialGlobalAds);
+    const [ads, setAds] = useState<GlobalAd[]>(initialGlobalAdsData);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingAd, setEditingAd] = useState<GlobalAd | null>(null);
 
@@ -401,199 +397,116 @@ const PricingSettings: React.FC<{
 
     return (
         <Card className="max-w-md">
-            <h4 className="text-xl font-bold mb-4">Subscription Pricing</h4>
+            <h3 className="text-lg font-bold mb-4 dark:text-dark-text-primary">Subscription Pricing</h3>
             <div className="space-y-4">
                 <div>
-                    <label className="block text-sm font-medium">Community Annual Price (₦)</label>
-                    <input 
-                        type="number" 
-                        value={formState.community} 
-                        onChange={e => setFormState({...formState, community: Number(e.target.value)})} 
-                        className="w-full p-2 border rounded-md dark:bg-dark-surface dark:border-dark-border"
-                    />
+                    <label className="block text-sm font-medium dark:text-dark-text-secondary">Community Platform Annual Fee (₦)</label>
+                    <input type="number" value={formState.community} onChange={e => setFormState({...formState, community: Number(e.target.value)})} className="w-full p-2 border rounded-md mt-1 dark:bg-dark-surface dark:border-dark-border"/>
                 </div>
-                <div>
-                    <label className="block text-sm font-medium">Estate Annual Price (₦)</label>
-                    <input 
-                        type="number" 
-                        value={formState.estate} 
-                        onChange={e => setFormState({...formState, estate: Number(e.target.value)})} 
-                        className="w-full p-2 border rounded-md dark:bg-dark-surface dark:border-dark-border"
-                    />
+                 <div>
+                    <label className="block text-sm font-medium dark:text-dark-text-secondary">Estate Platform Annual Fee (₦)</label>
+                    <input type="number" value={formState.estate} onChange={e => setFormState({...formState, estate: Number(e.target.value)})} className="w-full p-2 border rounded-md mt-1 dark:bg-dark-surface dark:border-dark-border"/>
                 </div>
-                <Button onClick={handleSave} className="w-full">Save Prices</Button>
+                <Button onClick={handleSave}>Save Pricing</Button>
             </div>
         </Card>
     );
 };
 
-const SubscriptionManagement: React.FC<{
+const UserSubscriptionManagement: React.FC<{
     users: ManagedUser[];
     setUsers: (users: ManagedUser[]) => void;
-    showToast: (message: string, type?: ToastMessage['type']) => void;
     pricing: SubscriptionPricing;
-    setPricing: (pricing: SubscriptionPricing) => void;
-}> = ({ users, setUsers, showToast, pricing, setPricing }) => {
-    const [activeSubTab, setActiveSubTab] = useState<'community' | 'estate' | 'pricing'>('community');
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filterStatus, setFilterStatus] = useState<'all' | 'subscribed' | 'unsubscribed'>('all');
+}> = ({ users, setUsers, pricing }) => {
 
     const handleToggleSubscription = (userId: string, type: 'community' | 'estate') => {
-        const updatedUsers = users.map(user => {
+        setUsers(users.map(user => {
             if (user.id === userId) {
-                const currentSub = user.subscriptions[type];
-                const newStatus = !currentSub.subscribed;
-                showToast(`${newStatus ? 'Granted' : 'Revoked'} ${type} subscription for ${user.name}.`, 'success');
+                const isSubscribed = user.subscriptions[type].subscribed;
                 return {
                     ...user,
                     subscriptions: {
                         ...user.subscriptions,
                         [type]: {
-                            subscribed: newStatus,
-                            date: newStatus ? new Date().toISOString() : undefined
-                        },
-                    },
+                            subscribed: !isSubscribed,
+                            date: !isSubscribed ? new Date().toISOString() : undefined
+                        }
+                    }
                 };
             }
             return user;
-        });
-        setUsers(updatedUsers);
+        }));
     };
-
-    const UserTable: React.FC<{ type: 'community' | 'estate' }> = ({ type }) => {
-        const stats = useMemo(() => {
-            const totalUsers = users.length;
-            const subscribedUsers = users.filter(u => u.subscriptions[type].subscribed).length;
-            const rate = totalUsers > 0 ? (subscribedUsers / totalUsers) * 100 : 0;
-            return { totalUsers, subscribedUsers, rate: rate.toFixed(1) };
-        }, [users, type]);
-
-        const filteredUsers = useMemo(() => {
-            return users
-                .filter(user => {
-                    if (filterStatus === 'all') return true;
-                    if (filterStatus === 'subscribed') return user.subscriptions[type].subscribed;
-                    if (filterStatus === 'unsubscribed') return !user.subscriptions[type].subscribed;
-                    return true;
-                })
-                .filter(user =>
-                    user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    user.email.toLowerCase().includes(searchTerm.toLowerCase())
-                );
-        }, [users, type, filterStatus, searchTerm]);
-        
-        return (
-            <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Card className="!p-4 bg-gray-50 dark:bg-dark-surface/50 text-center">
-                        <p className="text-sm text-gray-500 dark:text-dark-text-secondary">Total Users</p>
-                        <p className="text-2xl font-bold dark:text-dark-text-primary">{stats.totalUsers}</p>
-                    </Card>
-                    <Card className="!p-4 bg-gray-50 dark:bg-dark-surface/50 text-center">
-                        <p className="text-sm text-gray-500 dark:text-dark-text-secondary">Subscribed Users</p>
-                        <p className="text-2xl font-bold dark:text-dark-text-primary">{stats.subscribedUsers}</p>
-                    </Card>
-                    <Card className="!p-4 bg-gray-50 dark:bg-dark-surface/50 text-center">
-                        <p className="text-sm text-gray-500 dark:text-dark-text-secondary">Subscription Rate</p>
-                        <p className="text-2xl font-bold dark:text-dark-text-primary">{stats.rate}%</p>
-                    </Card>
-                </div>
-
-                <div className="overflow-x-auto">
-                    <table className="min-w-full text-sm">
-                        <thead className="bg-gray-100 dark:bg-dark-surface/50">
-                            <tr>
-                                <th className="p-2 text-left font-semibold text-gray-600 dark:text-dark-text-secondary">User</th>
-                                <th className="p-2 text-left font-semibold text-gray-600 dark:text-dark-text-secondary">Email</th>
-                                <th className="p-2 text-left font-semibold text-gray-600 dark:text-dark-text-secondary">Date Subscribed</th>
-                                <th className="p-2 text-center font-semibold text-gray-600 dark:text-dark-text-secondary">Status</th>
-                                <th className="p-2 text-center font-semibold text-gray-600 dark:text-dark-text-secondary">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y dark:divide-dark-border">
-                            {filteredUsers.map(user => (
-                                <tr key={user.id}>
-                                    <td className="p-2">
-                                        <div className="flex items-center">
-                                            <img src={user.avatarUrl} alt={user.name} className="h-8 w-8 rounded-full mr-3" />
-                                            <span className="font-semibold dark:text-dark-text-primary">{user.name}</span>
-                                        </div>
-                                    </td>
-                                    <td className="p-2 dark:text-dark-text-secondary">{user.email}</td>
-                                    <td className="p-2 dark:text-dark-text-secondary">
-                                        {user.subscriptions[type].date
-                                            ? new Date(user.subscriptions[type].date!).toLocaleDateString()
-                                            : '-'}
-                                    </td>
-                                    <td className="p-2 text-center">
-                                        {user.subscriptions[type].subscribed
-                                            ? <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">Active</span>
-                                            : <span className="px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-800 dark:bg-gray-600 dark:text-gray-300">Inactive</span>
-                                        }
-                                    </td>
-                                    <td className="p-2 text-center">
-                                        <Button
-                                            onClick={() => handleToggleSubscription(user.id, type)}
-                                            variant={user.subscriptions[type].subscribed ? 'danger' : 'primary'}
-                                            className="!text-xs !py-1 !px-2"
-                                        >
-                                            {user.subscriptions[type].subscribed ? 'Revoke' : 'Grant'}
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        );
-    };
-
+    
     return (
         <Card>
-            <div className="space-y-4">
-                 <div className="border-b border-gray-200 dark:border-dark-border">
-                    <nav className="-mb-px flex space-x-4">
-                        <button onClick={() => setActiveSubTab('community')} className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${activeSubTab === 'community' ? 'border-brand-primary text-brand-primary' : 'border-transparent text-gray-500'}`}>Community Subscriptions</button>
-                        <button onClick={() => setActiveSubTab('estate')} className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${activeSubTab === 'estate' ? 'border-brand-primary text-brand-primary' : 'border-transparent text-gray-500'}`}>Estate Subscriptions</button>
-                        <button onClick={() => setActiveSubTab('pricing')} className={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${activeSubTab === 'pricing' ? 'border-brand-primary text-brand-primary' : 'border-transparent text-gray-500'}`}>Pricing</button>
-                    </nav>
-                </div>
-
-                {activeSubTab !== 'pricing' && (
-                    <div className="flex flex-col sm:flex-row gap-4 items-center p-4 bg-gray-50 dark:bg-dark-surface/50 rounded-lg">
-                        <FunnelIcon className="h-5 w-5 text-gray-500" />
-                        <input
-                            type="text"
-                            placeholder="Search by name or email..."
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            className="p-2 border rounded-md dark:bg-dark-surface dark:border-dark-border text-sm w-full sm:flex-grow"
-                        />
-                        <select value={filterStatus} onChange={e => setFilterStatus(e.target.value as any)} className="p-2 border rounded-md dark:bg-dark-surface dark:border-dark-border text-sm w-full sm:w-auto">
-                            <option value="all">All Statuses</option>
-                            <option value="subscribed">Subscribed</option>
-                            <option value="unsubscribed">Unsubscribed</option>
-                        </select>
-                    </div>
-                )}
-                
-                <div className="pt-4">
-                    {activeSubTab === 'community' && <UserTable type="community" />}
-                    {activeSubTab === 'estate' && <UserTable type="estate" />}
-                    {activeSubTab === 'pricing' && <PricingSettings pricing={pricing} setPricing={setPricing} showToast={showToast} />}
-                </div>
+            <h3 className="text-lg font-bold mb-4 dark:text-dark-text-primary">User Subscriptions</h3>
+            <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                    <thead className="bg-gray-50 dark:bg-dark-surface/50">
+                        <tr>
+                            <th className="p-2 text-left dark:text-dark-text-secondary">User</th>
+                            <th className="p-2 text-center dark:text-dark-text-secondary">Community Sub (₦{pricing.community.toLocaleString()}/yr)</th>
+                            <th className="p-2 text-center dark:text-dark-text-secondary">Estate Sub (₦{pricing.estate.toLocaleString()}/yr)</th>
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y dark:divide-dark-border">
+                        {users.map(user => (
+                            <tr key={user.id}>
+                                <td className="p-2">
+                                    <div className="flex items-center">
+                                        <img src={user.avatarUrl} alt={user.name} className="h-8 w-8 rounded-full mr-2"/>
+                                        <div>
+                                            <p className="font-semibold dark:text-dark-text-primary">{user.name}</p>
+                                            <p className="text-xs text-gray-500 dark:text-dark-text-secondary">{user.email}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td className="p-2 text-center">
+                                    <button 
+                                        onClick={() => handleToggleSubscription(user.id, 'community')}
+                                        className={`px-3 py-1 rounded-full text-xs ${user.subscriptions.community.subscribed ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'}`}
+                                    >
+                                        {user.subscriptions.community.subscribed ? 'Active' : 'Inactive'}
+                                    </button>
+                                </td>
+                                <td className="p-2 text-center">
+                                     <button 
+                                        onClick={() => handleToggleSubscription(user.id, 'estate')}
+                                        className={`px-3 py-1 rounded-full text-xs ${user.subscriptions.estate.subscribed ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-700'}`}
+                                    >
+                                        {user.subscriptions.estate.subscribed ? 'Active' : 'Inactive'}
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </Card>
     );
 };
 
+const SubscriptionsManagement: React.FC<{
+    users: ManagedUser[];
+    setUsers: (users: ManagedUser[]) => void;
+    pricing: SubscriptionPricing;
+    setPricing: (pricing: SubscriptionPricing) => void;
+    showToast: (message: string, type?: ToastMessage['type']) => void;
+}> = ({ users, setUsers, pricing, setPricing, showToast }) => {
+    return (
+        <div className="space-y-6">
+            <PricingSettings pricing={pricing} setPricing={setPricing} showToast={showToast} />
+            <UserSubscriptionManagement users={users} setUsers={setUsers} pricing={pricing} />
+        </div>
+    );
+};
 
-interface AdminPanelProps { 
-    userRole: UserRole; 
-    showToast: (message: string, type?: ToastMessage['type']) => void; 
+interface AdminPanelProps {
+    userRole: UserRole;
+    showToast: (message: string, type?: ToastMessage['type']) => void;
     adPricing: AdPricing;
-    setAdPricing: (pricing: AdPricing) => void;
+    setAdPricing: (p: AdPricing) => void;
     requests: CreationRequest[];
     setRequests: (requests: CreationRequest[]) => void;
     kycSubmissions: KYCSubmission[];
@@ -607,42 +520,98 @@ interface AdminPanelProps {
     subscriptionPricing: SubscriptionPricing;
     setSubscriptionPricing: (pricing: SubscriptionPricing) => void;
 }
-export const AdminPanel: React.FC<AdminPanelProps> = ({ userRole, showToast, adPricing, setAdPricing, requests, setRequests, kycSubmissions, setKycSubmissions, listings, setListings, vendors, setVendors, managedUsers, setManagedUsers, subscriptionPricing, setSubscriptionPricing }) => {
-    // This panel is now only for Administrators
+
+export const AdminPanel: React.FC<AdminPanelProps> = ({
+    userRole,
+    showToast,
+    adPricing,
+    setAdPricing,
+    requests,
+    setRequests,
+    kycSubmissions,
+    setKycSubmissions,
+    listings,
+    setListings,
+    vendors,
+    setVendors,
+    managedUsers,
+    setManagedUsers,
+    subscriptionPricing,
+    setSubscriptionPricing,
+}) => {
     const [activeTab, setActiveTab] = useState<AdminTab>(AdminTab.REQUESTS);
-    
-    const renderTabContent = () => {
-        switch (activeTab) {
-            case AdminTab.REQUESTS: return <RequestsManagement requests={requests} setRequests={setRequests} showToast={showToast} />;
-            case AdminTab.KYC_VERIFICATION: return <KYCManagement submissions={kycSubmissions} setSubmissions={setKycSubmissions} showToast={showToast} />;
-            case AdminTab.GLOBAL_ADS: return <GlobalAdsManagement showToast={showToast} />;
-            case AdminTab.MARKETPLACE: return <MarketplaceManagementPanel pricing={adPricing} setPricing={setAdPricing} showToast={showToast} listings={listings} setListings={setListings} vendors={vendors} setVendors={setVendors} />;
-            case AdminTab.SUBSCRIPTIONS: return <SubscriptionManagement users={managedUsers} setUsers={setManagedUsers} showToast={showToast} pricing={subscriptionPricing} setPricing={setSubscriptionPricing} />;
-            default: return null;
-        }
-    }
-    
-    const TabButton: React.FC<{tab: AdminTab, label: string, icon: React.ElementType}> = ({ tab, label, icon: Icon }) => (
-        <button onClick={() => setActiveTab(tab)} className={`flex items-center space-x-2 px-4 py-2 font-semibold rounded-t-lg whitespace-nowrap ${activeTab === tab ? 'bg-brand-surface dark:bg-dark-surface border-b-2 border-brand-primary dark:border-dark-primary text-brand-primary dark:text-dark-primary' : 'text-gray-500 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
-            <Icon className="h-5 w-5" />
-            <span>{label}</span>
+
+    const TabButton: React.FC<{ tab: AdminTab; label: string }> = ({ tab, label }) => (
+        <button
+            onClick={() => setActiveTab(tab)}
+            className={`whitespace-nowrap py-3 px-4 border-b-2 font-medium text-sm ${
+                activeTab === tab
+                    ? 'border-brand-primary text-brand-primary dark:border-dark-primary'
+                    : 'border-transparent text-brand-text-secondary dark:text-dark-text-secondary hover:text-gray-700 hover:border-gray-300'
+            }`}
+        >
+            {label}
         </button>
     );
 
+    const renderContent = () => {
+        switch (activeTab) {
+            case AdminTab.REQUESTS:
+                return <RequestsManagement requests={requests} setRequests={setRequests} showToast={showToast} />;
+            case AdminTab.KYC_VERIFICATION:
+                return <KYCManagement submissions={kycSubmissions} setSubmissions={setKycSubmissions} showToast={showToast} />;
+            case AdminTab.GLOBAL_ADS:
+                return <GlobalAdsManagement showToast={showToast} />;
+            case AdminTab.MARKETPLACE:
+                return <MarketplaceManagementPanel 
+                            pricing={adPricing} 
+                            setPricing={setAdPricing} 
+                            showToast={showToast} 
+                            listings={listings} 
+                            setListings={setListings} 
+                            vendors={vendors}
+                            setVendors={setVendors}
+                        />;
+            case AdminTab.SUBSCRIPTIONS:
+                 return <SubscriptionsManagement 
+                            users={managedUsers} 
+                            setUsers={setManagedUsers} 
+                            pricing={subscriptionPricing}
+                            setPricing={setSubscriptionPricing}
+                            showToast={showToast}
+                        />;
+            default:
+                return null;
+        }
+    };
+
+    if (userRole !== UserRole.ADMINISTRATOR) {
+        return (
+            <Card className="text-center py-16">
+                <ShieldExclamationIcon className="h-12 w-12 text-red-500 mx-auto mb-4"/>
+                <h3 className="text-xl font-bold dark:text-dark-text-primary">Access Denied</h3>
+                <p className="text-gray-500 dark:text-dark-text-secondary mt-2">You do not have permission to view this page.</p>
+            </Card>
+        );
+    }
+
     return (
         <div className="space-y-6">
-            <div>
-                <div className="border-b border-brand-border dark:border-dark-border">
+            <h2 className="text-3xl font-bold dark:text-dark-text-primary">Administrator Panel</h2>
+            <Card className="!p-0">
+                <div className="border-b dark:border-dark-border px-4">
                     <nav className="-mb-px flex space-x-2 overflow-x-auto">
-                        <TabButton tab={AdminTab.REQUESTS} label="Requests" icon={BellAlertIcon} />
-                        <TabButton tab={AdminTab.KYC_VERIFICATION} label="KYC Verification" icon={CheckBadgeIcon} />
-                        <TabButton tab={AdminTab.SUBSCRIPTIONS} label="Subscriptions" icon={CreditCardIcon} />
-                        <TabButton tab={AdminTab.GLOBAL_ADS} label="Global Ads" icon={CurrencyDollarIcon} />
-                        <TabButton tab={AdminTab.MARKETPLACE} label="Marketplace" icon={BuildingOffice2Icon} />
+                        <TabButton tab={AdminTab.REQUESTS} label="Creation Requests" />
+                        <TabButton tab={AdminTab.KYC_VERIFICATION} label="KYC Verifications" />
+                        <TabButton tab={AdminTab.MARKETPLACE} label="Marketplace" />
+                        <TabButton tab={AdminTab.SUBSCRIPTIONS} label="Subscriptions" />
+                        <TabButton tab={AdminTab.GLOBAL_ADS} label="Global Ads" />
                     </nav>
                 </div>
-            </div>
-            {renderTabContent()}
+                <div className="p-6 bg-gray-50 dark:bg-dark-surface/50 rounded-b-xl">
+                    {renderContent()}
+                </div>
+            </Card>
         </div>
     );
 };

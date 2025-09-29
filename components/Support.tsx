@@ -3,38 +3,7 @@ import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { SupportTicket, ChatMessage, UserRole } from '../types';
 import { PaperAirplaneIcon, MagnifyingGlassIcon, InboxIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-
-const initialSupportTickets: SupportTicket[] = [
-    {
-        id: 'TICKET001',
-        contactName: 'Creeb Support',
-        destination: 'Creeb',
-        lastMessage: "You're welcome! Let us know if you need anything else.",
-        lastMessageTime: '10:45 AM',
-        unreadCount: 0,
-        messages: [
-            { id: 'MSG001', sender: 'support', text: 'Hello John, welcome to Creeb Support! How can we help you today?', timestamp: '10:40 AM' },
-            { id: 'MSG002', sender: 'user', text: 'Hi, I just wanted to test out the support feature.', timestamp: '10:42 AM' },
-            { id: 'MSG003', sender: 'support', text: "No problem at all! Everything seems to be working correctly. You're welcome! Let us know if you need anything else.", timestamp: '10:45 AM' },
-        ],
-        status: 'Closed',
-        submittedBy: 'user123',
-    },
-    {
-        id: 'TICKET002',
-        contactName: 'Demo Community Support',
-        destination: 'Community',
-        hubId: 'demo',
-        lastMessage: 'The meeting is scheduled for 2 PM tomorrow.',
-        lastMessageTime: 'Yesterday',
-        unreadCount: 1,
-        messages: [
-            { id: 'MSG004', sender: 'support', text: 'The meeting is scheduled for 2 PM tomorrow.', timestamp: 'Yesterday' },
-        ],
-        status: 'Open',
-        submittedBy: 'user456',
-    },
-];
+import { initialSupportTickets as initialSupportTicketsData } from '../data';
 
 interface SupportProps {
     userRole: UserRole;
@@ -95,8 +64,8 @@ const NewTicketModal: React.FC<{
 
 
 export const Support: React.FC<SupportProps> = ({ userRole }) => {
-    const [tickets, setTickets] = useState<SupportTicket[]>(initialSupportTickets);
-    const [activeTicketId, setActiveTicketId] = useState<string | null>(initialSupportTickets[0].id);
+    const [tickets, setTickets] = useState<SupportTicket[]>(initialSupportTicketsData);
+    const [activeTicketId, setActiveTicketId] = useState<string | null>(initialSupportTicketsData[0].id);
     const [newMessage, setNewMessage] = useState('');
     const [isNewTicketModalOpen, setIsNewTicketModalOpen] = useState(false);
     const chatEndRef = useRef<HTMLDivElement>(null);
