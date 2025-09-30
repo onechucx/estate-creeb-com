@@ -1,21 +1,36 @@
 import http from 'node:http';
-const paths = ['/', '/app/dashboard', '/app/marketplace'];
+// The (app) route group in SvelteKit maps to the root path; adjust runtime paths accordingly
+const paths = ['/', '/dashboard', '/marketplace'];
 const PORT = process.env.PORT ? Number(process.env.PORT) : 5173;
 
 async function fetchPath(path) {
-  return new Promise((resolve, reject) => {
-    const req = http.request(
-      { hostname: '127.0.0.1', port: PORT, path, method: 'GET', timeout: 5000 },
-      (r) => {
-        let b = '';
-        r.on('data', (c) => (b += c));
-        r.on('end', () => resolve({ statusCode: r.statusCode, headers: r.headers, body: b }));
-      }
-    );
-    req.on('error', (e) => reject(e));
-    req.on('timeout', () => reject(new Error('timeout')));
-    req.end();
-  });
+  // Try common loopback hostnames (IPv4, IPv6, and localhost) to handle bind differences
+  const hosts = ['127.0.0.1', '::1', 'localhost'];
+
+  for (const host of hosts) {
+    try {
+      const res = await new Promise((resolve, reject) => {
+        const req = http.request(
+          { hostname: host, port: PORT, path, method: 'GET', timeout: 5000 },
+          (r) => {
+            let b = '';
+            r.on('data', (c) => (b += c));
+            r.on('end', () => resolve({ statusCode: r.statusCode, headers: r.headers, body: b }));
+          }
+        );
+        req.on('error', (e) => reject(e));
+        req.on('timeout', () => reject(new Error('timeout')));
+        req.end();
+      });
+      // If we got a response, return it
+      return res;
+    } catch (err) {
+      // Try next host
+      // console.error(`host ${host} failed:`, err.message);
+    }
+  }
+
+  throw new Error('all hosts failed');
 }
 
 (async () => {

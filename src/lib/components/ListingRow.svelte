@@ -37,12 +37,12 @@
             {listing.title}
         </h3>
         <p class="text-sm text-gray-500 dark:text-dark-text-secondary">{listing.location}</p>
-        {#if onViewVendor}
+            {#if onViewVendor}
             <p class="text-sm text-gray-500 dark:text-dark-text-secondary">
                 by
-                <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold"
-                    >{listing.vendorName}</button
-                >
+                <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`}>
+                    {listing.vendorName}
+                </button>
             </p>
         {:else}
             <p class="text-sm text-gray-500 dark:text-dark-text-secondary">by {listing.vendorName}</p>
@@ -52,6 +52,6 @@
         <p class="font-semibold text-brand-primary dark:text-dark-primary text-xl">
             ₦{listing.price.toLocaleString()}
         </p>
-        <Button variant="secondary" class="mt-2 text-sm !py-1 !px-3" on:click={() => dispatch('open', listing)}>View Details</Button>
+    <Button type="button" variant="secondary" class="mt-2 text-sm !py-1 !px-3" on:click={() => dispatch('open', listing)} aria-label={`View details for ${listing.title}`}>View Details</Button>
     </div>
 </Card>
