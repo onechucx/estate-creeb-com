@@ -4,26 +4,31 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { PostCard } from './Community';
-import { Post, PropertyHolding, GlobalAd, OtherHolding } from '../types';
-import { ArrowUpRightIcon, BanknotesIcon, BuildingOffice2Icon, CubeIcon, RocketLaunchIcon, CakeIcon, DocumentChartBarIcon, XMarkIcon, PlusIcon, PhotoIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { Post, PropertyHolding, GlobalAd, OtherHolding, AppView, ToastMessage } from '../types';
+import { ArrowUpRightIcon, BanknotesIcon, BuildingOffice2Icon, CubeIcon, RocketLaunchIcon, CakeIcon, DocumentChartBarIcon, XMarkIcon, PlusIcon, PhotoIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
-import { AppView } from '../types';
 import { AdSection } from './AdSection';
 import { dashboardChartData, mockGlobalPosts, upcomingBirthdays, mockStatementData, mockUserProperties, mockGlobalAd, mockOtherHoldings as mockOtherHoldingsData } from '../data';
 
 
 interface DashboardProps {
   setActiveView: (view: AppView) => void;
+  showToast: (message: string, type?: ToastMessage['type']) => void;
 }
 
-const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockStatementData }> = ({ onClose, data }) => {
-    const [options, setOptions] = useState({ wallet: true, loans: true, projects: true, savings: true, formalInvoices: false });
+const StatementRequestModal: React.FC<{ 
+    onClose: () => void, 
+    data: typeof mockStatementData,
+    showToast: (message: string, type?: ToastMessage['type']) => void;
+}> = ({ onClose, data, showToast }) => {
+    const [options, setOptions] = useState({ wallet: true, cardTransactions: true, loans: true, savings: true });
     const [startDate, setStartDate] = useState(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+    const [email, setEmail] = useState('john.doe@example.com');
     
     const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, [e.target.name]: e.target.checked });
 
-    const generateStatementHtml = () => {
+    const generateStatementHtml = (recipientEmail: string) => {
         const theme = document.documentElement.className;
 
         let balance = data.openingBalance;
@@ -55,23 +60,46 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
                     </table>
                 </div>
             </section>` : '';
+        
+        const cardTransactionsSection = options.cardTransactions && data.cardTransactions ? `
+            <section class="mb-8">
+                <h3 class="text-xl font-bold border-b-2 border-green-500 dark:border-green-400 pb-2 mb-4 text-brand-text-primary">Virtual Card Statement</h3>
+                 <div class="grid grid-cols-2 gap-4 text-center mb-6">
+                    ${(() => {
+                        const totalCardDebit = data.cardTransactions.filter(t => t.type === 'Debit').reduce((sum, t) => sum + t.amount, 0);
+                        const totalCardCredit = data.cardTransactions.filter(t => t.type === 'Credit').reduce((sum, t) => sum + t.amount, 0);
+                        return `
+                            <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Spending</p><p class="font-bold text-lg text-red-600 dark:text-red-400">- $${totalCardDebit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
+                            <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Credits/Refunds</p><p class="font-bold text-lg text-green-600 dark:text-green-400">+ $${totalCardCredit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
+                        `;
+                    })()}
+                </div>
+                <h4 class="font-semibold mb-2 text-brand-text-primary">Card Transaction History</h4>
+                <div class="border dark:border-dark-border rounded-lg overflow-hidden">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-dark-surface/50"><tr class="text-left text-brand-text-secondary"><th class="p-3 font-semibold">Date</th><th class="p-3 font-semibold">Description</th><th class="p-3 font-semibold text-right">Debit</th><th class="p-3 font-semibold text-right">Credit</th></tr></thead>
+                        <tbody class="divide-y dark:divide-dark-border">
+                        ${data.cardTransactions.map(tx => {
+                            const debit = tx.type === 'Debit' ? tx.amount : 0;
+                            const credit = tx.type === 'Credit' ? tx.amount : 0;
+                            return `<tr class="bg-brand-surface dark:bg-dark-surface"><td class="p-3 whitespace-nowrap">${new Date(tx.date).toLocaleDateString()}</td><td class="p-3">${tx.description}</td><td class="p-3 text-right font-mono text-red-600 dark:text-red-400">${debit > 0 ? `$${debit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td><td class="p-3 text-right font-mono text-green-600 dark:text-green-400">${credit > 0 ? `$${credit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td></tr>`
+                        }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        ` : '';
             
-        const holdingsSection = (options.loans || options.projects || options.savings) ? `
+        const holdingsSection = (options.loans || options.savings) ? `
              <section class="mb-8">
                 <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Community Holdings Summary</h3>
                  <div class="p-4 border rounded dark:border-dark-border bg-brand-surface dark:bg-dark-surface">
                     <div class="flex items-center mb-4"><img src="${data.community.logo}" alt="Community Logo" class="h-12 w-12 rounded-full mr-4"/><div><h3 class="text-xl font-bold text-brand-text-primary">${data.community.name}</h3><p class="text-xs text-brand-text-secondary">${data.community.address}</p></div></div>
                     ${options.loans ? `<h4 class="font-bold mb-2 text-brand-text-primary">Loan Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.loans.map(l => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${l.type}</td><td class="p-2 text-brand-text-secondary">₦${l.amount.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${l.interest}% Interest</td><td class="p-2 text-brand-text-secondary">Due: ${new Date(l.maturity).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>` : ''}
-                    ${options.projects ? `<h4 class="font-bold mb-2 text-brand-text-primary">Project Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.projects.map(p => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${p.name}</td><td class="p-2 text-brand-text-secondary">Contribution: ₦${p.contribution.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${p.status}</td></tr>`).join('')}</tbody></table>` : ''}
                     ${options.savings ? `<h4 class="font-bold mb-2 text-brand-text-primary">Savings Summary</h4><table class="min-w-full text-sm"><tbody>${data.community.savings.map(s => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${s.productName}</td><td class="p-2 text-brand-text-secondary">Principal: ₦${s.principal.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${s.interestRate}% Interest</td><td class="p-2 text-brand-text-secondary">Matures: ${new Date(s.maturity).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>` : ''}
                 </div>
             </section>` : '';
         
-        const invoicesSection = (options.formalInvoices && data.invoices) ? `
-            <section class="mb-8">
-                <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Formal Invoices</h3>
-                <div class="space-y-4">${data.invoices.map(invoice => `<div class="p-3 border rounded dark:border-dark-border flex items-start justify-between"><div><p class="font-bold text-brand-text-primary">${invoice.description}</p><p class="text-xs text-gray-500">ID: ${invoice.id} | Date: ${new Date(invoice.date).toLocaleDateString()}</p><p class="font-semibold text-brand-primary mt-1">₦${invoice.amount.toLocaleString()}</p></div><div class="text-right flex-shrink-0"><img src="${invoice.entity === 'community' ? data.community.logo : data.estate.logo}" alt="${invoice.entity} Logo" class="h-10 w-10 rounded-full ml-4" /><p class="text-xs text-gray-400 mt-1">${invoice.entity === 'community' ? data.community.name : data.estate.name}</p></div></div>`).join('')}</div>
-            </section>` : '';
 
         return `
             <!DOCTYPE html><html lang="en" class="${theme}"><head><meta charset="UTF-8" /><title>Account Statement</title><script src="https://cdn.tailwindcss.com"></script>
@@ -89,8 +117,8 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
             <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'brand-primary': 'var(--brand-primary)', 'brand-secondary': 'var(--brand-secondary)', 'brand-accent': 'var(--brand-accent)', 'brand-background': 'var(--brand-background)', 'brand-surface': 'var(--brand-surface)', 'brand-text-primary': 'var(--brand-text-primary)', 'brand-text-secondary': 'var(--brand-text-secondary)', 'brand-border': 'var(--brand-border)' }}},}</script></head>
             <body class="bg-brand-background text-brand-text-primary font-sans">
                 <div class="max-w-4xl mx-auto my-8 p-8 bg-brand-surface shadow-lg print-shadow-none border border-brand-border">
-                    <header class="flex items-center justify-between mb-8 border-b pb-4 dark:border-dark-border"><div class="flex items-center"><svg class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" /></svg><h2 class="text-3xl font-bold ml-3 text-brand-text-primary">Account Statement</h2></div><div class="text-right"><p class="font-bold text-brand-text-primary">John Doe</p><p class="text-xs text-brand-text-secondary">For period: ${startDate} to ${endDate}</p><p class="text-xs text-brand-text-secondary">Generated: ${new Date().toLocaleString()}</p></div></header>
-                    <main>${walletSection}${holdingsSection}${invoicesSection}</main>
+                    <header class="flex items-center justify-between mb-8 border-b pb-4 dark:border-dark-border"><div class="flex items-center"><svg class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" /></svg><h2 class="text-3xl font-bold ml-3 text-brand-text-primary">Account Statement</h2></div><div class="text-right"><p class="font-bold text-brand-text-primary">John Doe</p><p class="text-xs text-brand-text-secondary">For period: ${startDate} to ${endDate}</p><p class="text-xs text-brand-text-secondary">Sent to: ${recipientEmail}</p></div></header>
+                    <main>${walletSection}${cardTransactionsSection}${holdingsSection}</main>
                     <footer class="text-center text-xs text-gray-500 pt-6 border-t dark:border-dark-border mt-8"><p>This statement was generated electronically from the Creeb platform.</p><p>Powered by Creeb.vip</p></footer>
                 </div>
                 <div class="text-center my-8 no-print"><button onclick="window.print()" class="px-6 py-2 bg-brand-primary text-white rounded-lg font-semibold">Print Statement</button></div>
@@ -98,7 +126,7 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
     };
 
     const handleGenerate = () => {
-        const statementHtml = generateStatementHtml();
+        const statementHtml = generateStatementHtml(email);
         const statementWindow = window.open("", "_blank");
         if (statementWindow) {
             statementWindow.document.write(statementHtml);
@@ -106,10 +134,11 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
         } else {
             alert("Please allow pop-ups to view your statement.");
         }
+        showToast(`Statement successfully sent to ${email}`, 'success');
         onClose();
     };
 
-    const simplifiedOptions = { wallet: options.wallet, loans: options.loans, projects: options.projects, savings: options.savings, formalInvoices: options.formalInvoices };
+    const simplifiedOptions = { wallet: "Wallet Transactions", cardTransactions: "Card Transactions", loans: "Loan Holdings", savings: "Savings Holdings" };
     
     return (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
@@ -117,8 +146,17 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
                 <div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold dark:text-dark-text-primary">Generate Statement of Account</h2><button onClick={onClose}><XMarkIcon className="h-6 w-6"/></button></div>
                 <div className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4"><input type="date" title="Start Date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full p-2 border rounded dark:bg-dark-surface dark:border-dark-border" /><input type="date" title="End Date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full p-2 border rounded dark:bg-dark-surface dark:border-dark-border" /></div>
-                    <fieldset className="space-y-2 border p-3 rounded dark:border-dark-border"><legend className="text-sm font-semibold px-2">Include in statement:</legend>{Object.entries(simplifiedOptions).map(([key, value]) => (<label key={key} className="flex items-center"><input type="checkbox" name={key} checked={value} onChange={handleCheckboxChange} className="h-4 w-4 rounded text-brand-primary focus:ring-brand-primary" /><span className="ml-2 text-sm dark:text-dark-text-secondary">{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</span></label>))}</fieldset>
-                    <Button onClick={handleGenerate} className="w-full">Generate Statement</Button>
+                    
+                    <div>
+                         <label htmlFor="email" className="text-sm font-semibold px-2">Send statement to:</label>
+                         <div className="relative mt-1">
+                            <EnvelopeIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"/>
+                            <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full p-2 pl-10 border rounded dark:bg-dark-surface dark:border-dark-border" required />
+                         </div>
+                    </div>
+                    
+                    <fieldset className="space-y-2 border p-3 rounded dark:border-dark-border"><legend className="text-sm font-semibold px-2">Include in statement:</legend>{Object.entries(simplifiedOptions).map(([key, label]) => (<label key={key} className="flex items-center"><input type="checkbox" name={key} checked={options[key as keyof typeof options]} onChange={handleCheckboxChange} className="h-4 w-4 rounded text-brand-primary focus:ring-brand-primary" /><span className="ml-2 text-sm dark:text-dark-text-secondary">{label}</span></label>))}</fieldset>
+                    <Button onClick={handleGenerate} className="w-full">Generate & Send</Button>
                 </div>
             </Card>
         </div>
@@ -160,8 +198,6 @@ const MetricCard: React.FC<{
     );
 };
 
-// FIX: The `TooltipProps` type from recharts is not suitable for custom tooltip components.
-// It lacks `payload` and `label` properties. Replaced with an inline type that correctly defines the expected props.
 const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ color: string; value: number }>; label?: string; }) => {
   if (active && payload && payload.length) {
     return (
@@ -397,7 +433,7 @@ const OtherHoldingsPanel: React.FC<{ holdings: OtherHolding[]; onEditHolding: (h
     </Card>
 );
 
-export const Dashboard: React.FC<DashboardProps> = ({ setActiveView }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }) => {
     const [isStatementModalOpen, setIsStatementModalOpen] = useState(false);
     const [otherHoldings, setOtherHoldings] = useState<OtherHolding[]>(mockOtherHoldingsData);
     const [editingHolding, setEditingHolding] = useState<OtherHolding | 'new' | null>(null);
@@ -448,7 +484,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveView }) => {
 
   return (
     <>
-    {isStatementModalOpen && <StatementRequestModal onClose={() => setIsStatementModalOpen(false)} data={mockStatementData} />}
+    {isStatementModalOpen && <StatementRequestModal onClose={() => setIsStatementModalOpen(false)} data={mockStatementData} showToast={showToast} />}
     {editingHolding && <HoldingDetailModal holding={editingHolding} onClose={() => setEditingHolding(null)} onSave={handleSaveHolding} onDelete={handleDeleteHolding} />}
 
     <div className="space-y-8">

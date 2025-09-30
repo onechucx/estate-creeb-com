@@ -62,7 +62,6 @@ interface MyListingsProps {
     adPricing: AdPricing;
     userLastFreeAdDate: string | null;
     setUserLastFreeAdDate: (date: string) => void;
-    // FIX: Renamed 'isSubscribed' to 'isCommunitySubscribed' to match the prop name used in App.tsx.
     isCommunitySubscribed: boolean;
     allListings: Listing[];
     setAllListings: (listings: Listing[]) => void;

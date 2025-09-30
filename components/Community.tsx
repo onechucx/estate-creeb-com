@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
@@ -22,7 +23,7 @@ export const PostCard: React.FC<{
     onStartMessage?: (userId: string, userName: string) => void;
 }> = ({ post, isSubscribed, onVoteClick, onLike, onStartMessage }) => {
     const totalVotes = post.poll ? post.poll.options.reduce((sum, opt) => sum + opt.votes, 0) : 0;
-    const hasVoted = post.poll?.votedBy.includes('user1'); // Mock current user
+    const hasVoted = post.poll?.votedBy.includes('d_user1'); // Mock current user
 
     return (
         <Card className="mb-4">
@@ -54,7 +55,7 @@ export const PostCard: React.FC<{
                                     </div>
                                 </div>
                             ))}
-                            <p className="text-xs text-brand-text-secondary">{totalVotes} votes · Poll ends {new Date(post.poll.endDate).toLocaleDateString()}</p>
+                            <p className="text-xs text-brand-text-secondary">{totalVotes.toLocaleString()} Rubbies Voted · Poll ends {new Date(post.poll.endDate).toLocaleDateString()}</p>
                             {!hasVoted && onVoteClick && <Button onClick={() => onVoteClick(post)} variant="secondary" className="w-full mt-2" disabled={!isSubscribed} title={!isSubscribed ? "Subscription required to vote" : ""}>Vote</Button>}
                             {hasVoted && <p className="text-sm text-green-600 font-semibold mt-2 text-center">You have voted.</p>}
                         </div>
@@ -3081,14 +3082,29 @@ const CommunityDetailView: React.FC<{
     const handleNewPost = (post: Post) => setPosts(prev => [post, ...prev]);
     const handleLike = (postId: string) => setPosts(posts.map(p => p.id === postId ? {...p, likes: p.likes+1} : p));
     const handleVote = (postId: string, optionText: string) => {
+        // Find the current user to get their voting power (rubby holdings)
+        const currentUser = community.members.find(m => m.id === 'd_user1'); // Mock current user
+        const votingPower = currentUser?.holdings.rubbies.total || 0;
+
+        if (votingPower === 0) {
+            showToast("You need rubbies to vote.", "info");
+            setVotingOnPost(null);
+            return;
+        }
+
         setPosts(posts.map(p => {
             if(p.id === postId && p.poll) {
-                const newOptions = p.poll.options.map(opt => opt.text === optionText ? {...opt, votes: opt.votes+1} : opt);
-                return {...p, poll: {...p.poll, options: newOptions, votedBy: [...p.poll.votedBy, 'user1']}};
+                // Add the user's rubby count to the selected option's vote tally
+                const newOptions = p.poll.options.map(opt => 
+                    opt.text === optionText ? {...opt, votes: opt.votes + votingPower } : opt
+                );
+                // Mark the user as having voted
+                return {...p, poll: {...p.poll, options: newOptions, votedBy: [...p.poll.votedBy, 'd_user1']}};
             }
             return p;
         }));
         setVotingOnPost(null);
+        showToast(`Your vote of ${votingPower.toLocaleString()} rubbies has been cast!`, 'success');
     };
     
     const handleUpdateProject = (updatedProject: Project) => {

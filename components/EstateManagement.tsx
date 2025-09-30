@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
@@ -21,7 +22,6 @@ interface EstateManagementProps {
     userRole: UserRole;
     showToast: (message: string, type?: ToastMessage['type']) => void;
     onStartMessage: (userId: string, userName: string) => void;
-    // FIX: Added missing isEstateSubscribed prop to align with the component's usage in App.tsx.
     isEstateSubscribed: boolean;
 }
 

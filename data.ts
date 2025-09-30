@@ -1,9 +1,12 @@
 
-
 import React from 'react';
 import { CreationRequest, KYCSubmission, Vendor, Listing, ManagedUser, GlobalAd, Post, PropertyHolding, OtherHolding, Wallet, Transaction, VirtualCard, PayoutAccount, SupportTicket, UserConversation, CommunityInfo, LoanProduct, PiggyProduct, LoanApplication, PropertyForSale, CommunityTransaction, EstateInfo, EstateMember, Amenity, Incident, EstateFee, BillPaymentStatus, Occupant, Post as EstatePost, EstateEvent, DueFrequency, CommunityMember, PaymentStatus } from './types';
 import { CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import { pastDate, futureDate, generateCardNumber, generateCVV, generateExpiry, generateMembershipNumber } from './utils';
+
+// FIX: Define projectStartDate to be used in mock project data.
+const projectStartDate = new Date();
+projectStartDate.setMonth(projectStartDate.getMonth() - 2);
 
 // --- Mock Data from App.tsx ---
 export const initialRequests: CreationRequest[] = [
@@ -105,14 +108,12 @@ export const mockOtherHoldings: OtherHolding[] = [
 
 
 // --- Mock Data from Wallets.tsx ---
-// FIX: Converted JSX in a .ts file to React.createElement to fix parsing errors.
 const UsdtIcon = () => (
     React.createElement('svg', { xmlns: 'http://www.w3.org/2000/svg', className: "h-6 w-6", viewBox: "0 0 24 24", fill: "currentColor" },
         React.createElement('path', { d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2.34c1.1.2 1.95.83 2.45 1.66h-1.9c-.39-.55-1.02-.8-1.55-.8s-1.16.25-1.55.8h-1.9c.5-1.3 1.85-2-3.45-2V7h-2v2h-2V7z M8.55 12.5c-.5.83-1.35 1.46-2.45 1.66V15h2v2h2v-2h2v-2.34c-1.1-.2-1.95-.83-2.45-1.66h1.9c.39.55 1.02.8 1.55.8s1.16-.25-1.55.8h1.9c-.5 1.3-1.85 2-3.45 2V17h2v-2h2v-2h-3.45z" })
     )
 );
 
-// FIX: Converted JSX in a .ts file to React.createElement to fix parsing errors.
 export const initialWallets: Wallet[] = [
   { id: 'naira', currency: 'Naira', balance: 500000, icon: React.createElement(CurrencyDollarIcon, { className: "h-6 w-6" }), color: 'blue' },
   { id: 'dollar', currency: 'Dollar', balance: 250.00, icon: React.createElement(CurrencyDollarIcon, { className: "h-6 w-6" }), color: 'green' },
@@ -128,6 +129,14 @@ export const mockTransactions: Transaction[] = [
   { id: 'TXN345678', type: 'Debit', description: 'Airtime Purchase', amount: 5000, date: pastDate(10), status: 'Completed', details: { "Network": "MTN", "Recipient": "+2348012345678" } },
   { id: 'TXN901234', type: 'Credit', description: 'Loan Payout: Emergency Loan', amount: 50000, date: pastDate(5), status: 'Completed', details: { "Loan ID": "LN001" } },
   { id: 'TXN567890', type: 'Debit', description: 'Subscription Fee: Community', amount: 50000, date: pastDate(2), status: 'Completed', details: { "Subscription": "Community Annual" } },
+];
+
+export const mockCardTransactions: Transaction[] = [
+  { id: 'CTX-C-001', type: 'Debit', description: 'Amazon Purchase', amount: 49.99, date: pastDate(5), status: 'Completed', details: { "Merchant": "Amazon.com", "Category": "Shopping" } },
+  { id: 'CTX-C-002', type: 'Debit', description: 'Netflix Subscription', amount: 15.49, date: pastDate(10), status: 'Completed', details: { "Merchant": "Netflix", "Category": "Entertainment" } },
+  { id: 'CTX-C-003', type: 'Credit', description: 'Refund from Target', amount: 25.00, date: pastDate(12), status: 'Completed', details: { "Merchant": "Target", "Category": "Refund" } },
+  { id: 'CTX-C-004', type: 'Debit', description: 'Uber Ride', amount: 22.50, date: pastDate(15), status: 'Completed', details: { "Merchant": "Uber", "Category": "Transport" } },
+  { id: 'CTX-C-005', type: 'Debit', description: 'Starbucks Coffee', amount: 5.75, date: pastDate(16), status: 'Completed', details: { "Merchant": "Starbucks", "Category": "Food & Drink" } },
 ];
 
 export const mockPayoutAccounts: PayoutAccount[] = [
@@ -226,6 +235,36 @@ export const initialConversations: UserConversation[] = [
 // --- Mock Data from Community.tsx ---
 const memberStatuses = ['Active', 'Suspended', 'Invited'] as const;
 const paymentStatuses = ['Paid', 'Unpaid', 'Overdue'] as const;
+
+// FIX: Define and export mockStatementData for use in Dashboard.tsx.
+export const mockStatementData = {
+  openingBalance: 100000,
+  walletTransactions: mockTransactions.slice(0, 5), // take a few
+  cardTransactions: mockCardTransactions,
+  community: {
+    logo: 'https://picsum.photos/seed/demo/48/48',
+    name: 'Demo Community',
+    address: '123 Community Hub, Innovation City',
+    loans: [
+      {id: 'L001', type: 'Emergency Loan', amount: 50000, interest: 15, maturity: futureDate(320)},
+    ],
+    projects: [
+      {id: 'PROJ001', name: 'Project Phoenix', contribution: 100000, status: 'Ongoing' as 'Ongoing' | 'Completed'},
+    ],
+    savings: [
+      {id: 'S001', productName: 'Flex Save', principal: 150000, interestRate: 10, maturity: futureDate(265)},
+    ],
+  },
+  estate: {
+    logo: 'https://picsum.photos/seed/estate-demo/48/48',
+    name: 'Demo Estate',
+  },
+  invoices: [
+    {id: 'INV001', description: 'Annual Membership Dues', amount: 5500, date: pastDate(30), entity: 'community' as 'community' | 'estate'},
+    {id: 'INV002', description: 'Monthly Service Charge', amount: 25000, date: pastDate(5), entity: 'estate' as 'community' | 'estate'},
+  ]
+};
+
 
 export const mockLoanProducts: LoanProduct[] = [
     { id: 'LP001', name: 'Emergency Loan', description: 'Quick access funds for emergencies, up to ₦100,000.', interestRate: 15, maxAmount: 100000, maxTenure: 12 },
@@ -432,7 +471,7 @@ export const mockFullCommunities: Record<string, CommunityInfo> = {
                     }
                 ]
             },
-            { id: 'PROJ002', name: 'Tech Innovators Fund', supervisor: 'Diana Prince', projectManager: 'Bruce Wayne', category: 'Tech Startup', isPublic: true, currency: 'NGN', unitPrice: 5000, totalUnits: 5000, targetAmount: 25000000, minContribution: 50000, enrollmentCloseDate: futureDate(60), isResellable: false, withdrawalNoticeDays: 90, profitModel: 'Payout', description: 'Investing in promising early-stage technology startups.', enrollmentType: 'TargetBased', startDate: pastDate(60), tiers: [], milestones: [], updates: [], financials: [], participants: [] },
+            { id: 'PROJ002', name: 'Tech Innovators Fund', supervisor: 'Diana Prince', projectManager: 'Bruce Wayne', category: 'Tech Startup', isPublic: true, currency: 'NGN', unitPrice: 5000, totalUnits: 5000, targetAmount: 25000000, minContribution: 50000, enrollmentCloseDate: futureDate(60), isResellable: false, withdrawalNoticeDays: 90, profitModel: 'Payout', description: 'Investing in promising early-stage technology startups.', enrollmentType: 'TargetBased', startDate: projectStartDate.toISOString(), tiers: [], milestones: [], updates: [], financials: [], participants: [] },
         ],
         loanProducts: mockLoanProducts,
         loanApplications: mockLoanApplications,
@@ -483,147 +522,4 @@ export const mockFullCommunities: Record<string, CommunityInfo> = {
         ],
         transactionHistory: mockTransactionHistory,
     }
-};
-
-// --- Mock Data from EstateManagement.tsx ---
-export const MOCK_CURRENT_USER_ID = 'user123'; // A simulated ID for a non-member user
-export const MOCK_CURRENT_USER_AVATAR = 'https://picsum.photos/seed/currentuser/48/48';
-
-export const mockEstateMembers: EstateMember[] = [
-    { id: 'em1', fullName: 'John Doe', avatarUrl: 'https://picsum.photos/seed/em1/48/48', role: 'Resident', phoneNumber: '+234 801 234 5678', email: 'john.doe@example.com', birthDate: '1985-04-12', privacySettings: { isPhoneNumberPublic: true, isAddressPublic: false, isBirthYearPublic: true, messagePrivacy: 'members_only' }, status: 'Active', propertyHoldings: [{ id: 'ph1', propertyId: 'EPROP01', propertyName: 'Demo Estate 4-Bed Duplex', estateId: 'demo', variantName: 'Standard Unit', units: 1 }] },
-    { id: 'em2', fullName: 'Alice Williams', avatarUrl: 'https://picsum.photos/seed/em2/48/48', role: 'Partner', phoneNumber: '+234 802 345 6789', email: 'alice.w@example.com', birthDate: '1978-09-25', privacySettings: { isPhoneNumberPublic: true, isAddressPublic: true, isBirthYearPublic: true, messagePrivacy: 'anyone' }, status: 'Active' },
-    { id: 'em3', fullName: 'Security Gate A', avatarUrl: 'https://picsum.photos/seed/em3/48/48', role: 'Security', phoneNumber: '+234 803 456 7890', email: 'gate.a@example.com', birthDate: '1990-01-01', privacySettings: { isPhoneNumberPublic: true, isAddressPublic: false, isBirthYearPublic: false, messagePrivacy: 'members_only' }, status: 'Active' },
-    { id: 'em4', fullName: 'Jane Smith', avatarUrl: 'https://picsum.photos/seed/em4/48/48', role: 'Resident', phoneNumber: '+234 804 567 8901', email: 'jane.s@example.com', birthDate: '1992-02-14', privacySettings: { isPhoneNumberPublic: false, isAddressPublic: false, isBirthYearPublic: false, messagePrivacy: 'members_only' }, status: 'Suspended' },
-    { id: 'em5', fullName: 'Bob Brown', avatarUrl: 'https://picsum.photos/seed/em5/48/48', role: 'Resident', phoneNumber: '+234 805 678 9012', email: 'bob.b@example.com', birthDate: '1995-03-18', privacySettings: { isPhoneNumberPublic: true, isAddressPublic: false, isBirthYearPublic: false, messagePrivacy: 'members_only' }, status: 'Inactive' },
-];
-
-export const mockEstateEvents: EstateEvent[] = [
-    { id: 'EE1', title: 'Annual General Meeting', date: new Date(new Date().getFullYear(), new Date().getMonth(), 28).toISOString(), description: 'Discussing the financials and future plans.', isEndorsed: true, proposer: 'Alice Williams' },
-    { id: 'EE2', title: 'Kids Halloween Party', date: new Date(new Date().getFullYear(), 9, 31).toISOString(), description: 'Fun and games for the little ones at the clubhouse.', isEndorsed: false, proposer: 'John Doe' }
-];
-
-export const mockEstateProperties: PropertyForSale[] = [
-    { 
-        id: 'EPROP01', 
-        estateId: 'demo', 
-        name: 'Demo Estate 4-Bed Duplex', 
-        description: 'A luxurious duplex with a private garden in the heart of the estate.', 
-        image: 'https://picsum.photos/seed/prop-duplex/400/300',
-        variants: [
-            { id: 'v1', name: 'Standard Unit', price: 85000000, availableUnits: 3, paymentType: 'One-off', installments: [], refundOnDefaultPercent: 0 },
-            { id: 'v2', name: 'Penthouse Unit', price: 120000000, availableUnits: 1, paymentType: 'One-off', installments: [], refundOnDefaultPercent: 0 }
-        ]
-    }
-];
-
-export const mockAmenities: Amenity[] = [ { id: 'gym', name: 'Gym', operatingHours: { start: 6, end: 22 } }, { id: 'clubhouse', name: 'Clubhouse', operatingHours: { start: 10, end: 20 } }, ];
-export const mockIncidents: Incident[] = [
-    { id: 'INC-001', description: 'Street light out near Block C', location: 'Block C', severity: 'Low', departments: ['Maintenance'], reportedBy: 'John Doe', reportedByOccupantId: 1, date: pastDate(1), status: 'Reported', thumbsUp: 5, thumbsDown: 0 },
-    { id: 'INC-002', description: 'Loud music from Flat 2B', location: 'Flat 2B', severity: 'Medium', departments: ['Security', 'Management'], reportedBy: 'Alice Williams', date: pastDate(3), status: 'In Progress', thumbsUp: 2, thumbsDown: 1 },
-    { id: 'INC-003', description: 'Waste disposal not collected', location: 'General Area', severity: 'Medium', departments: ['Management', 'Utility'], reportedBy: 'Jane Doe', reportedByOccupantId: 2, date: pastDate(5), status: 'Resolved', thumbsUp: 10, thumbsDown: 0 },
-];
-export const initialEstateFees: EstateFee[] = [ { id: 'B001', title: 'Monthly Service Charge', description: 'Covers security, cleaning, and general maintenance.', amount: 25000, dueDate: '2023-11-30', frequency: DueFrequency.MONTHLY }, { id: 'B002', title: 'Generator Fuel Levy', description: 'Contribution for diesel purchase.', amount: 10000, dueDate: '2023-11-15', frequency: DueFrequency.ONETIME }, ];
-
-export const initialFullEstates: EstateInfo[] = [
-    { 
-        id: 'demo', 
-        name: 'Demo Estate', 
-        address: '123 Showcase Avenue, Creeb City', 
-        coverImage: 'https://picsum.photos/seed/estate-demo/800/400',
-        description: 'Welcome to Demo Estate, a premier residential community offering top-notch amenities and a secure environment. This is a placeholder description that partners can edit to provide more details about the estate.',
-        gallery: [
-            'https://picsum.photos/seed/gallery1/600/400',
-            'https://picsum.photos/seed/gallery2/600/400',
-            'https://picsum.photos/seed/gallery3/600/400',
-            'https://picsum.photos/seed/gallery4/600/400',
-        ],
-        about: { description: 'Welcome to Demo Estate, a premier residential community offering top-notch amenities and a secure environment. This is a placeholder description that partners can edit to provide more details about the estate.', externalLinks: [{title: "Official Website", url:"#"}], phoneNumbers: ["+234 800 123 4567"], officeAddress: '123 Showcase Avenue, Creeb City', officeHours: 'Mon-Fri, 9am-5pm' },
-        amenities: mockAmenities,
-        incidents: mockIncidents,
-        fees: initialEstateFees,
-        members: mockEstateMembers,
-        accessRequests: [
-             { userId: 'user456', userName: 'Bruce Wayne', userAvatar: 'https://picsum.photos/seed/bruce/48/48', date: new Date().toISOString(), status: 'Pending' }
-        ],
-        events: mockEstateEvents,
-        propertiesForSale: mockEstateProperties,
-        customRoles: ['Treasurer', 'Maintenance Contact'],
-    },
-    { 
-        id: 'prime', 
-        name: 'Prime Gardens Estate', 
-        address: 'Lekki, Lagos', 
-        coverImage: 'https://picsum.photos/seed/estate1/800/400',
-        description: 'Experience luxury living at Prime Gardens. Located in the heart of Lekki, this estate offers serene landscapes and state-of-the-art facilities for a comfortable and modern lifestyle.',
-        gallery: [
-            'https://picsum.photos/seed/prime1/600/400',
-            'https://picsum.photos/seed/prime2/600/400',
-        ],
-        about: { description: 'Experience luxury living at Prime Gardens. Located in the heart of Lekki, this estate offers serene landscapes and state-of-the-art facilities for a comfortable and modern lifestyle.', externalLinks: [], phoneNumbers: [], officeAddress: 'Lekki, Lagos', officeHours: 'Mon-Fri, 9am-5pm' },
-        amenities: [],
-        incidents: [],
-        fees: [],
-        members: [],
-        accessRequests: [],
-        events: [],
-    },
-    { 
-        id: 'haven', 
-        name: 'Serene Haven', 
-        address: 'Ikeja, Lagos', 
-        coverImage: 'https://picsum.photos/seed/estate2/800/400',
-        description: 'A peaceful and family-friendly environment in Ikeja. Serene Haven is known for its excellent security, well-maintained infrastructure, and strong community spirit.',
-        gallery: [],
-        about: { description: 'A peaceful and family-friendly environment in Ikeja. Serene Haven is known for its excellent security, well-maintained infrastructure, and strong community spirit.', externalLinks: [], phoneNumbers: [], officeAddress: 'Ikeja, Lagos', officeHours: 'Mon-Fri, 9am-5pm' },
-        amenities: [],
-        incidents: [],
-        fees: [],
-        members: [],
-        accessRequests: [],
-        events: [],
-    },
-];
-
-export const initialOccupants: Occupant[] = [
-    { id: 1, name: 'Jane Doe', email: 'jane.d@example.com', address: 'Flat 1A, Main Building', role: 'Occupant', status: 'Active', accessCode: '789 012',
-        bills: [
-            { id: 'OB1', title: 'Monthly Service Charge', description: 'Service charge for October', amount: 25000, status: 'Paid', type: 'Recurrent', frequency: DueFrequency.MONTHLY, issueDate: pastDate(35), dueDate: pastDate(5) },
-            { id: 'OB2', title: 'Generator Fuel Levy', description: 'Contribution for fuel', amount: 10000, status: 'Paid', type: 'One-off', frequency: null, issueDate: pastDate(20), dueDate: pastDate(15), discount: 1000, notes: 'Early payment discount' },
-        ],
-        noticeBoard: [{id: 'N1', author: 'John Doe (Owner)', authorId: 'em1', authorAvatar: 'https://picsum.photos/seed/em1/48/48', content: 'Rent is due next week!', timestamp: new Date().toISOString(), comments: []}]
-    },
-    { id: 2, name: 'Junior Doe', email: 'junior.d@example.com', address: 'Flat 1A, Main Building', role: 'Sub-Admin', status: 'Active', accessCode: '345 678', bills: [], noticeBoard: [] },
-    { id: 3, name: 'New Tenant', email: 'new@tenant.com', address: 'BQ, Main Building', role: 'Occupant', status: 'Invited', accessCode: '901 234', bills: [], noticeBoard: [] },
-];
-
-export const mockEstatePosts: EstatePost[] = [
-    { id: 'e1', author: 'Estate Manager', authorAvatar: 'https://picsum.photos/seed/e-admin/48/48', content: "Friendly reminder: The monthly service charge is due this Friday. You can pay via the 'View Bills' button on the dashboard.", timestamp: '1d ago', likes: 15, comments: 2, reposts: 0, visibility: 'members_and_occupants' },
-    { id: 'e2', author: 'John Doe', authorAvatar: 'https://picsum.photos/seed/user/48/48', content: "Has anyone else noticed the street light out near Block C? I've reported it via the incident panel.", timestamp: '3h ago', likes: 8, comments: 4, reposts: 0, visibility: 'members_only' },
-];
-
-export const initialPaymentStatus: BillPaymentStatus[] = [ { billId: 'B001', residentName: 'John Doe', status: 'Paid' }, { billId: 'B001', residentName: 'Jane Smith', status: 'Unpaid' }, { billId: 'B001', residentName: 'Alice Johnson', status: 'Overdue' }, { billId: 'B002', residentName: 'John Doe', status: 'Paid' }, { billId: 'B002', residentName: 'Jane Smith', status: 'Paid' }, { billId: 'B002', residentName: 'Alice Johnson', status: 'Unpaid' }, ];
-
-export const mockStatementData = {
-    openingBalance: 500000,
-    walletTransactions: mockTransactions,
-    community: {
-        name: 'Demo Community',
-        logo: 'https://picsum.photos/seed/demo/100/100',
-        address: '456 Demo Lane, Innovation City',
-        loans: [{ id: 'LN001', type: 'Business Loan', amount: 500000, repaid: 100000, interest: 8, maturity: futureDate(365) }],
-        projects: [{ id: 'PROJ001', name: 'Project Phoenix', contribution: 100000, status: 'Ongoing' as const }],
-        savings: [{ id: 'SV001', productName: 'Flex Save', principal: 150000, interestRate: 10, maturity: futureDate(180) }]
-    },
-    estate: {
-        name: 'Demo Estate',
-        logo: 'https://picsum.photos/seed/estate-demo/100/100',
-        address: '123 Showcase Avenue, Creeb City',
-        bills: [{ id: 'B001', title: 'Monthly Service Charge', amount: 25000, status: 'Paid' as PaymentStatus }],
-        occupants: ['Jane Doe', 'Junior Doe'],
-    },
-    invoices: [
-        { id: 'INV-R-023', description: 'Rubby Purchase (Batch Q4 2023)', date: pastDate(25), amount: 50000, entity: 'community' as const },
-        { id: 'INV-P-451', description: 'Project Phoenix Initial Investment', date: pastDate(45), amount: 100000, entity: 'community' as const },
-        { id: 'INV-E-987', description: 'Special Gate Access Fob', date: pastDate(2), amount: 15000, entity: 'estate' as const },
-    ]
 };

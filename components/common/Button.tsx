@@ -1,17 +1,15 @@
 
+
 import React from 'react';
 
 interface ButtonProps {
   children: React.ReactNode;
-  // FIX: Changed onClick prop type to support event handlers that need the event object, like for stopPropagation.
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   variant?: 'primary' | 'secondary' | 'danger';
   className?: string;
   type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
-  // FIX: Added optional title prop to support tooltips on buttons.
   title?: string;
-  // FIX: Added form prop to support associating button with a form outside its DOM hierarchy.
   form?: string;
 }
 

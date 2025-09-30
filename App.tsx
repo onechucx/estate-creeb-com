@@ -1,4 +1,5 @@
 
+
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
@@ -127,11 +128,10 @@ const App: React.FC = () => {
 
     switch (activeView) {
       case AppView.DASHBOARD:
-        return <Dashboard setActiveView={setActiveView} />;
+        return <Dashboard setActiveView={setActiveView} showToast={showToast} />;
       case AppView.WALLETS:
         return <Wallets showToast={showToast} />;
       case AppView.COMMUNITY:
-        // FIX: Changed prop name from 'isCommunitySubscribed' to 'isSubscribed' to match CommunityProps interface.
         return <Community showToast={showToast} userRole={userRole} isSubscribed={userSubscriptions.community} onStartMessage={handleStartMessage} />;
       case AppView.ADMIN_PANEL:
         return <AdminPanel userRole={userRole} showToast={showToast} adPricing={adPricing} setAdPricing={setAdPricing} requests={requests} setRequests={setRequests} kycSubmissions={kycSubmissions} setKycSubmissions={setKycSubmissions} listings={listings} setListings={setListings} vendors={vendors} setVendors={setVendors} managedUsers={managedUsers} setManagedUsers={setManagedUsers} subscriptionPricing={subscriptionPricing} setSubscriptionPricing={setSubscriptionPricing} />;
@@ -142,7 +142,6 @@ const App: React.FC = () => {
       case AppView.MARKETPLACE:
         return <Marketplace showToast={showToast} isAuthenticated={true} setActiveView={setActiveView} onViewVendor={handleViewVendor} isCommunitySubscribed={userSubscriptions.community} listings={listings} onStartMessage={handleStartMessage} />;
       case AppView.MY_LISTINGS:
-        // FIX: Changed prop name from 'isSubscribed' to 'isCommunitySubscribed' to match the MyListingsProps interface.
         return <MyListings showToast={showToast} adPricing={adPricing} userLastFreeAdDate={userLastFreeAdDate} setUserLastFreeAdDate={setUserLastFreeAdDate} isCommunitySubscribed={userSubscriptions.community} allListings={listings} setAllListings={setListings} currentVendorId={MOCK_CURRENT_VENDOR_ID} />;
       case AppView.SETTINGS:
         return <Settings settings={appSettings} setSettings={setAppSettings} />;
@@ -151,12 +150,11 @@ const App: React.FC = () => {
       case AppView.INBOX:
         return <Inbox recipient={messageRecipient} setRecipient={setMessageRecipient} />;
       case AppView.CREATE_HUB:
-        // FIX: Changed 'userSubscriptions' prop to 'isSubscribed' and passed a boolean value to match component's props interface.
         return <CreateHub showToast={showToast} setRequests={setRequests} isSubscribed={userSubscriptions.community || userSubscriptions.estate} />;
       case AppView.VENDOR_PROFILE:
         return viewedVendorName ? <VendorProfile vendorName={viewedVendorName} setActiveView={setActiveView} listings={listings} onStartMessage={handleStartMessage} /> : <Marketplace showToast={showToast} isAuthenticated={true} setActiveView={setActiveView} onViewVendor={handleViewVendor} isCommunitySubscribed={userSubscriptions.community} listings={listings} onStartMessage={handleStartMessage} />;
       default:
-        return <Dashboard setActiveView={setActiveView} />;
+        return <Dashboard setActiveView={setActiveView} showToast={showToast} />;
     }
   };
   

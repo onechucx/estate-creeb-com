@@ -42,7 +42,6 @@ export const PublicHomePage: React.FC<PublicHomePageProps> = ({ onLoginSuccess, 
                     isAuthenticated={false} 
                     listings={listings} 
                     onLoginRequest={() => setIsLoginModalOpen(true)}
-                    // FIX: Added missing 'isCommunitySubscribed' prop, required by MarketplaceProps.
                     isCommunitySubscribed={false}
                 />
             </main>
