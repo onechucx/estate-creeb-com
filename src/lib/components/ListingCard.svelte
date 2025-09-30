@@ -2,6 +2,9 @@
     import { StarIcon } from 'heroicons-svelte/24/solid';
     import Card from './common/Card.svelte';
     import type { Listing } from '$lib/types';
+    import { createEventDispatcher } from 'svelte';
+
+    const dispatch = createEventDispatcher();
 
     export let listing: Listing;
     export let onViewVendor: ((vendorName: string) => void) | undefined = undefined;
@@ -14,7 +17,7 @@
     }
 </script>
 
-<Card className="group relative cursor-pointer" on:click>
+<Card class="group relative">
     {#if listing.isPaid}
             <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full flex items-center">
             <StarIcon class="h-4 w-4 mr-1" />Paid
@@ -26,7 +29,10 @@
     <p class="font-semibold text-brand-primary dark:text-dark-primary text-xl">₦{listing.price.toLocaleString()}</p>
     <p class="text-sm text-gray-500 dark:text-dark-text-secondary truncate">{listing.location}</p>
     {#if onViewVendor}
-        <p class="text-xs text-gray-400 mt-1">by <button on:click={handleViewVendor} class="hover:underline font-semibold">{listing.vendorName}</button></p>
+        <p class="text-xs text-gray-400 mt-1">by <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold">{listing.vendorName}</button></p>
     {/if}
+    <div class="mt-4">
+        <button type="button" class="px-3 py-2 bg-brand-primary text-white rounded" on:click={() => dispatch('open', listing)}>View Details</button>
+    </div>
 </Card>
  
