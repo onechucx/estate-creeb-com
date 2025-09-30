@@ -1,8 +1,12 @@
-import { c as create_ssr_component } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, v as validate_component } from "../../../../chunks/ssr.js";
+import "../../../../chunks/stores.js";
+const Dashboard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  const data = void 0;
+  if ($$props.data === void 0 && $$bindings.data && data !== void 0) ;
+  return `<div data-svelte-h="svelte-unu57u"><h2 class="text-2xl font-bold">Dashboard</h2> <p class="mt-2">Overview and metrics go here.</p></div>`;
+});
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  let { data } = $$props;
-  if ($$props.data === void 0 && $$bindings.data && data !== void 0) $$bindings.data(data);
-  return `<h2 class="text-2xl font-bold" data-svelte-h="svelte-1fl8n8o">Dashboard</h2> <p class="mt-2" data-svelte-h="svelte-1ag2kfv">This is the dashboard placeholder.</p>`;
+  return `${validate_component(Dashboard, "Dashboard").$$render($$result, {}, {}, {})}`;
 });
 export {
   Page as default

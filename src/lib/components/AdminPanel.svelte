@@ -15,27 +15,37 @@
 
 <div class="space-y-6">
   <div>
-    <div class="border-b border-brand-border dark:border-dark-border">
-      <nav class="-mb-px flex space-x-2 overflow-x-auto">
-        <button on:click={() => (activeTab = 'requests')} class="px-4 py-2 font-semibold rounded-t-lg">Requests</button>
-        <button on:click={() => (activeTab = 'kyc')} class="px-4 py-2 font-semibold rounded-t-lg">KYC Verification</button>
-        <button on:click={() => (activeTab = 'subscriptions')} class="px-4 py-2 font-semibold rounded-t-lg">Subscriptions</button>
-        <button on:click={() => (activeTab = 'global_ads')} class="px-4 py-2 font-semibold rounded-t-lg">Global Ads</button>
-        <button on:click={() => (activeTab = 'marketplace')} class="px-4 py-2 font-semibold rounded-t-lg">Marketplace</button>
-      </nav>
+      <div class="border-b border-brand-border dark:border-dark-border">
+      <div class="-mb-px flex space-x-2 overflow-x-auto" role="tablist" aria-label="Admin sections">
+  <button id="tab-requests" type="button" role="tab" aria-selected={activeTab === 'requests'} aria-controls="tabpanel-requests" on:click={() => (activeTab = 'requests')} aria-label="Requests tab" class="px-4 py-2 font-semibold rounded-t-lg">Requests</button>
+  <button id="tab-kyc" type="button" role="tab" aria-selected={activeTab === 'kyc'} aria-controls="tabpanel-kyc" on:click={() => (activeTab = 'kyc')} aria-label="KYC Verification tab" class="px-4 py-2 font-semibold rounded-t-lg">KYC Verification</button>
+  <button id="tab-subscriptions" type="button" role="tab" aria-selected={activeTab === 'subscriptions'} aria-controls="tabpanel-subscriptions" on:click={() => (activeTab = 'subscriptions')} aria-label="Subscriptions tab" class="px-4 py-2 font-semibold rounded-t-lg">Subscriptions</button>
+  <button id="tab-global-ads" type="button" role="tab" aria-selected={activeTab === 'global_ads'} aria-controls="tabpanel-global-ads" on:click={() => (activeTab = 'global_ads')} aria-label="Global Ads tab" class="px-4 py-2 font-semibold rounded-t-lg">Global Ads</button>
+  <button id="tab-marketplace" type="button" role="tab" aria-selected={activeTab === 'marketplace'} aria-controls="tabpanel-marketplace" on:click={() => (activeTab = 'marketplace')} aria-label="Marketplace tab" class="px-4 py-2 font-semibold rounded-t-lg">Marketplace</button>
+  </div>
     </div>
   </div>
 
   {#if activeTab === 'requests'}
-    <RequestsManagement {showToast} />
+    <div id="tabpanel-requests" role="tabpanel" aria-labelledby="tab-requests">
+      <RequestsManagement {showToast} />
+    </div>
   {:else if activeTab === 'kyc'}
-    <KYCManagement {showToast} />
+    <div id="tabpanel-kyc" role="tabpanel" aria-labelledby="tab-kyc">
+      <KYCManagement {showToast} />
+    </div>
   {:else if activeTab === 'global_ads'}
-    <GlobalAdsManagement {showToast} />
+    <div id="tabpanel-global-ads" role="tabpanel" aria-labelledby="tab-global-ads">
+      <GlobalAdsManagement {showToast} />
+    </div>
   {:else if activeTab === 'marketplace'}
-    <MarketplaceManagementPanel {showToast} />
+    <div id="tabpanel-marketplace" role="tabpanel" aria-labelledby="tab-marketplace">
+      <MarketplaceManagementPanel {showToast} />
+    </div>
   {:else if activeTab === 'subscriptions'}
-    <SubscriptionManagement {showToast} />
+    <div id="tabpanel-subscriptions" role="tabpanel" aria-labelledby="tab-subscriptions">
+      <SubscriptionManagement {showToast} />
+    </div>
   {/if}
 </div>
 

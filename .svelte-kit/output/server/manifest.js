@@ -10,12 +10,23 @@ return {
 	assets: new Set(["favicon.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		client: {start:"_app/immutable/entry/start.BaEA_KEa.js",app:"_app/immutable/entry/app.C4h0-QPI.js",imports:["_app/immutable/entry/start.BaEA_KEa.js","_app/immutable/chunks/CgnZDRt_.js","_app/immutable/chunks/0iOe7Ifd.js","_app/immutable/entry/app.C4h0-QPI.js","_app/immutable/chunks/0iOe7Ifd.js","_app/immutable/chunks/IHki7fMi.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
+		client: {start:"_app/immutable/entry/start.CIMIKQyB.js",app:"_app/immutable/entry/app.ixJ1Eojj.js",imports:["_app/immutable/entry/start.CIMIKQyB.js","_app/immutable/chunks/oLxC1rRC.js","_app/immutable/chunks/BMrH7jlL.js","_app/immutable/chunks/lWV1LG3Y.js","_app/immutable/entry/app.ixJ1Eojj.js","_app/immutable/chunks/BMrH7jlL.js","_app/immutable/chunks/IHki7fMi.js"],stylesheets:[],fonts:[],uses_env_dynamic_public:false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
 			__memo(() => import('./nodes/2.js')),
-			__memo(() => import('./nodes/3.js'))
+			__memo(() => import('./nodes/3.js')),
+			__memo(() => import('./nodes/4.js')),
+			__memo(() => import('./nodes/5.js')),
+			__memo(() => import('./nodes/6.js')),
+			__memo(() => import('./nodes/7.js')),
+			__memo(() => import('./nodes/8.js')),
+			__memo(() => import('./nodes/9.js')),
+			__memo(() => import('./nodes/10.js')),
+			__memo(() => import('./nodes/11.js')),
+			__memo(() => import('./nodes/12.js')),
+			__memo(() => import('./nodes/13.js')),
+			__memo(() => import('./nodes/14.js'))
 		],
 		remotes: {
 			
@@ -29,10 +40,31 @@ return {
 				endpoint: null
 			},
 			{
+				id: "/(app)/admin-panel",
+				pattern: /^\/admin-panel\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 3 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/community",
+				pattern: /^\/community\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 4 },
+				endpoint: null
+			},
+			{
 				id: "/(app)/dashboard",
 				pattern: /^\/dashboard\/?$/,
 				params: [],
-				page: { layouts: [0,], errors: [1,], leaf: 3 },
+				page: { layouts: [0,], errors: [1,], leaf: 5 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/estate-management",
+				pattern: /^\/estate-management\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 6 },
 				endpoint: null
 			},
 			{
@@ -41,6 +73,62 @@ return {
 				params: [],
 				page: null,
 				endpoint: __memo(() => import('./entries/endpoints/favicon.ico/_server.ts.js'))
+			},
+			{
+				id: "/(app)/inbox",
+				pattern: /^\/inbox\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 7 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/marketplace",
+				pattern: /^\/marketplace\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 8 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/my-listings",
+				pattern: /^\/my-listings\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 9 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/profile",
+				pattern: /^\/profile\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 10 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/settings",
+				pattern: /^\/settings\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 11 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/support",
+				pattern: /^\/support\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 12 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/vendor/[name]",
+				pattern: /^\/vendor\/([^/]+?)\/?$/,
+				params: [{"name":"name","optional":false,"rest":false,"chained":false}],
+				page: { layouts: [0,], errors: [1,], leaf: 13 },
+				endpoint: null
+			},
+			{
+				id: "/(app)/wallets",
+				pattern: /^\/wallets\/?$/,
+				params: [],
+				page: { layouts: [0,], errors: [1,], leaf: 14 },
+				endpoint: null
 			}
 		],
 		prerendered_routes: new Set([]),

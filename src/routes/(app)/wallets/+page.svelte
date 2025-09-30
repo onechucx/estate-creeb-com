@@ -1,6 +1,5 @@
 <script lang="ts">
-  // Wallets placeholder
+  import Wallets from '$lib/components/Wallets.svelte';
 </script>
 
-<h2 class="text-2xl font-bold">Wallets</h2>
-<p class="mt-2">Wallets and payments placeholder.</p>
+<Wallets />

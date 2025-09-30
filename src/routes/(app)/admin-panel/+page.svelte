@@ -1,6 +1,10 @@
 <script lang="ts">
-  // Admin panel placeholder
+  import AdminPanel from '$lib/components/AdminPanel.svelte';
+  import { toast } from '$lib/stores';
+
+  const showToast = (m: string) => toast.set({ id: Date.now().toString(), message: m, type: 'success' });
 </script>
 
-<h2 class="text-2xl font-bold">Admin Panel</h2>
-<p class="mt-2">Administration dashboard placeholder.</p>
+<div class="p-6">
+  <AdminPanel {showToast} />
+</div>

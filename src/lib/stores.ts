@@ -24,6 +24,17 @@ export const appSettings = writable<AppSettings>({
     fontSize: 'base'
 });
 
+// minimal user store used by profile and other components
+export const user = writable({
+    id: 'user-1',
+    name: 'John Doe',
+    email: 'john.d@example.com',
+    phone: '',
+    avatar: 'https://picsum.photos/seed/user-1/48/48',
+    role: 'User' as UserRole,
+    bio: ''
+});
+
 const pastDate = (days: number) => new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 
 export const initialRequests: CreationRequest[] = [

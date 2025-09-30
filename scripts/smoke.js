@@ -1,12 +1,14 @@
 const http = require('http');
-const paths = ['/', '/app/dashboard', '/app/marketplace'];
 
-(async () => {
-  for (const path of paths) {
+const paths = ['/', '/dashboard', '/marketplace'];
+const hosts = ['127.0.0.1', '::1', 'localhost'];
+
+async function tryHosts(path) {
+  for (const host of hosts) {
     try {
       const res = await new Promise((resolve, reject) => {
         const req = http.request(
-          { hostname: '127.0.0.1', port: 5173, path, method: 'GET', timeout: 5000 },
+          { hostname: host, port: process.env.PORT || 4173, path, method: 'GET', timeout: 5000 },
           (r) => {
             let b = '';
             r.on('data', (c) => (b += c));
@@ -20,6 +22,18 @@ const paths = ['/', '/app/dashboard', '/app/marketplace'];
 
       console.log('\n===', path, 'status=', res.statusCode);
       console.log(res.body.slice(0, 800));
+      return;
+    } catch (e) {
+      // try next
+    }
+  }
+  throw new Error('all hosts failed');
+}
+
+(async () => {
+  for (const path of paths) {
+    try {
+      await tryHosts(path);
     } catch (e) {
       console.error('\nERR', path, e.message);
     }

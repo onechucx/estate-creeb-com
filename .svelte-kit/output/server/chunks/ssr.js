@@ -22,6 +22,12 @@ function subscribe(store, ...callbacks) {
   const unsub = store.subscribe(...callbacks);
   return unsub.unsubscribe ? () => unsub.unsubscribe() : unsub;
 }
+function compute_rest_props(props, keys) {
+  const rest = {};
+  keys = new Set(keys);
+  for (const k in props) if (!keys.has(k) && k[0] !== "$") rest[k] = props[k];
+  return rest;
+}
 function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
   return new CustomEvent(type, { detail, bubbles, cancelable });
 }
@@ -248,9 +254,11 @@ export {
   escape_object as e,
   escape as f,
   createEventDispatcher as g,
-  safe_not_equal as h,
-  getContext as i,
-  subscribe as j,
+  getContext as h,
+  subscribe as i,
+  safe_not_equal as j,
+  compute_rest_props as k,
+  escape_attribute_value as l,
   missing_component as m,
   noop as n,
   setContext as s,

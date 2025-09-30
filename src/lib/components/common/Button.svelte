@@ -20,9 +20,16 @@
     };
 
     let finalClasses: string;
-    $: finalClasses = `${baseClasses} ${variantClasses[variant]} ${className}`;
+    // Merge any `class` passed via the component's attributes with the computed classes
+    $: extraClass = ($$restProps && ($$restProps as any).class) || '';
+    $: finalClasses = `${baseClasses} ${variantClasses[variant]} ${className} ${extraClass}`.trim();
+    // Build rest props without `class` so we don't accidentally duplicate the attribute
+    $: restProps = (() => {
+        const { class: _cls, ...r } = $$restProps as any;
+        return r;
+    })();
 </script>
 
-<button {type} on:click class={finalClasses} {disabled} {title} {form}>
+<button {type} class={finalClasses} {disabled} {title} {form} {...restProps}>
     <slot />
 </button>

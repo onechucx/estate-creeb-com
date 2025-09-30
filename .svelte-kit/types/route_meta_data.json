@@ -1,7 +1,18 @@
 {
 	"/": [],
+	"/(app)/admin-panel": [],
+	"/(app)/community": [],
 	"/(app)/dashboard": [],
+	"/(app)/estate-management": [],
 	"/favicon.ico": [
 		"src/routes/favicon.ico/+server.ts"
-	]
+	],
+	"/(app)/inbox": [],
+	"/(app)/marketplace": [],
+	"/(app)/my-listings": [],
+	"/(app)/profile": [],
+	"/(app)/settings": [],
+	"/(app)/support": [],
+	"/(app)/vendor/[name]": [],
+	"/(app)/wallets": []
 }

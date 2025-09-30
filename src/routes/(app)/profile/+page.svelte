@@ -1,6 +1,5 @@
 <script lang="ts">
-  // Profile placeholder
+  import Profile from '$lib/components/Profile.svelte';
 </script>
 
-<h2 class="text-2xl font-bold">Profile</h2>
-<p class="mt-2">User profile placeholder page.</p>
+<Profile />
