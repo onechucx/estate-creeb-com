@@ -2,7 +2,7 @@
     import {
         MagnifyingGlassIcon,
         FunnelIcon,
-        Squares2X2Icon,
+    Squares2x2Icon,
         Bars3Icon,
         ChevronLeftIcon,
         ChevronRightIcon,
@@ -128,7 +128,7 @@
     <Card>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div class="relative lg:col-span-2">
-                <MagnifyingGlass
+                <MagnifyingGlassIcon
                     class="h-5 w-5 text-gray-400 dark:text-gray-500 absolute top-1/2 left-3 transform -translate-y-1/2"
                 />
                 <input
@@ -176,8 +176,7 @@
                         }`}
                         aria-label="Grid View"
                         aria-pressed={viewMode === 'grid'}
-                    ><Squares2X2 class="h-5 w-5" /></button
-                    >
+                    ><Squares2x2Icon class="h-5 w-5" /></button>
                     <button
                         type="button"
                         on:click={() => (viewMode = 'list')}
@@ -186,8 +185,7 @@
                         }`}
                         aria-label="List View"
                         aria-pressed={viewMode === 'list'}
-                    ><Bars3 class="h-5 w-5" /></button
-                    >
+                    ><Bars3Icon class="h-5 w-5" /></button>
                 </div>
             </div>
         </div>
@@ -213,14 +211,14 @@
 
     {#if isAuthenticated}
         <div class="flex justify-end">
-            <Button
+                <Button
                 type="button"
                 variant="secondary"
                 on:click={() => setActiveView('MY_LISTINGS')}
                 disabled={!isCommunitySubscribed}
                 title={!isCommunitySubscribed ? 'Community subscription required to manage listings' : ''}
             >
-                <WrenchScrewdriver class="h-5 w-5 mr-2" />
+                <WrenchScrewdriverIcon class="h-5 w-5 mr-2" />
                 Manage My Listings
             </Button>
         </div>
@@ -278,7 +276,6 @@
             >
                 <ChevronLeftIcon class="h-5 w-5" />
             </Button>
-            >
             <span class="text-sm font-medium">Page {currentPage} of {totalPages}</span>
             <Button
                 type="button"
@@ -289,7 +286,6 @@
             >
                 <ChevronRightIcon class="h-5 w-5" />
             </Button>
-            >
         </div>
     </Card>
 </div>
