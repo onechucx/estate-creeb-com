@@ -1,4 +1,5 @@
 {
+	"/(app)": [],
 	"/": [],
 	"/(app)/admin-panel": [],
 	"/(app)/community": [],

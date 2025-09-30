@@ -13,7 +13,7 @@
     aria-label={ariaLabel}
     aria-labelledby={ariaLabelledby}
     aria-describedby={ariaDescribedby}
-    {tabindex}
+    tabindex={tabindex !== undefined && tabindex >= 0 ? tabindex : undefined}
     {...$$restProps}
 >
     <slot />

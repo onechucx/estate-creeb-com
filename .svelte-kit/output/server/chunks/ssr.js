@@ -251,11 +251,11 @@ function style_object_to_string(style_object) {
 }
 export {
   add_attribute as a,
-  escape as b,
+  createEventDispatcher as b,
   create_ssr_component as c,
-  createEventDispatcher as d,
-  each as e,
-  subscribe as f,
+  subscribe as d,
+  escape as e,
+  each as f,
   getContext as g,
   safe_not_equal as h,
   compute_rest_props as i,

@@ -1,3 +1,4 @@
+const SCHEME = /^[a-z][a-z\d+\-.]+:/i;
 const internal = new URL("sveltekit-internal://");
 function resolve(base, path) {
   if (path[0] === "/" && path[1] === "/") return path;
@@ -23,17 +24,7 @@ function decode_params(params) {
   }
   return params;
 }
-const tracked_url_properties = (
-  /** @type {const} */
-  [
-    "href",
-    "pathname",
-    "search",
-    "toString",
-    "toJSON"
-  ]
-);
-function make_trackable(url, callback, search_params_callback) {
+function make_trackable(url, callback, search_params_callback, allow_hash = false) {
   const tracked = new URL(url);
   Object.defineProperty(tracked, "searchParams", {
     value: new Proxy(tracked.searchParams, {
@@ -52,6 +43,8 @@ function make_trackable(url, callback, search_params_callback) {
     enumerable: true,
     configurable: true
   });
+  const tracked_url_properties = ["href", "pathname", "search", "toString", "toJSON"];
+  if (allow_hash) tracked_url_properties.push("hash");
   for (const property of tracked_url_properties) {
     Object.defineProperty(tracked, property, {
       get() {
@@ -66,8 +59,11 @@ function make_trackable(url, callback, search_params_callback) {
     tracked[Symbol.for("nodejs.util.inspect.custom")] = (depth, opts, inspect) => {
       return inspect(url, opts);
     };
+    tracked.searchParams[Symbol.for("nodejs.util.inspect.custom")] = (depth, opts, inspect) => {
+      return inspect(url.searchParams, opts);
+    };
   }
-  {
+  if (!allow_hash) {
     disable_hash(tracked);
   }
   return tracked;
@@ -77,7 +73,7 @@ function disable_hash(url) {
   Object.defineProperty(url, "hash", {
     get() {
       throw new Error(
-        "Cannot access event.url.hash. Consider using `$page.url.hash` inside a component instead"
+        "Cannot access event.url.hash. Consider using `page.url.hash` inside a component instead"
       );
     }
   });
@@ -98,21 +94,6 @@ function allow_nodejs_console_log(url) {
       return inspect(new URL(url), opts);
     };
   }
-}
-const DATA_SUFFIX = "/__data.json";
-const HTML_DATA_SUFFIX = ".html__data.json";
-function has_data_suffix(pathname) {
-  return pathname.endsWith(DATA_SUFFIX) || pathname.endsWith(HTML_DATA_SUFFIX);
-}
-function add_data_suffix(pathname) {
-  if (pathname.endsWith(".html")) return pathname.replace(/\.html$/, HTML_DATA_SUFFIX);
-  return pathname.replace(/\/$/, "") + DATA_SUFFIX;
-}
-function strip_data_suffix(pathname) {
-  if (pathname.endsWith(HTML_DATA_SUFFIX)) {
-    return pathname.slice(0, -HTML_DATA_SUFFIX.length) + ".html";
-  }
-  return pathname.slice(0, -DATA_SUFFIX.length);
 }
 function validator(expected) {
   function validate(module, file) {
@@ -178,18 +159,16 @@ const validate_layout_server_exports = validator(valid_layout_server_exports);
 const validate_page_server_exports = validator(valid_page_server_exports);
 const validate_server_exports = validator(valid_server_exports);
 export {
-  add_data_suffix as a,
-  decode_pathname as b,
-  decode_params as c,
+  SCHEME as S,
+  decode_params as a,
+  validate_layout_exports as b,
+  validate_page_server_exports as c,
   disable_search as d,
-  validate_layout_exports as e,
-  validate_page_server_exports as f,
-  validate_page_exports as g,
-  has_data_suffix as h,
-  validate_server_exports as i,
+  validate_page_exports as e,
+  decode_pathname as f,
+  validate_server_exports as g,
   make_trackable as m,
   normalize_path as n,
   resolve as r,
-  strip_data_suffix as s,
   validate_layout_server_exports as v
 };

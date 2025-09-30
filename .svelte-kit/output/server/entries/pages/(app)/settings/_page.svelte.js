@@ -1,7 +1,7 @@
-import { c as create_ssr_component, v as validate_component, e as each, a as add_attribute, b as escape, m as missing_component } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, v as validate_component, f as each, a as add_attribute, e as escape, m as missing_component } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { B as Button } from "../../../../chunks/Button.js";
-import { n as UserIcon, e as BellIcon, S as ShieldCheckIcon, z as CogIcon } from "../../../../chunks/heroicons-fallback.js";
+import { q as UserIcon, g as BellIcon, S as ShieldCheckIcon, D as CogIcon } from "../../../../chunks/heroicons-fallback.js";
 const Settings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let activeSection = "profile";
   const sections = [

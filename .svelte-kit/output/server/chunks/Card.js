@@ -29,7 +29,7 @@ const Card = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         "aria-describedby": escape_attribute_value(ariaDescribedby)
       },
       {
-        tabindex: escape_attribute_value(tabindex)
+        tabindex: escape_attribute_value(tabindex !== void 0 && tabindex >= 0 ? tabindex : void 0)
       },
       escape_object($$restProps)
     ],

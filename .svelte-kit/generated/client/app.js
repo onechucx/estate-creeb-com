@@ -15,31 +15,39 @@ export const nodes = [
 	() => import('./nodes/11'),
 	() => import('./nodes/12'),
 	() => import('./nodes/13'),
-	() => import('./nodes/14')
+	() => import('./nodes/14'),
+	() => import('./nodes/15')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
-		"/": [2],
-		"/(app)/admin-panel": [3],
-		"/(app)/community": [4],
-		"/(app)/dashboard": [5],
-		"/(app)/estate-management": [6],
-		"/(app)/inbox": [7],
-		"/(app)/marketplace": [8],
-		"/(app)/my-listings": [9],
-		"/(app)/profile": [10],
-		"/(app)/settings": [11],
-		"/(app)/support": [12],
-		"/(app)/vendor/[name]": [13],
-		"/(app)/wallets": [14]
+		"/": [3],
+		"/(app)/admin-panel": [4,[2]],
+		"/(app)/community": [5,[2]],
+		"/(app)/dashboard": [6,[2]],
+		"/(app)/estate-management": [7,[2]],
+		"/(app)/inbox": [8,[2]],
+		"/(app)/marketplace": [9,[2]],
+		"/(app)/my-listings": [10,[2]],
+		"/(app)/profile": [11,[2]],
+		"/(app)/settings": [12,[2]],
+		"/(app)/support": [13,[2]],
+		"/(app)/vendor/[name]": [14,[2]],
+		"/(app)/wallets": [15,[2]]
 	};
 
 export const hooks = {
 	handleError: (({ error }) => { console.error(error) }),
-
-	reroute: (() => {})
+	
+	reroute: (() => {}),
+	transport: {}
 };
+
+export const decoders = Object.fromEntries(Object.entries(hooks.transport).map(([k, v]) => [k, v.decode]));
+
+export const hash = false;
+
+export const decode = (type, value) => decoders[type](value);
 
 export { default as root } from '../root.svelte';

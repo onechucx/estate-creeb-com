@@ -1,4 +1,4 @@
-import { c as create_ssr_component, a as add_attribute, v as validate_component, b as escape, m as missing_component } from "./ssr.js";
+import { c as create_ssr_component, a as add_attribute, v as validate_component, e as escape, m as missing_component } from "./ssr.js";
 const MetricCard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { label } = $$props;
   let { value } = $$props;

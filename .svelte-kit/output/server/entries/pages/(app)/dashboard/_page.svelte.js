@@ -1,8 +1,8 @@
-import { c as create_ssr_component, e as each, v as validate_component, b as escape } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, f as each, v as validate_component, e as escape } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { B as Button } from "../../../../chunks/Button.js";
 import { M as MetricCard } from "../../../../chunks/MetricCard.js";
-import { H as HomeIcon, m as BuildingOfficeIcon, C as CurrencyDollarIcon, n as UserIcon } from "../../../../chunks/heroicons-fallback.js";
+import { H as HomeIcon, p as BuildingOfficeIcon, C as CurrencyDollarIcon, q as UserIcon } from "../../../../chunks/heroicons-fallback.js";
 import "../../../../chunks/stores.js";
 const Dashboard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const metrics = [

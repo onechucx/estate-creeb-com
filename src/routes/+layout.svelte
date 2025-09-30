@@ -1,26 +1,25 @@
-<script lang="ts">
-    import Sidebar from '$lib/components/Sidebar.svelte';
-    import Header from '$lib/components/Header.svelte';
+<script lang="ts">  
+    import PublicHeader from '$lib/components/PublicHeader.svelte';
+    import LoginModal from '$lib/components/LoginModal.svelte';
     import Toast from '$lib/components/Toast.svelte';
     import type { ToastMessage } from '$lib/types';
     import "../app.css";
 
     let toastMessage: ToastMessage | null = null;
-    // simple example: show a toast on mount
-    // toastMessage = { id: 't1', type: 'info', message: 'Welcome to Creeb Svelte' };
+    let showLoginModal = false;
+
+    function handleLoginClick() {
+        showLoginModal = true;
+    }
+
+    function handleCloseLogin() {
+        showLoginModal = false;
+    }
 </script>
 
-<div class="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
-    <div class="flex">
-        <Sidebar />
-        <div class="flex-1">
-            <Header />
-            <main class="p-6">
-                <slot />
-            </main>
-        </div>
-    </div>
-    <Toast message={toastMessage} />
-</div>
+<PublicHeader onLoginClick={handleLoginClick} />
+<slot />
+<Toast message={toastMessage} />
+<LoginModal open={showLoginModal} onClose={handleCloseLogin} />
 
  

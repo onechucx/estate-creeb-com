@@ -1,7 +1,7 @@
-import { c as create_ssr_component, v as validate_component, e as each, a as add_attribute, b as escape } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, v as validate_component, f as each, a as add_attribute, e as escape } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { B as Button } from "../../../../chunks/Button.js";
-import { Q as QuestionMarkCircleIcon, D as ChatBubbleLeftRightIcon, F as DocumentTextIcon, f as ChevronDownIcon, E as EnvelopeIcon, G as PhoneIcon } from "../../../../chunks/heroicons-fallback.js";
+import { Q as QuestionMarkCircleIcon, F as ChatBubbleLeftRightIcon, G as DocumentTextIcon, h as ChevronDownIcon, c as EnvelopeIcon, J as PhoneIcon } from "../../../../chunks/heroicons-fallback.js";
 const Support = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   const supportCategories = [
     "General Questions",
