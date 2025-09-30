@@ -53,6 +53,13 @@
       "_Button.js"
     ]
   },
+  "_MetricCard.js": {
+    "file": "chunks/MetricCard.js",
+    "name": "MetricCard",
+    "imports": [
+      "_ssr.js"
+    ]
+  },
   "_client.js": {
     "file": "chunks/client.js",
     "name": "client",
@@ -114,7 +121,9 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Card.js"
+      "_Card.js",
+      "_Button.js",
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -124,6 +133,10 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
+      "_Card.js",
+      "_Button.js",
+      "_MetricCard.js",
+      "_heroicons-fallback.js",
       "_stores.js"
     ]
   },
@@ -134,7 +147,9 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Card.js"
+      "_Card.js",
+      "_Button.js",
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/inbox/+page.svelte": {
@@ -168,7 +183,8 @@
       "_ssr.js",
       "_Card.js",
       "_Button.js",
-      "_heroicons-fallback.js"
+      "_heroicons-fallback.js",
+      "_MetricCard.js"
     ]
   },
   "src/routes/(app)/profile/+page.svelte": {
@@ -191,7 +207,9 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Card.js"
+      "_Card.js",
+      "_Button.js",
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/support/+page.svelte": {
@@ -201,7 +219,9 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Card.js"
+      "_Card.js",
+      "_Button.js",
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/vendor/[name]/+page.svelte": {
@@ -249,6 +269,8 @@
       "_ssr.js",
       "_Marketplace.js",
       "_Button.js",
+      "_heroicons-fallback.js",
+      "_Card.js",
       "_stores.js"
     ]
   },

@@ -1,7 +1,7 @@
 import { c as create_ssr_component, v as validate_component, e as each, a as add_attribute, b as escape } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { B as Button } from "../../../../chunks/Button.js";
-import { i as PencilSquareIcon, M as MagnifyingGlassIcon, S as StarIcon, A as ArchiveBoxIcon, T as TrashIcon } from "../../../../chunks/heroicons-fallback.js";
+import { r as PencilSquareIcon, M as MagnifyingGlassIcon, s as StarIcon, A as ArchiveBoxIcon, T as TrashIcon } from "../../../../chunks/heroicons-fallback.js";
 const Inbox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let messages = [
     {

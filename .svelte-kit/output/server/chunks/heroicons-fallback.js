@@ -30,6 +30,7 @@ const Cog6ToothIcon = Heroicons_fallback;
 const InboxIcon = Heroicons_fallback;
 const BuildingStorefrontIcon = Heroicons_fallback;
 const BuildingLibraryIcon = Heroicons_fallback;
+const ShieldCheckIcon = Heroicons_fallback;
 const PlusCircleIcon = Heroicons_fallback;
 const EnvelopeIcon = Heroicons_fallback;
 const CheckCircleIcon = Heroicons_fallback;
@@ -55,16 +56,34 @@ const ChevronRightIcon = Heroicons_fallback;
 const WrenchScrewdriverIcon = Heroicons_fallback;
 const ArchiveBoxIcon = Heroicons_fallback;
 const PencilSquareIcon = Heroicons_fallback;
+const QuestionMarkCircleIcon = Heroicons_fallback;
+const ChatBubbleLeftRightIcon = Heroicons_fallback;
+const PhoneIcon = Heroicons_fallback;
+const DocumentTextIcon = Heroicons_fallback;
+const ChatBubbleLeftIcon = Heroicons_fallback;
+const HeartIcon = Heroicons_fallback;
+const ShareIcon = Heroicons_fallback;
+const BuildingOfficeIcon = Heroicons_fallback;
+const UserIcon = Heroicons_fallback;
+const MapIcon = Heroicons_fallback;
+const CogIcon = Heroicons_fallback;
 export {
   ArchiveBoxIcon as A,
   BuildingLibraryIcon as B,
   CurrencyDollarIcon as C,
+  ChatBubbleLeftRightIcon as D,
   EnvelopeIcon as E,
+  DocumentTextIcon as F,
+  PhoneIcon as G,
   HomeIcon as H,
   InboxIcon as I,
+  ArrowDownIcon as J,
+  ArrowUpIcon as K,
+  ArrowsRightLeftIcon as L,
   MagnifyingGlassIcon as M,
   PlusCircleIcon as P,
-  StarIcon as S,
+  QuestionMarkCircleIcon as Q,
+  ShieldCheckIcon as S,
   TrashIcon as T,
   UsersIcon as U,
   WrenchScrewdriverIcon as W,
@@ -77,17 +96,22 @@ export {
   ChevronDownIcon as f,
   InformationCircleIcon as g,
   CheckCircleIcon as h,
-  PencilSquareIcon as i,
-  Squares2x2Icon as j,
-  Bars3Icon as k,
-  ChevronLeftIcon as l,
-  ChevronRightIcon as m,
-  EyeIcon as n,
-  ChartBarIcon as o,
-  BoltIcon as p,
-  PlusIcon as q,
-  PencilIcon as r,
-  ArrowDownIcon as s,
-  ArrowUpIcon as t,
-  ArrowsRightLeftIcon as u
+  PlusIcon as i,
+  ChatBubbleLeftIcon as j,
+  HeartIcon as k,
+  ShareIcon as l,
+  BuildingOfficeIcon as m,
+  UserIcon as n,
+  MapIcon as o,
+  EyeIcon as p,
+  PencilIcon as q,
+  PencilSquareIcon as r,
+  StarIcon as s,
+  Squares2x2Icon as t,
+  Bars3Icon as u,
+  ChevronLeftIcon as v,
+  ChevronRightIcon as w,
+  ChartBarIcon as x,
+  BoltIcon as y,
+  CogIcon as z
 };
