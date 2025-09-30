@@ -19,8 +19,8 @@
 
 <Card class="group relative">
     {#if listing.isPaid}
-            <div aria-hidden="false" class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full flex items-center">
-                <StarIcon aria-hidden="true" class="h-4 w-4 mr-1" />
+            <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full flex items-center" aria-hidden="true">
+                <StarIcon aria-hidden="true" focusable="false" class="h-4 w-4 mr-1" />
                 <span class="sr-only">Paid listing</span>
                 <span aria-hidden="true">Paid</span>
             </div>
@@ -31,10 +31,24 @@
     <p class="font-semibold text-brand-primary dark:text-dark-primary text-xl">₦{listing.price.toLocaleString()}</p>
     <p class="text-sm text-gray-500 dark:text-dark-text-secondary truncate">{listing.location}</p>
     {#if onViewVendor}
-    <p class="text-xs text-gray-400 mt-1">by <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleViewVendor(e)}>{listing.vendorName}</button></p>
+    <p class="text-xs text-gray-400 mt-1">by <button
+            type="button"
+            on:click={handleViewVendor}
+            on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewVendor(e) } }}
+            class="hover:underline font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
+            aria-label={`View vendor ${listing.vendorName}`}
+        >{listing.vendorName}</button></p>
     {/if}
     <div class="mt-4">
-    <button type="button" class="px-3 py-2 bg-brand-primary text-white rounded" on:click={() => dispatch('open', listing)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dispatch('open', listing) } }} aria-label={`View details for ${listing.title}`}>View Details</button>
+    <button
+        type="button"
+        class="px-3 py-2 bg-brand-primary text-white rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
+        on:click={() => dispatch('open', listing)}
+        on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dispatch('open', listing) } }}
+        aria-label={`View details for ${listing.title}`}
+    >
+        View Details
+    </button>
     </div>
 </Card>
  

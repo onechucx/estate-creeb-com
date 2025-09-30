@@ -1,49 +1,7 @@
-import { c as create_ssr_component, a as spread, e as escape_object, v as validate_component, f as escape, b as each, m as missing_component } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, v as validate_component, b as escape, e as each, m as missing_component } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { B as Button } from "../../../../chunks/Button.js";
-import { P as PlusIcon } from "../../../../chunks/PlusIcon.js";
-const ArrowDownIcon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<svg${spread(
-    [
-      { xmlns: "http://www.w3.org/2000/svg" },
-      { fill: "none" },
-      { viewBox: "0 0 24 24" },
-      { "stroke-width": "1.5" },
-      { stroke: "currentColor" },
-      { "aria-hidden": "true" },
-      escape_object($$props)
-    ],
-    {}
-  )}><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3"></path></svg>`;
-});
-const ArrowsRightLeftIcon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<svg${spread(
-    [
-      { xmlns: "http://www.w3.org/2000/svg" },
-      { fill: "none" },
-      { viewBox: "0 0 24 24" },
-      { "stroke-width": "1.5" },
-      { stroke: "currentColor" },
-      { "aria-hidden": "true" },
-      escape_object($$props)
-    ],
-    {}
-  )}><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5"></path></svg>`;
-});
-const ArrowUpIcon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<svg${spread(
-    [
-      { xmlns: "http://www.w3.org/2000/svg" },
-      { fill: "none" },
-      { viewBox: "0 0 24 24" },
-      { "stroke-width": "1.5" },
-      { stroke: "currentColor" },
-      { "aria-hidden": "true" },
-      escape_object($$props)
-    ],
-    {}
-  )}><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"></path></svg>`;
-});
+import { s as ArrowDownIcon, t as ArrowUpIcon, u as ArrowsRightLeftIcon, q as PlusIcon } from "../../../../chunks/heroicons-fallback.js";
 const Wallets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let wallets = [
     {
@@ -151,7 +109,16 @@ const Wallets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     {},
     {
       default: () => {
-        return `${validate_component(ArrowDownIcon, "ArrowDown").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
+        return `${validate_component(ArrowDownIcon, "ArrowDown").$$render(
+          $$result,
+          {
+            class: "w-5 h-5 mr-2",
+            "aria-hidden": "true",
+            focusable: "false"
+          },
+          {},
+          {}
+        )}
                 Deposit`;
       }
     }
@@ -165,7 +132,16 @@ const Wallets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     {},
     {
       default: () => {
-        return `${validate_component(ArrowUpIcon, "ArrowUp").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
+        return `${validate_component(ArrowUpIcon, "ArrowUp").$$render(
+          $$result,
+          {
+            class: "w-5 h-5 mr-2",
+            "aria-hidden": "true",
+            focusable: "false"
+          },
+          {},
+          {}
+        )}
                 Withdraw`;
       }
     }
@@ -178,16 +154,25 @@ const Wallets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     {},
     {
       default: () => {
-        return `${validate_component(ArrowsRightLeftIcon, "ArrowsRightLeft").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
+        return `${validate_component(ArrowsRightLeftIcon, "ArrowsRightLeft").$$render(
+          $$result,
+          {
+            class: "w-5 h-5 mr-2",
+            "aria-hidden": "true",
+            focusable: "false"
+          },
+          {},
+          {}
+        )}
                 Send`;
       }
     }
-  )}</div></div> <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-2">${validate_component(Card, "Card").$$render($$result, {}, {}, {
+  )}</div></div> <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-2">${validate_component(Card, "Card").$$render($$result, { "aria-label": "Wallet balance card" }, {}, {
     default: () => {
       return `<div class="p-4"><div class="flex justify-between items-center mb-4"><div><p class="text-sm text-brand-text-secondary">${escape(selectedWallet.currency)} Balance</p> <p class="text-3xl font-bold text-brand-text-primary">${escape(selectedWallet.symbol)}${escape(selectedWallet.balance.toLocaleString("en-US", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
-      }))}</p></div> <div class="flex space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">${each(wallets, (wallet) => {
+      }))}</p></div> <div class="flex space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1" role="tablist" aria-label="Wallet selector">${each(wallets, (wallet) => {
         return `${validate_component(Button, "Button").$$render(
           $$result,
           {
@@ -250,9 +235,9 @@ const Wallets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         }
       )}</div></div>`;
     }
-  })}</div></div> <div class="mt-6">${validate_component(Card, "Card").$$render($$result, {}, {}, {
+  })}</div></div> <div class="mt-6">${validate_component(Card, "Card").$$render($$result, { "aria-label": "Transaction history" }, {}, {
     default: () => {
-      return `<div class="p-4" data-svelte-h="svelte-1768jac"><h3 class="font-bold text-lg mb-4 text-brand-text-primary">Transaction History</h3></div> <div class="overflow-x-auto"><table class="w-full text-left"><thead class="border-b border-brand-border dark:border-dark-border" data-svelte-h="svelte-v7v8tu"><tr class="text-sm text-brand-text-secondary"><th class="p-4 font-medium">Transaction</th> <th class="p-4 font-medium hidden md:table-cell">Date</th> <th class="p-4 font-medium hidden sm:table-cell">Amount</th> <th class="p-4 font-medium">Status</th></tr></thead> <tbody class="divide-y divide-brand-border dark:divide-dark-border">${each(transactions, (tx) => {
+      return `<div class="p-4" data-svelte-h="svelte-1768jac"><h3 class="font-bold text-lg mb-4 text-brand-text-primary">Transaction History</h3></div> <div class="overflow-x-auto" role="region" aria-label="Transaction history table"><table class="w-full text-left" aria-describedby="transaction-help"><thead class="border-b border-brand-border dark:border-dark-border" data-svelte-h="svelte-b300km"><tr class="text-sm text-brand-text-secondary"><th scope="col" class="p-4 font-medium">Transaction</th> <th scope="col" class="p-4 font-medium hidden md:table-cell">Date</th> <th scope="col" class="p-4 font-medium hidden sm:table-cell">Amount</th> <th scope="col" class="p-4 font-medium">Status</th></tr></thead> <tbody class="divide-y divide-brand-border dark:divide-dark-border">${each(transactions, (tx) => {
         return `<tr class="text-brand-text-primary"><td class="p-4"><div class="flex items-center"><div class="${"w-8 h-8 rounded-full flex items-center justify-center mr-3 " + escape(getTransactionIcon(tx.type).class.replace("text-", "bg-") + "/20", true)}">${validate_component(getTransactionIcon(tx.type).icon || missing_component, "svelte:component").$$render(
           $$result,
           {

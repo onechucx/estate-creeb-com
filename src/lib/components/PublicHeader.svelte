@@ -3,7 +3,7 @@
     export let onLoginClick: () => void;
 </script>
 
-<header class="bg-brand-surface dark:bg-dark-surface p-4 border-b border-brand-border dark:border-dark-border">
+<header class="bg-brand-surface dark:bg-dark-surface p-4 border-b border-brand-border dark:border-dark-border" role="banner">
     <div class="container mx-auto flex items-center justify-between">
         <div class="flex items-center">
             <svg aria-hidden="true" focusable="false" class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor">

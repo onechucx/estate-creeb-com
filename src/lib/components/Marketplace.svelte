@@ -139,6 +139,7 @@
                     type="text"
                     placeholder="Search listings by title, location..."
                     bind:value={searchTerm}
+                    aria-label="Search listings"
                     class="pl-10 pr-4 py-2 w-full bg-gray-100 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 />
             </div>
@@ -147,6 +148,7 @@
                     type="number"
                     placeholder="Min Price"
                     bind:value={priceRange.min}
+                    aria-label="Minimum price"
                     class="pr-4 py-2 w-full bg-gray-100 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary text-center"
                 />
                 <span class="text-gray-400">-</span>
@@ -154,12 +156,14 @@
                     type="number"
                     placeholder="Max Price"
                     bind:value={priceRange.max}
+                    aria-label="Maximum price"
                     class="pr-4 py-2 w-full bg-gray-100 dark:bg-gray-800 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary text-center"
                 />
             </div>
             <div class="flex items-center gap-4">
                 <select
                     bind:value={sortBy}
+                    aria-label="Sort listings"
                     class="p-2 w-full border border-brand-border dark:border-dark-border bg-brand-surface dark:bg-dark-surface rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary"
                 >
                     <option value="date-desc">Newest First</option>
@@ -196,7 +200,7 @@
             </div>
         </div>
         <div class="mt-4 border-b border-brand-border dark:border-dark-border">
-            <nav class="-mb-px flex space-x-4 overflow-x-auto">
+            <nav class="-mb-px flex space-x-4 overflow-x-auto" aria-label="Listing categories">
                 {#each categories as category}
                     <button
                         type="button"
@@ -219,14 +223,14 @@
 
     {#if isAuthenticated}
         <div class="flex justify-end">
-            <Button
+                <Button
                 type="button"
                 variant="secondary"
                 on:click={() => setActiveView('MY_LISTINGS')}
                 disabled={!isCommunitySubscribed}
                 title={!isCommunitySubscribed ? 'Community subscription required to manage listings' : ''}
             >
-                <WrenchScrewdriverIcon class="h-5 w-5 mr-2" />
+                    <WrenchScrewdriverIcon class="h-5 w-5 mr-2" aria-hidden="true" focusable="false" />
                 Manage My Listings
             </Button>
         </div>
@@ -234,7 +238,7 @@
 
     {#if currentListings.length > 0}
         {#if viewMode === 'grid'}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
                 {#each currentListings as listing (listing.id)}
                     <ListingCard
                         {listing}
@@ -244,7 +248,7 @@
                 {/each}
             </div>
         {:else}
-            <div class="space-y-4">
+            <div class="space-y-4" role="list">
                 {#each currentListings as listing (listing.id)}
                     <ListingRow
                         {listing}
@@ -256,7 +260,7 @@
         {/if}
     {:else}
         <Card class="text-center py-16">
-            <InformationCircleIcon class="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <InformationCircleIcon class="h-12 w-12 text-gray-400 mx-auto mb-4" aria-hidden="true" focusable="false" />
             <h3 class="text-xl font-bold">No listings found</h3>
             <p class="text-gray-500">Try adjusting your search or filters.</p>
         </Card>
@@ -267,6 +271,7 @@
             <span>Items per page:</span>
             <select
                 bind:value={itemsPerPage}
+                aria-label="Items per page"
                 class="p-1 border border-brand-border dark:border-dark-border bg-brand-surface dark:bg-dark-surface rounded-md"
             >
                 <option value={6}>6</option>

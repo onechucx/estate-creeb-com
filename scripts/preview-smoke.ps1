@@ -5,10 +5,12 @@ param(
     [int]$TimeoutSeconds = 20
 )
 
-$cwd = Split-Path -Parent $MyInvocation.MyCommand.Definition
-Set-Location -Path $cwd
+# Determine project root (parent of the scripts folder) so .svelte-kit is found correctly
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
+$projectRoot = Resolve-Path (Join-Path $scriptDir '..')
+Set-Location -Path $projectRoot
 
-$index = Join-Path $cwd '.svelte-kit\output\server\index.js'
+$index = Join-Path $projectRoot '.svelte-kit\output\server\index.js'
 if (-not (Test-Path $index)) {
     Write-Error "Server build not found at $index. Run 'npm run build' first."
     exit 2
@@ -16,8 +18,12 @@ if (-not (Test-Path $index)) {
 
 # Start server
 $env:PORT = $Port
-$proc = Start-Process -FilePath 'node' -ArgumentList $index -WorkingDirectory $cwd -PassThru
-Write-Output "Started server PID=$($proc.Id), waiting for port $Port..."
+$outLog = Join-Path $projectRoot 'server-out.log'
+$errLog = Join-Path $projectRoot 'server-err.log'
+# Start node via cmd.exe so we can quote the index path correctly and redirect output
+$cmd = 'node "' + $index + '" > "' + $outLog + '" 2> "' + $errLog + '"'
+$proc = Start-Process -FilePath 'cmd.exe' -ArgumentList '/c', $cmd -WorkingDirectory $projectRoot -PassThru
+Write-Output "Started server PID=$($proc.Id), waiting for port $Port... (logs -> $outLog and $errLog)"
 
 # Wait for port to be accepting connections
 $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
@@ -35,7 +41,11 @@ while ((Get-Date) -lt $deadline) {
 }
 
 if (-not $bound) {
-    Write-Error "Server did not bind to port $Port within $TimeoutSeconds seconds. Check server logs."
+    Write-Error "Server did not bind to port $Port within $TimeoutSeconds seconds. Dumping logs for diagnosis."
+    Write-Output "--- server-out.log ---"
+    if (Test-Path $outLog) { Get-Content $outLog -Tail 200 } else { Write-Output 'no stdout log' }
+    Write-Output "--- server-err.log ---"
+    if (Test-Path $errLog) { Get-Content $errLog -Tail 200 } else { Write-Output 'no stderr log' }
     # Kill the process we started
     try { Stop-Process -Id $proc.Id -Force } catch {}
     exit 3
@@ -44,7 +54,7 @@ if (-not $bound) {
 Write-Output "Port $Port is bound. Running smoke script..."
 
 # Run smoke script
-$smoke = Join-Path $cwd 'scripts\smoke.mjs'
+ $smoke = Join-Path $projectRoot 'scripts\smoke.mjs'
 if (-not (Test-Path $smoke)) { Write-Error "smoke.mjs not found"; Stop-Process -Id $proc.Id -Force; exit 4 }
 node $smoke
 $exitCode = $LASTEXITCODE

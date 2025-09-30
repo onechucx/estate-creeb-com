@@ -1,17 +1,35 @@
 import { c as create_ssr_component, s as setContext, v as validate_component, m as missing_component } from "./ssr.js";
-import { a as afterUpdate } from "./ssr2.js";
-import "./environment.js";
+let base = "";
+let assets = base;
+const initial = { base, assets };
+function override(paths) {
+  base = paths.base;
+  assets = paths.assets;
+}
+function reset() {
+  base = initial.base;
+  assets = initial.assets;
+}
+function set_assets(path) {
+  assets = initial.assets = path;
+}
 let public_env = {};
+let safe_public_env = {};
 function set_private_env(environment) {
 }
 function set_public_env(environment) {
   public_env = environment;
 }
-let read_implementation = null;
-function set_read_implementation(fn) {
-  read_implementation = fn;
+function set_safe_public_env(environment) {
+  safe_public_env = environment;
 }
-function set_manifest(_) {
+function afterUpdate() {
+}
+let prerendering = false;
+function set_building() {
+}
+function set_prerendering() {
+  prerendering = true;
 }
 const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { stores } = $$props;
@@ -43,11 +61,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     }
     $$rendered = `  ${constructors[1] ? `${validate_component(constructors[0] || missing_component, "svelte:component").$$render(
       $$result,
-      {
-        data: data_0,
-        params: page.params,
-        this: components[0]
-      },
+      { data: data_0, this: components[0] },
       {
         this: ($$value) => {
           components[0] = $$value;
@@ -58,12 +72,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         default: () => {
           return `${validate_component(constructors[1] || missing_component, "svelte:component").$$render(
             $$result,
-            {
-              data: data_1,
-              form,
-              params: page.params,
-              this: components[1]
-            },
+            { data: data_1, form, this: components[1] },
             {
               this: ($$value) => {
                 components[1] = $$value;
@@ -76,12 +85,7 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       }
     )}` : `${validate_component(constructors[0] || missing_component, "svelte:component").$$render(
       $$result,
-      {
-        data: data_0,
-        form,
-        params: page.params,
-        this: components[0]
-      },
+      { data: data_0, form, this: components[0] },
       {
         this: ($$value) => {
           components[0] = $$value;
@@ -93,24 +97,25 @@ const Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   } while (!$$settled);
   return $$rendered;
 });
+function set_read_implementation(fn) {
+}
+function set_manifest(_) {
+}
 const options = {
+  app_dir: "_app",
   app_template_contains_nonce: false,
-  async: false,
   csp: { "mode": "auto", "directives": { "upgrade-insecure-requests": false, "block-all-mixed-content": false }, "reportOnly": { "upgrade-insecure-requests": false, "block-all-mixed-content": false } },
   csrf_check_origin: true,
-  csrf_trusted_origins: [],
   embedded: false,
   env_public_prefix: "PUBLIC_",
   env_private_prefix: "",
-  hash_routing: false,
   hooks: null,
   // added lazily, via `get_hooks`
   preload_strategy: "modulepreload",
   root: Root,
   service_worker: false,
-  service_worker_options: void 0,
   templates: {
-    app: ({ head, body, assets, nonce, env }) => '<!doctype html>\r\n<html lang="en">\r\n	<head>\r\n		<meta charset="utf-8" />\r\n		<link rel="icon" href="' + assets + '/favicon.png" />\r\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\r\n		' + head + '\r\n	</head>\r\n	<body data-sveltekit-preload-data="hover">\r\n		<div style="display: contents">' + body + "</div>\r\n	</body>\r\n</html>\r\n",
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!doctype html>\r\n<html lang="en">\r\n	<head>\r\n		<meta charset="utf-8" />\r\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\r\n		<meta name="viewport" content="width=device-width, initial-scale=1" />\r\n		' + head + '\r\n	</head>\r\n	<body data-sveltekit-preload-data="hover">\r\n		<div style="display: contents">' + body + "</div>\r\n	</body>\r\n</html>\r\n",
     error: ({ status, message }) => '<!doctype html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -182,33 +187,27 @@ const options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "12uyh8y"
+  version_hash: "nu45m9"
 };
 async function get_hooks() {
-  let handle;
-  let handleFetch;
-  let handleError;
-  let handleValidationError;
-  let init;
-  let reroute;
-  let transport;
-  return {
-    handle,
-    handleFetch,
-    handleError,
-    handleValidationError,
-    init,
-    reroute,
-    transport
-  };
+  return {};
 }
 export {
-  set_public_env as a,
-  set_read_implementation as b,
-  set_manifest as c,
+  assets as a,
+  base as b,
+  options as c,
+  set_private_env as d,
+  prerendering as e,
+  set_public_env as f,
   get_hooks as g,
-  options as o,
+  set_safe_public_env as h,
+  set_assets as i,
+  set_building as j,
+  set_manifest as k,
+  set_prerendering as l,
+  set_read_implementation as m,
+  override as o,
   public_env as p,
-  read_implementation as r,
-  set_private_env as s
+  reset as r,
+  safe_public_env as s
 };

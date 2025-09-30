@@ -1,4 +1,4 @@
-import { c as create_ssr_component, k as compute_rest_props, a as spread, l as escape_attribute_value, e as escape_object } from "./ssr.js";
+import { c as create_ssr_component, i as compute_rest_props, j as spread, k as escape_attribute_value, l as escape_object } from "./ssr.js";
 const baseClasses = "px-4 py-2 rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed";
 const Button = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let extraClass;

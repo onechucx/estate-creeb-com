@@ -1,8 +1,8 @@
-import { c as create_ssr_component, i as subscribe, v as validate_component, d as add_attribute, f as escape } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, f as subscribe, v as validate_component, a as add_attribute, b as escape } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { B as Button } from "../../../../chunks/Button.js";
 import { c as user } from "../../../../chunks/stores.js";
-import { P as PencilIcon } from "../../../../chunks/PencilIcon.js";
+import { r as PencilIcon } from "../../../../chunks/heroicons-fallback.js";
 const Profile = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $user, $$unsubscribe_user;
   $$unsubscribe_user = subscribe(user, (value) => $user = value);

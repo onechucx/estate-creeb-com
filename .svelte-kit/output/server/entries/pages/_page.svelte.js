@@ -1,4 +1,4 @@
-import { c as create_ssr_component, g as createEventDispatcher, v as validate_component } from "../../chunks/ssr.js";
+import { c as create_ssr_component, d as createEventDispatcher, v as validate_component } from "../../chunks/ssr.js";
 import { M as Marketplace } from "../../chunks/Marketplace.js";
 import { B as Button } from "../../chunks/Button.js";
 import { i as initialListings } from "../../chunks/stores.js";

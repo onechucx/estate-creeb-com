@@ -48,7 +48,7 @@
 
     <div class="flex items-center space-x-6">
         <div class="relative">
-            <MagnifyingGlassIcon aria-hidden="true" class="h-5 w-5 text-gray-400 dark:text-gray-500 absolute top-1/2 left-3 transform -translate-y-1/2" />
+            <MagnifyingGlassIcon aria-hidden="true" focusable="false" class="h-5 w-5 text-gray-400 dark:text-gray-500 absolute top-1/2 left-3 transform -translate-y-1/2" />
             <input
                 type="text"
                 placeholder="Search..."
@@ -57,25 +57,37 @@
             />
         </div>
 
-            <button type="button" aria-label="Notifications" title="Notifications" class="relative text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary" on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); /* no-op for now */ } }}>
-            <BellIcon class="h-6 w-6" aria-hidden="true" focusable="false" />
-            <span aria-hidden="true" class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
-        </button>
+            <button
+                type="button"
+                aria-label="Notifications"
+                title="Notifications"
+                class="relative text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
+                on:click={() => { /* placeholder for future notifications */ }}
+            >
+                <BellIcon class="h-6 w-6" aria-hidden="true" focusable="false" />
+                <span aria-hidden="true" class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
+            </button>
 
         <div class="relative">
-            <button
-                id="user-menu-toggle"
-                        type="button"
-                class="flex items-center space-x-3"
-                on:click={() => (isDropdownOpen = !isDropdownOpen)}
-                on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isDropdownOpen = !isDropdownOpen } }}
-                aria-haspopup="true"
-                aria-controls="user-menu"
-                aria-expanded={isDropdownOpen}
-                aria-label="Toggle user menu"
-                title="Toggle user menu"
-            >
-                <img src={`https://picsum.photos/seed/${role}/40/40`} alt="User Avatar" class="h-10 w-10 rounded-full" />
+                <button
+                    id="user-menu-toggle"
+                    type="button"
+                    class="flex items-center space-x-3"
+                    on:click={() => {
+                        isDropdownOpen = !isDropdownOpen;
+                        // when opening, focus the first interactive element in the menu
+                        setTimeout(() => {
+                            const el = document.querySelector('#user-menu button, #user-menu select');
+                            try { if (el && typeof el.focus === 'function') el.focus(); } catch (e) { /* ignore */ }
+                        }, 0);
+                    }}
+                    aria-haspopup="true"
+                    aria-controls="user-menu"
+                    aria-expanded={isDropdownOpen}
+                    aria-label="Toggle user menu"
+                    title="Toggle user menu"
+                >
+                    <img src={`https://picsum.photos/seed/${role}/40/40`} alt="" class="h-10 w-10 rounded-full" />
                 <div>
                     <p class="font-semibold text-sm text-brand-text-primary dark:text-dark-text-primary">John Doe</p>
                     <div class="flex items-center">

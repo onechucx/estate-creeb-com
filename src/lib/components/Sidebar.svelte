@@ -95,7 +95,9 @@
     }
 </script>
 
-<aside class="w-64 bg-brand-surface dark:bg-dark-surface flex-shrink-0 p-4 border-r border-brand-border dark:border-dark-border flex flex-col">
+<aside class="w-64 bg-brand-surface dark:bg-dark-surface flex-shrink-0 p-4 border-r border-brand-border dark:border-dark-border flex flex-col" aria-label="Application sidebar">
+    <!-- Skip link for keyboard users to jump to main content -->
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4">Skip to main content</a>
     <div class="flex items-center mb-10 p-2">
         <svg aria-hidden="true" focusable="false" class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" />
@@ -103,10 +105,10 @@
         <h1 class="text-2xl font-bold text-brand-primary dark:text-dark-text-primary ml-2">Creeb</h1>
     </div>
     <nav class="flex-1" aria-label="Main navigation">
-        <ul class="space-y-1">
+        <ul class="space-y-1" role="list">
             {#each visibleNavItems as item}
                 {@const isActive = active === item.view}
-                <li>
+                <li role="listitem">
                     <button
                         type="button"
                         class={itemClass(isActive)}
@@ -125,7 +127,7 @@
 
         {#if visibleActionNavItems.length > 0}
             <hr class="my-6 border-brand-border dark:border-dark-border" />
-            <ul class="space-y-1">
+            <ul class="space-y-1" role="list">
                 {#each visibleActionNavItems as item}
                     {@const isDisabled = item.view === 'CREATE_HUB' && role !== 'Administrator' && !(subs.community || subs.estate)}
                         <li>
@@ -148,10 +150,10 @@
 
         {#if visibleAdminNavItems.length > 0}
             <hr class="my-6 border-brand-border dark:border-dark-border" />
-            <ul class="space-y-1">
+            <ul class="space-y-1" role="list">
                 {#each visibleAdminNavItems as item}
                     {@const isActive = active === item.view}
-                        <li>
+                        <li role="listitem">
                             <button type="button" class={itemClass(isActive)} on:click={() => setActiveView(item.view)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveView(item.view) } }} aria-pressed={isActive} aria-label={item.label}>
                                 <svelte:component this={item.icon} class="h-6 w-6 mr-4" aria-hidden="true" focusable="false" />
                                 <span class="font-medium">{item.label}</span>

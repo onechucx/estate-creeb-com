@@ -108,15 +108,15 @@
         <h1 class="text-2xl font-bold text-brand-text-primary mb-4 sm:mb-0">Wallets</h1>
         <div class="flex items-center space-x-2">
             <Button type="button" variant="secondary" aria-label="Deposit funds">
-                <ArrowDown class="w-5 h-5 mr-2" />
+                <ArrowDown class="w-5 h-5 mr-2" aria-hidden="true" focusable="false" />
                 Deposit
             </Button>
             <Button type="button" variant="secondary" aria-label="Withdraw funds">
-                <ArrowUp class="w-5 h-5 mr-2" />
+                <ArrowUp class="w-5 h-5 mr-2" aria-hidden="true" focusable="false" />
                 Withdraw
             </Button>
             <Button type="button" aria-label="Send funds">
-                <ArrowsRightLeft class="w-5 h-5 mr-2" />
+                <ArrowsRightLeft class="w-5 h-5 mr-2" aria-hidden="true" focusable="false" />
                 Send
             </Button>
         </div>
@@ -124,7 +124,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2">
-            <Card>
+            <Card aria-label="Wallet balance card">
                 <div class="p-4">
                     <div class="flex justify-between items-center mb-4">
                         <div>
@@ -136,7 +136,7 @@
                                 })}
                             </p>
                         </div>
-                        <div class="flex space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
+                        <div class="flex space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1" role="tablist" aria-label="Wallet selector">
                             {#each wallets as wallet}
                                                             <Button
                                                                 type="button"
@@ -176,18 +176,18 @@
     </div>
 
     <div class="mt-6">
-        <Card>
+        <Card aria-label="Transaction history">
             <div class="p-4">
                 <h3 class="font-bold text-lg mb-4 text-brand-text-primary">Transaction History</h3>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
+            <div class="overflow-x-auto" role="region" aria-label="Transaction history table">
+                <table class="w-full text-left" aria-describedby="transaction-help">
                     <thead class="border-b border-brand-border dark:border-dark-border">
                         <tr class="text-sm text-brand-text-secondary">
-                            <th class="p-4 font-medium">Transaction</th>
-                            <th class="p-4 font-medium hidden md:table-cell">Date</th>
-                            <th class="p-4 font-medium hidden sm:table-cell">Amount</th>
-                            <th class="p-4 font-medium">Status</th>
+                            <th scope="col" class="p-4 font-medium">Transaction</th>
+                            <th scope="col" class="p-4 font-medium hidden md:table-cell">Date</th>
+                            <th scope="col" class="p-4 font-medium hidden sm:table-cell">Amount</th>
+                            <th scope="col" class="p-4 font-medium">Status</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-brand-border dark:divide-dark-border">

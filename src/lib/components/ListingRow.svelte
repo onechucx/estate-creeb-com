@@ -17,10 +17,11 @@
     }
 </script>
 
-<Card class="flex items-center space-x-4 mb-2">
+<Card class="flex items-center space-x-4 mb-2" role="listitem">
     <img
         src={listing.images[0]}
         alt={listing.title}
+        loading="lazy"
         class="w-24 h-24 object-cover rounded-lg flex-shrink-0"
     />
     <div class="flex-1">
@@ -29,6 +30,7 @@
             {#if listing.isPaid}
                 <span
                     class="text-xs bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-300 font-bold px-2 py-0.5 rounded-full"
+                    aria-hidden="true"
                     >Paid</span
                 >
             {/if}
@@ -40,18 +42,37 @@
             {#if onViewVendor}
             <p class="text-sm text-gray-500 dark:text-dark-text-secondary">
                 by
-                    <button type="button" on:click={handleViewVendor} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewVendor(e) } }} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`}>
-                    {listing.vendorName}
-                </button>
+                    <button
+                        type="button"
+                        on:click={handleViewVendor}
+                        on:keydown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleViewVendor(e);
+                            }
+                        }}
+                        class="hover:underline font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
+                        aria-label={`View vendor ${listing.vendorName}`}
+                    >
+                        {listing.vendorName}
+                    </button>
             </p>
         {:else}
             <p class="text-sm text-gray-500 dark:text-dark-text-secondary">by {listing.vendorName}</p>
         {/if}
     </div>
     <div class="text-right">
-        <p class="font-semibold text-brand-primary dark:text-dark-primary text-xl">
+        <p class="font-semibold text-brand-primary dark:text-dark-primary text-xl" aria-label={`Price ${listing.price}`}>
             ₦{listing.price.toLocaleString()}
         </p>
-    <Button type="button" variant="secondary" class="mt-2 text-sm !py-1 !px-3" on:click={() => dispatch('open', listing)} aria-label={`View details for ${listing.title}`}>View Details</Button>
+    <Button
+        type="button"
+        variant="secondary"
+        class="mt-2 text-sm !py-1 !px-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-primary"
+        on:click={() => dispatch('open', listing)}
+        aria-label={`View details for ${listing.title}`}
+    >
+        View Details
+    </Button>
     </div>
 </Card>

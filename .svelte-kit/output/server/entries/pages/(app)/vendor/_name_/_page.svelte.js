@@ -1,4 +1,4 @@
-import { c as create_ssr_component, f as escape } from "../../../../../chunks/ssr.js";
+import { c as create_ssr_component, b as escape } from "../../../../../chunks/ssr.js";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let { params } = $$props;
   if ($$props.params === void 0 && $$bindings.params && params !== void 0) $$bindings.params(params);

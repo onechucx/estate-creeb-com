@@ -1,7 +1,6 @@
-
-> estate-creeb-svelte@0.0.1 preview
-> vite preview --port 4173 --host 127.0.0.1
-
-  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4173[22m/[39m
-[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m
-^C^C
+[31merror when starting preview server:
+Error: Server files not found at C:\Users\video\Downloads\react converter\estate-creeb\react-src\.svelte-kit\output\server, did you run `build` first?
+    at preview (file:///C:/Users/video/Downloads/react%20converter/estate-creeb/node_modules/@sveltejs/kit/src/exports/vite/preview/index.js:35:9)
+    at configurePreviewServer (file:///C:/Users/video/Downloads/react%20converter/estate-creeb/node_modules/@sveltejs/kit/src/exports/vite/index.js:698:11)
+    at preview (file:///C:/Users/video/Downloads/react%20converter/estate-creeb/node_modules/vite/dist/node/chunks/dep-D_zLpgQd.js:66276:26)
+    at async CAC.<anonymous> (file:///C:/Users/video/Downloads/react%20converter/estate-creeb/node_modules/vite/dist/node/cli.js:883:22)[39m

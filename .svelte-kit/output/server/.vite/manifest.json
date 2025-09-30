@@ -1,12 +1,32 @@
 {
+  "../node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
+    "file": "entries/fallbacks/error.svelte.js",
+    "name": "entries/fallbacks/error.svelte",
+    "src": "../node_modules/@sveltejs/kit/src/runtime/components/error.svelte",
+    "isEntry": true,
+    "imports": [
+      "_ssr.js",
+      "_client.js"
+    ]
+  },
+  "../node_modules/@sveltejs/kit/src/runtime/server/index.js": {
+    "file": "index.js",
+    "name": "index",
+    "src": "../node_modules/@sveltejs/kit/src/runtime/server/index.js",
+    "isEntry": true,
+    "imports": [
+      "_internal.js",
+      "_exports.js",
+      "_index.js"
+    ]
+  },
   ".svelte-kit/generated/server/internal.js": {
     "file": "internal.js",
     "name": "internal",
     "src": ".svelte-kit/generated/server/internal.js",
     "isEntry": true,
     "imports": [
-      "_internal.js",
-      "_environment.js"
+      "_internal.js"
     ]
   },
   "_Button.js": {
@@ -23,59 +43,33 @@
       "_ssr.js"
     ]
   },
-  "_InformationCircleIcon.js": {
-    "file": "chunks/InformationCircleIcon.js",
-    "name": "InformationCircleIcon",
-    "imports": [
-      "_ssr.js"
-    ]
-  },
-  "_MagnifyingGlassIcon.js": {
-    "file": "chunks/MagnifyingGlassIcon.js",
-    "name": "MagnifyingGlassIcon",
-    "imports": [
-      "_ssr.js"
-    ]
-  },
   "_Marketplace.js": {
     "file": "chunks/Marketplace.js",
     "name": "Marketplace",
     "imports": [
       "_ssr.js",
-      "_InformationCircleIcon.js",
-      "_MagnifyingGlassIcon.js",
+      "_heroicons-fallback.js",
       "_Card.js",
       "_Button.js"
     ]
   },
-  "_PencilIcon.js": {
-    "file": "chunks/PencilIcon.js",
-    "name": "PencilIcon",
+  "_client.js": {
+    "file": "chunks/client.js",
+    "name": "client",
     "imports": [
-      "_ssr.js"
+      "_exports.js"
     ]
-  },
-  "_PlusIcon.js": {
-    "file": "chunks/PlusIcon.js",
-    "name": "PlusIcon",
-    "imports": [
-      "_ssr.js"
-    ]
-  },
-  "_TrashIcon.js": {
-    "file": "chunks/TrashIcon.js",
-    "name": "TrashIcon",
-    "imports": [
-      "_ssr.js"
-    ]
-  },
-  "_environment.js": {
-    "file": "chunks/environment.js",
-    "name": "environment"
   },
   "_exports.js": {
     "file": "chunks/exports.js",
     "name": "exports"
+  },
+  "_heroicons-fallback.js": {
+    "file": "chunks/heroicons-fallback.js",
+    "name": "heroicons-fallback",
+    "imports": [
+      "_ssr.js"
+    ]
   },
   "_index.js": {
     "file": "chunks/index.js",
@@ -88,79 +82,18 @@
     "file": "chunks/internal.js",
     "name": "internal",
     "imports": [
-      "_ssr.js",
-      "_ssr2.js",
-      "_environment.js"
-    ]
-  },
-  "_shared.js": {
-    "file": "chunks/shared.js",
-    "name": "shared",
-    "imports": [
-      "_utils.js"
+      "_ssr.js"
     ]
   },
   "_ssr.js": {
     "file": "chunks/ssr.js",
     "name": "ssr"
   },
-  "_ssr2.js": {
-    "file": "chunks/ssr2.js",
-    "name": "ssr"
-  },
-  "_state.svelte.js": {
-    "file": "chunks/state.svelte.js",
-    "name": "state.svelte",
-    "imports": [
-      "_ssr2.js"
-    ]
-  },
   "_stores.js": {
     "file": "chunks/stores.js",
     "name": "stores",
     "imports": [
       "_index.js"
-    ]
-  },
-  "_utils.js": {
-    "file": "chunks/utils.js",
-    "name": "utils"
-  },
-  "node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js": {
-    "file": "remote-entry.js",
-    "name": "remote-entry",
-    "src": "node_modules/@sveltejs/kit/src/runtime/app/server/remote/index.js",
-    "isEntry": true,
-    "imports": [
-      "_shared.js",
-      "_utils.js",
-      "_environment.js"
-    ]
-  },
-  "node_modules/@sveltejs/kit/src/runtime/components/svelte-4/error.svelte": {
-    "file": "entries/fallbacks/error.svelte.js",
-    "name": "entries/fallbacks/error.svelte",
-    "src": "node_modules/@sveltejs/kit/src/runtime/components/svelte-4/error.svelte",
-    "isEntry": true,
-    "imports": [
-      "_ssr.js",
-      "_exports.js",
-      "_utils.js",
-      "_state.svelte.js"
-    ]
-  },
-  "node_modules/@sveltejs/kit/src/runtime/server/index.js": {
-    "file": "index.js",
-    "name": "index",
-    "src": "node_modules/@sveltejs/kit/src/runtime/server/index.js",
-    "isEntry": true,
-    "imports": [
-      "_shared.js",
-      "_environment.js",
-      "_exports.js",
-      "_utils.js",
-      "_index.js",
-      "_internal.js"
     ]
   },
   "src/routes/(app)/admin-panel/+page.svelte": {
@@ -213,8 +146,7 @@
       "_ssr.js",
       "_Card.js",
       "_Button.js",
-      "_MagnifyingGlassIcon.js",
-      "_TrashIcon.js"
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/marketplace/+page.svelte": {
@@ -236,9 +168,7 @@
       "_ssr.js",
       "_Card.js",
       "_Button.js",
-      "_PencilIcon.js",
-      "_PlusIcon.js",
-      "_TrashIcon.js"
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/profile/+page.svelte": {
@@ -251,7 +181,7 @@
       "_Card.js",
       "_Button.js",
       "_stores.js",
-      "_PencilIcon.js"
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/(app)/settings/+page.svelte": {
@@ -292,7 +222,7 @@
       "_ssr.js",
       "_Card.js",
       "_Button.js",
-      "_PlusIcon.js"
+      "_heroicons-fallback.js"
     ]
   },
   "src/routes/+layout.svelte": {
@@ -302,15 +232,12 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
+      "_heroicons-fallback.js",
       "_stores.js",
-      "_exports.js",
-      "_utils.js",
-      "_state.svelte.js",
-      "_MagnifyingGlassIcon.js",
-      "_InformationCircleIcon.js"
+      "_client.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.DDynHn2i.css"
+      "_app/immutable/assets/_layout.C6G_3qQV.css"
     ]
   },
   "src/routes/+page.svelte": {

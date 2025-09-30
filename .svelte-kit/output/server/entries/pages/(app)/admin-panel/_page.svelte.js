@@ -1,4 +1,4 @@
-import { c as create_ssr_component, v as validate_component, d as add_attribute } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, v as validate_component, a as add_attribute } from "../../../../chunks/ssr.js";
 import { C as Card } from "../../../../chunks/Card.js";
 import { t as toast } from "../../../../chunks/stores.js";
 const RequestsManagement = create_ssr_component(($$result, $$props, $$bindings, slots) => {
