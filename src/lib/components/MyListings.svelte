@@ -83,7 +83,7 @@
 <div class="p-4 sm:p-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h1 class="text-2xl font-bold text-brand-text-primary mb-4 sm:mb-0">My Listings</h1>
-        <Button type="button" on:click={() => (showCreateModal = true)} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (showCreateModal = true)} aria-label="Create a new listing">
+        <Button type="button" on:click={() => (showCreateModal = true)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); showCreateModal = true } }} aria-label="Create a new listing">
             <PlusIcon class="w-5 h-5 mr-2" />
             Create Listing
         </Button>
@@ -139,7 +139,7 @@
                             <td class="p-4 hidden lg:table-cell">{listing.leads}</td>
                             <td class="p-4">
                                 <div class="flex items-center space-x-2">
-                                    <Button type="button" size="sm" variant="ghost" on:click={() => openBoostModal(listing)} aria-label={`Boost ${listing.title}`}>
+                                    <Button type="button" size="sm" variant="ghost" on:click={() => openBoostModal(listing)} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && openBoostModal(listing)} aria-label={`Boost ${listing.title}`}>
                                         <BoltIcon class="w-4 h-4" />
                                     </Button>
                                     <Button type="button" size="sm" variant="ghost" aria-label={`Edit ${listing.title}`}>

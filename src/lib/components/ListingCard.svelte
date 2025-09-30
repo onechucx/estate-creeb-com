@@ -31,10 +31,10 @@
     <p class="font-semibold text-brand-primary dark:text-dark-primary text-xl">₦{listing.price.toLocaleString()}</p>
     <p class="text-sm text-gray-500 dark:text-dark-text-secondary truncate">{listing.location}</p>
     {#if onViewVendor}
-        <p class="text-xs text-gray-400 mt-1">by <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`}>{listing.vendorName}</button></p>
+    <p class="text-xs text-gray-400 mt-1">by <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && handleViewVendor(e)}>{listing.vendorName}</button></p>
     {/if}
     <div class="mt-4">
-        <button type="button" class="px-3 py-2 bg-brand-primary text-white rounded" on:click={() => dispatch('open', listing)} aria-label={`View details for ${listing.title}`}>View Details</button>
+    <button type="button" class="px-3 py-2 bg-brand-primary text-white rounded" on:click={() => dispatch('open', listing)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); dispatch('open', listing) } }} aria-label={`View details for ${listing.title}`}>View Details</button>
     </div>
 </Card>
  

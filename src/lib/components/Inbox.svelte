@@ -77,10 +77,13 @@
                     <div class="relative">
                         <MagnifyingGlass
                             class="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                            aria-hidden="true"
+                            focusable="false"
                         />
                         <input
                             type="text"
                             placeholder="Search mail"
+                            aria-label="Search messages"
                             class="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-800 dark:border-dark-border focus:ring-brand-primary focus:border-brand-primary"
                         />
                     </div>
@@ -89,18 +92,20 @@
                     <ul>
                         {#each messages as message (message.id)}
                             <li class="border-b border-brand-border dark:border-dark-border">
-                <button
-                    type="button"
-                    class="w-full text-left p-4 {selectedMessage.id === message.id
+                                <button
+                                    type="button"
+                                    class="w-full text-left p-4 {selectedMessage.id === message.id
                                         ? 'bg-blue-50 dark:bg-blue-900/20'
                                         : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'}"
-                    on:click={() => (selectedMessage = message)}
-                    aria-pressed={selectedMessage.id === message.id}
-                                    >
+                                    on:click={() => (selectedMessage = message)}
+                                    on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectedMessage = message } }}
+                                    aria-pressed={selectedMessage.id === message.id}
+                                    aria-label={`Open message from ${message.sender}: ${message.subject}`}
+                                >
                                     <div class="flex justify-between items-start">
                                         <p class="font-semibold text-brand-text-primary">{message.sender}</p>
                                         {#if !message.read}
-                                            <span class="w-2 h-2 bg-brand-primary rounded-full"></span>
+                                            <span class="w-2 h-2 bg-brand-primary rounded-full" aria-hidden="true"></span>
                                         {/if}
                                     </div>
                                     <p class="text-sm font-medium text-brand-text-primary truncate">
@@ -142,9 +147,15 @@
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
-                            <Button variant="ghost"><Star class="w-5 h-5" /></Button>
-                            <Button variant="ghost"><ArchiveBox class="w-5 h-5" /></Button>
-                            <Button variant="ghost" class="text-red-500"><Trash class="w-5 h-5" /></Button>
+                            <Button type="button" variant="ghost" aria-label="Star message">
+                                <Star class="w-5 h-5" aria-hidden="true" />
+                            </Button>
+                            <Button type="button" variant="ghost" aria-label="Archive message">
+                                <ArchiveBox class="w-5 h-5" aria-hidden="true" />
+                            </Button>
+                            <Button type="button" variant="ghost" class="text-red-500" aria-label="Delete message">
+                                <Trash class="w-5 h-5" aria-hidden="true" />
+                            </Button>
                         </div>
                     </div>
                     <div class="flex-grow p-6 overflow-y-auto prose dark:prose-invert max-w-none">
@@ -166,7 +177,7 @@
                             rows="3"
                         ></textarea>
                         <div class="flex justify-end mt-2">
-                            <Button>Send Reply</Button>
+                            <Button type="button" aria-label={`Send reply to ${selectedMessage.sender}`}>Send Reply</Button>
                         </div>
                     </div>
                 {:else}

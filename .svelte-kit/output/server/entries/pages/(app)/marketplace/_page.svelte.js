@@ -1,6 +1,8 @@
-import { c as create_ssr_component } from "../../../../chunks/ssr.js";
+import { c as create_ssr_component, v as validate_component } from "../../../../chunks/ssr.js";
+import { M as Marketplace } from "../../../../chunks/Marketplace.js";
 const Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-  return `<h2 class="text-2xl font-bold" data-svelte-h="svelte-t8u25n">Marketplace</h2> <p class="mt-2" data-svelte-h="svelte-1l46dyw">Placeholder for the marketplace page.</p>`;
+  const listings = [];
+  return `<main>${validate_component(Marketplace, "Marketplace").$$render($$result, { listings }, {}, {})}</main>`;
 });
 export {
   Page as default

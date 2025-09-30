@@ -9,8 +9,8 @@
     export let listing: Listing;
     export let onViewVendor: ((vendorName: string) => void) | undefined = undefined;
 
-    function handleViewVendor(e: MouseEvent) {
-        e.stopPropagation();
+    function handleViewVendor(e: Event) {
+        e.stopPropagation?.();
         if (onViewVendor) {
             onViewVendor(listing.vendorName);
         }
@@ -40,7 +40,7 @@
             {#if onViewVendor}
             <p class="text-sm text-gray-500 dark:text-dark-text-secondary">
                 by
-                <button type="button" on:click={handleViewVendor} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`}>
+                    <button type="button" on:click={handleViewVendor} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleViewVendor(e) } }} class="hover:underline font-semibold" aria-label={`View vendor ${listing.vendorName}`}>
                     {listing.vendorName}
                 </button>
             </p>

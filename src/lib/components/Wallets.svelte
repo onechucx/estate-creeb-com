@@ -138,17 +138,18 @@
                         </div>
                         <div class="flex space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
                             {#each wallets as wallet}
-                                            <Button
-                                                type="button"
-                                                on:click={() => (selectedWallet = wallet)}
-                                                aria-pressed={selectedWallet.id === wallet.id}
-                                                aria-label={`Select ${wallet.currency} wallet`}
-                                                class="!text-xs !py-1 !px-3 {selectedWallet.id === wallet.id
-                                                        ? 'bg-brand-surface dark:bg-dark-surface shadow'
-                                                        : 'bg-transparent border-transparent'}"
-                                            >
-                                                {wallet.currency}
-                                            </Button>
+                                                            <Button
+                                                                type="button"
+                                                                on:click={() => (selectedWallet = wallet)}
+                                                                on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectedWallet = wallet } }}
+                                                                aria-pressed={selectedWallet.id === wallet.id}
+                                                                aria-label={`Select ${wallet.currency} wallet`}
+                                                                class="!text-xs !py-1 !px-3 {selectedWallet.id === wallet.id
+                                                                        ? 'bg-brand-surface dark:bg-dark-surface shadow'
+                                                                        : 'bg-transparent border-transparent'}"
+                                                            >
+                                                                {wallet.currency}
+                                                            </Button>
                             {/each}
                         </div>
                     </div>

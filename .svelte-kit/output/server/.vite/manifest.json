@@ -37,6 +37,17 @@
       "_ssr.js"
     ]
   },
+  "_Marketplace.js": {
+    "file": "chunks/Marketplace.js",
+    "name": "Marketplace",
+    "imports": [
+      "_ssr.js",
+      "_InformationCircleIcon.js",
+      "_MagnifyingGlassIcon.js",
+      "_Card.js",
+      "_Button.js"
+    ]
+  },
   "_PencilIcon.js": {
     "file": "chunks/PencilIcon.js",
     "name": "PencilIcon",
@@ -169,7 +180,8 @@
     "src": "src/routes/(app)/community/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_Card.js"
     ]
   },
   "src/routes/(app)/dashboard/+page.svelte": {
@@ -188,7 +200,8 @@
     "src": "src/routes/(app)/estate-management/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_Card.js"
     ]
   },
   "src/routes/(app)/inbox/+page.svelte": {
@@ -210,7 +223,8 @@
     "src": "src/routes/(app)/marketplace/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_Marketplace.js"
     ]
   },
   "src/routes/(app)/my-listings/+page.svelte": {
@@ -246,7 +260,8 @@
     "src": "src/routes/(app)/settings/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_Card.js"
     ]
   },
   "src/routes/(app)/support/+page.svelte": {
@@ -255,7 +270,8 @@
     "src": "src/routes/(app)/support/+page.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_Card.js"
     ]
   },
   "src/routes/(app)/vendor/[name]/+page.svelte": {
@@ -294,7 +310,7 @@
       "_InformationCircleIcon.js"
     ],
     "css": [
-      "_app/immutable/assets/_layout.Bdu-qCNK.css"
+      "_app/immutable/assets/_layout.DDynHn2i.css"
     ]
   },
   "src/routes/+page.svelte": {
@@ -304,9 +320,7 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_InformationCircleIcon.js",
-      "_MagnifyingGlassIcon.js",
-      "_Card.js",
+      "_Marketplace.js",
       "_Button.js",
       "_stores.js"
     ]

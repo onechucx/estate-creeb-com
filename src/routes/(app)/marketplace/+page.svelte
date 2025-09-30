@@ -1,6 +1,11 @@
 <script lang="ts">
-  // Marketplace placeholder
+  import Marketplace from '$lib/components/Marketplace.svelte';
+  import type { Listing } from '$lib/types';
+
+  // If you have server data, use a load function. For now pass empty listings.
+  const listings: Listing[] = [];
 </script>
 
-<h2 class="text-2xl font-bold">Marketplace</h2>
-<p class="mt-2">Placeholder for the marketplace page.</p>
+<main>
+  <Marketplace {listings} />
+</main>

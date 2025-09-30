@@ -111,7 +111,7 @@
                         type="button"
                         class={itemClass(isActive)}
                         on:click={() => setActiveView(item.view)}
-                        on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView(item.view)}
+                        on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveView(item.view) } }}
                         aria-pressed={isActive}
                         aria-current={isActive ? 'page' : undefined}
                         aria-label={item.label}
@@ -133,7 +133,7 @@
                                 type="button"
                                 class={actionItemClass(isDisabled)}
                                 on:click={!isDisabled ? () => setActiveView(item.view) : undefined}
-                                on:keydown={(e) => !isDisabled && (e.key === 'Enter' || e.key === ' ') && setActiveView(item.view)}
+                                on:keydown={(e) => { if (!isDisabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setActiveView(item.view) } }}
                                 title={isDisabled ? 'An active subscription is required for this feature.' : ''}
                                 aria-disabled={isDisabled}
                                 aria-label={item.label}
@@ -152,7 +152,7 @@
                 {#each visibleAdminNavItems as item}
                     {@const isActive = active === item.view}
                         <li>
-                            <button type="button" class={itemClass(isActive)} on:click={() => setActiveView(item.view)} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView(item.view)} aria-pressed={isActive} aria-label={item.label}>
+                            <button type="button" class={itemClass(isActive)} on:click={() => setActiveView(item.view)} on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActiveView(item.view) } }} aria-pressed={isActive} aria-label={item.label}>
                                 <svelte:component this={item.icon} class="h-6 w-6 mr-4" aria-hidden="true" focusable="false" />
                                 <span class="font-medium">{item.label}</span>
                             </button>

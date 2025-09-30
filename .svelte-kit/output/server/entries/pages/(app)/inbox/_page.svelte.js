@@ -112,38 +112,76 @@ const Inbox = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       return `<div class="p-4 border-b border-brand-border dark:border-dark-border"><div class="relative">${validate_component(MagnifyingGlassIcon, "MagnifyingGlass").$$render(
         $$result,
         {
-          class: "w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          class: "w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400",
+          "aria-hidden": "true",
+          focusable: "false"
         },
         {},
         {}
-      )} <input type="text" placeholder="Search mail" class="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-800 dark:border-dark-border focus:ring-brand-primary focus:border-brand-primary"></div></div> <div class="flex-grow overflow-y-auto"><ul>${each(messages, (message) => {
+      )} <input type="text" placeholder="Search mail" aria-label="Search messages" class="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-100 dark:bg-gray-800 dark:border-dark-border focus:ring-brand-primary focus:border-brand-primary"></div></div> <div class="flex-grow overflow-y-auto"><ul>${each(messages, (message) => {
         return `<li class="border-b border-brand-border dark:border-dark-border"><button type="button" class="${"w-full text-left p-4 " + escape(
           selectedMessage.id === message.id ? "bg-blue-50 dark:bg-blue-900/20" : "hover:bg-gray-50 dark:hover:bg-gray-800/50",
           true
-        )}"${add_attribute("aria-pressed", selectedMessage.id === message.id, 0)}><div class="flex justify-between items-start"><p class="font-semibold text-brand-text-primary">${escape(message.sender)}</p> ${!message.read ? `<span class="w-2 h-2 bg-brand-primary rounded-full"></span>` : ``}</div> <p class="text-sm font-medium text-brand-text-primary truncate">${escape(message.subject)}</p> <p class="text-sm text-brand-text-secondary truncate">${escape(message.snippet)}</p> <p class="text-xs text-brand-text-secondary mt-1">${escape(message.timestamp)}</p></button> </li>`;
+        )}"${add_attribute("aria-pressed", selectedMessage.id === message.id, 0)}${add_attribute("aria-label", `Open message from ${message.sender}: ${message.subject}`, 0)}><div class="flex justify-between items-start"><p class="font-semibold text-brand-text-primary">${escape(message.sender)}</p> ${!message.read ? `<span class="w-2 h-2 bg-brand-primary rounded-full" aria-hidden="true"></span>` : ``}</div> <p class="text-sm font-medium text-brand-text-primary truncate">${escape(message.subject)}</p> <p class="text-sm text-brand-text-secondary truncate">${escape(message.snippet)}</p> <p class="text-xs text-brand-text-secondary mt-1">${escape(message.timestamp)}</p></button> </li>`;
       })}</ul></div>`;
     }
   })}</div>  <div class="md:col-span-2 lg:col-span-3 h-full">${validate_component(Card, "Card").$$render($$result, { class: "h-full flex flex-col" }, {}, {
     default: () => {
-      return `${selectedMessage ? `<div class="flex-shrink-0 p-4 border-b border-brand-border dark:border-dark-border flex justify-between items-center"><div><h2 class="text-lg font-bold text-brand-text-primary">${escape(selectedMessage.subject)}</h2> <div class="flex items-center space-x-2 mt-1"><img${add_attribute("src", selectedMessage.avatar.replace("http://placeimg.com", "https://loremflickr.com"), 0)}${add_attribute("alt", selectedMessage.sender, 0)} class="w-8 h-8 rounded-full"> <div><p class="text-sm font-semibold text-brand-text-primary">${escape(selectedMessage.sender)}</p> <p class="text-xs text-brand-text-secondary" data-svelte-h="svelte-2xsijj">to me</p></div></div></div> <div class="flex items-center space-x-2">${validate_component(Button, "Button").$$render($$result, { variant: "ghost" }, {}, {
-        default: () => {
-          return `${validate_component(StarIcon, "Star").$$render($$result, { class: "w-5 h-5" }, {}, {})}`;
+      return `${selectedMessage ? `<div class="flex-shrink-0 p-4 border-b border-brand-border dark:border-dark-border flex justify-between items-center"><div><h2 class="text-lg font-bold text-brand-text-primary">${escape(selectedMessage.subject)}</h2> <div class="flex items-center space-x-2 mt-1"><img${add_attribute("src", selectedMessage.avatar.replace("http://placeimg.com", "https://loremflickr.com"), 0)}${add_attribute("alt", selectedMessage.sender, 0)} class="w-8 h-8 rounded-full"> <div><p class="text-sm font-semibold text-brand-text-primary">${escape(selectedMessage.sender)}</p> <p class="text-xs text-brand-text-secondary" data-svelte-h="svelte-2xsijj">to me</p></div></div></div> <div class="flex items-center space-x-2">${validate_component(Button, "Button").$$render(
+        $$result,
+        {
+          type: "button",
+          variant: "ghost",
+          "aria-label": "Star message"
+        },
+        {},
+        {
+          default: () => {
+            return `${validate_component(StarIcon, "Star").$$render($$result, { class: "w-5 h-5", "aria-hidden": "true" }, {}, {})}`;
+          }
         }
-      })} ${validate_component(Button, "Button").$$render($$result, { variant: "ghost" }, {}, {
-        default: () => {
-          return `${validate_component(ArchiveBoxIcon, "ArchiveBox").$$render($$result, { class: "w-5 h-5" }, {}, {})}`;
+      )} ${validate_component(Button, "Button").$$render(
+        $$result,
+        {
+          type: "button",
+          variant: "ghost",
+          "aria-label": "Archive message"
+        },
+        {},
+        {
+          default: () => {
+            return `${validate_component(ArchiveBoxIcon, "ArchiveBox").$$render($$result, { class: "w-5 h-5", "aria-hidden": "true" }, {}, {})}`;
+          }
         }
-      })} ${validate_component(Button, "Button").$$render($$result, { variant: "ghost", class: "text-red-500" }, {}, {
-        default: () => {
-          return `${validate_component(TrashIcon, "Trash").$$render($$result, { class: "w-5 h-5" }, {}, {})}`;
+      )} ${validate_component(Button, "Button").$$render(
+        $$result,
+        {
+          type: "button",
+          variant: "ghost",
+          class: "text-red-500",
+          "aria-label": "Delete message"
+        },
+        {},
+        {
+          default: () => {
+            return `${validate_component(TrashIcon, "Trash").$$render($$result, { class: "w-5 h-5", "aria-hidden": "true" }, {}, {})}`;
+          }
         }
-      })}</div></div> <div class="flex-grow p-6 overflow-y-auto prose dark:prose-invert max-w-none"><p>${escape(selectedMessage.snippet)}</p> <br> <p data-svelte-h="svelte-1q1qz65">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+      )}</div></div> <div class="flex-grow p-6 overflow-y-auto prose dark:prose-invert max-w-none"><p>${escape(selectedMessage.snippet)}</p> <br> <p data-svelte-h="svelte-1q1qz65">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
                             incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> <br> <p data-svelte-h="svelte-1vc28hw">Regards,</p> <p>${escape(selectedMessage.sender)}</p></div> <div class="flex-shrink-0 p-4 border-t border-brand-border dark:border-dark-border"><textarea class="w-full p-2 border rounded-md bg-gray-100 dark:bg-gray-800 dark:border-dark-border"${add_attribute("placeholder", "Reply to " + selectedMessage.sender, 0)} rows="3"></textarea> <div class="flex justify-end mt-2">${validate_component(Button, "Button").$$render($$result, {}, {}, {
-        default: () => {
-          return `Send Reply`;
+                            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> <br> <p data-svelte-h="svelte-1vc28hw">Regards,</p> <p>${escape(selectedMessage.sender)}</p></div> <div class="flex-shrink-0 p-4 border-t border-brand-border dark:border-dark-border"><textarea class="w-full p-2 border rounded-md bg-gray-100 dark:bg-gray-800 dark:border-dark-border"${add_attribute("placeholder", "Reply to " + selectedMessage.sender, 0)} rows="3"></textarea> <div class="flex justify-end mt-2">${validate_component(Button, "Button").$$render(
+        $$result,
+        {
+          type: "button",
+          "aria-label": `Send reply to ${selectedMessage.sender}`
+        },
+        {},
+        {
+          default: () => {
+            return `Send Reply`;
+          }
         }
-      })}</div></div>` : `<div class="flex-grow flex items-center justify-center" data-svelte-h="svelte-hjp3it"><div class="text-center"><p class="text-brand-text-secondary">Select a message to read</p></div></div>`}`;
+      )}</div></div>` : `<div class="flex-grow flex items-center justify-center" data-svelte-h="svelte-hjp3it"><div class="text-center"><p class="text-brand-text-secondary">Select a message to read</p></div></div>`}`;
     }
   })}</div></div></div>`;
 });

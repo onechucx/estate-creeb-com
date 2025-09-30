@@ -377,10 +377,21 @@ const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     },
     {},
     {}
-  )} <input type="text" placeholder="Search..." aria-label="Search listings" class="pl-10 pr-4 py-2 w-64 bg-gray-100 dark:bg-gray-700 rounded-lg text-brand-text-primary dark:text-dark-text-primary placeholder:text-brand-text-secondary dark:placeholder:text-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-dark-primary"></div> <button type="button" aria-label="Notifications" title="Notifications" class="relative text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary">${validate_component(BellIcon, "BellIcon").$$render($$result, { class: "h-6 w-6" }, {}, {})} <span aria-hidden="true" class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span></button> <div class="relative"><button id="user-menu-toggle" type="button" class="flex items-center space-x-3" aria-haspopup="true" aria-controls="user-menu"${add_attribute("aria-expanded", isDropdownOpen, 0)} aria-label="Toggle user menu" title="Toggle user menu"><img${add_attribute("src", `https://picsum.photos/seed/${role}/40/40`, 0)} alt="User Avatar" class="h-10 w-10 rounded-full"> <div><p class="font-semibold text-sm text-brand-text-primary dark:text-dark-text-primary" data-svelte-h="svelte-u4mo1g">John Doe</p> <div class="flex items-center"><span class="text-xs text-gray-500 dark:text-dark-text-secondary">${escape(role)}</span> ${validate_component(ChevronDownIcon, "ChevronDownIcon").$$render(
+  )} <input type="text" placeholder="Search..." aria-label="Search listings" class="pl-10 pr-4 py-2 w-64 bg-gray-100 dark:bg-gray-700 rounded-lg text-brand-text-primary dark:text-dark-text-primary placeholder:text-brand-text-secondary dark:placeholder:text-dark-text-secondary focus:outline-none focus:ring-2 focus:ring-brand-primary dark:focus:ring-dark-primary"></div> <button type="button" aria-label="Notifications" title="Notifications" class="relative text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary">${validate_component(BellIcon, "BellIcon").$$render(
     $$result,
     {
-      class: `h-3 w-3 text-brand-text-secondary dark:text-dark-text-secondary ml-1 transition-transform ${""}`
+      class: "h-6 w-6",
+      "aria-hidden": "true",
+      focusable: "false"
+    },
+    {},
+    {}
+  )} <span aria-hidden="true" class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span></button> <div class="relative"><button id="user-menu-toggle" type="button" class="flex items-center space-x-3" aria-haspopup="true" aria-controls="user-menu"${add_attribute("aria-expanded", isDropdownOpen, 0)} aria-label="Toggle user menu" title="Toggle user menu"><img${add_attribute("src", `https://picsum.photos/seed/${role}/40/40`, 0)} alt="User Avatar" class="h-10 w-10 rounded-full"> <div><p class="font-semibold text-sm text-brand-text-primary dark:text-dark-text-primary" data-svelte-h="svelte-u4mo1g">John Doe</p> <div class="flex items-center"><span class="text-xs text-gray-500 dark:text-dark-text-secondary">${escape(role)}</span> ${validate_component(ChevronDownIcon, "ChevronDownIcon").$$render(
+    $$result,
+    {
+      class: `h-3 w-3 text-brand-text-secondary dark:text-dark-text-secondary ml-1 transition-transform ${""}`,
+      "aria-hidden": "true",
+      focusable: "false"
     },
     {},
     {}
@@ -398,7 +409,8 @@ const Toast = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `${message ? `<div class="fixed top-5 right-5 bg-brand-surface dark:bg-dark-surface shadow-lg rounded-lg p-4 flex items-center z-[100] animate-fade-in-down border border-brand-border dark:border-dark-border" role="status" aria-live="polite">${validate_component((iconMap[message.type] ?? InformationCircleIcon) || missing_component, "svelte:component").$$render(
     $$result,
     {
-      class: `h-6 w-6 ${message.type === "success" ? "text-green-500" : message.type === "error" ? "text-red-500" : "text-blue-500"}`
+      class: `h-6 w-6 ${message.type === "success" ? "text-green-500" : message.type === "error" ? "text-red-500" : "text-blue-500"}`,
+      "aria-hidden": "true"
     },
     {},
     {}

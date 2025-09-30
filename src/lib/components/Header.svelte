@@ -57,15 +57,15 @@
             />
         </div>
 
-            <button type="button" aria-label="Notifications" title="Notifications" class="relative text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary">
-            <BellIcon class="h-6 w-6" />
+            <button type="button" aria-label="Notifications" title="Notifications" class="relative text-gray-500 hover:text-brand-primary dark:text-gray-400 dark:hover:text-dark-primary" on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); /* no-op for now */ } }}>
+            <BellIcon class="h-6 w-6" aria-hidden="true" focusable="false" />
             <span aria-hidden="true" class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full" />
         </button>
 
         <div class="relative">
             <button
                 id="user-menu-toggle"
-                type="button"
+                        type="button"
                 class="flex items-center space-x-3"
                 on:click={() => (isDropdownOpen = !isDropdownOpen)}
                 on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isDropdownOpen = !isDropdownOpen } }}
@@ -80,7 +80,7 @@
                     <p class="font-semibold text-sm text-brand-text-primary dark:text-dark-text-primary">John Doe</p>
                     <div class="flex items-center">
                         <span class="text-xs text-gray-500 dark:text-dark-text-secondary">{role}</span>
-                        <ChevronDownIcon class={`h-3 w-3 text-brand-text-secondary dark:text-dark-text-secondary ml-1 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+                        <ChevronDownIcon class={`h-3 w-3 text-brand-text-secondary dark:text-dark-text-secondary ml-1 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} aria-hidden="true" focusable="false" />
                     </div>
                 </div>
             </button>

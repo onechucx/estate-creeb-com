@@ -17,7 +17,9 @@
     import type { Listing, ListingCategory, ToastMessage, AppView } from '$lib/types';
     import { createEventDispatcher } from 'svelte';
 
-    export let showToast: (message: string, type?: ToastMessage['type']) => void;
+    // showToast is not used internally but may be passed by parent; export as const
+    // so the svelte plugin does not treat it as an unused reactive export.
+    export const showToast: (message: string, type?: ToastMessage['type']) => void = undefined as any;
     export let isAuthenticated: boolean = true;
     export let isCommunitySubscribed: boolean = false;
     export let listings: Listing[];
@@ -130,6 +132,8 @@
             <div class="relative lg:col-span-2">
                 <MagnifyingGlassIcon
                     class="h-5 w-5 text-gray-400 dark:text-gray-500 absolute top-1/2 left-3 transform -translate-y-1/2"
+                    aria-hidden="true"
+                    focusable="false"
                 />
                 <input
                     type="text"
@@ -171,21 +175,23 @@
                     <button
                         type="button"
                         on:click={() => (viewMode = 'grid')}
+                        on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); viewMode = 'grid' } }}
                         class={`p-1 rounded ${
                             viewMode === 'grid' ? 'bg-brand-surface dark:bg-dark-surface shadow' : ''
                         }`}
                         aria-label="Grid View"
                         aria-pressed={viewMode === 'grid'}
-                    ><Squares2x2Icon class="h-5 w-5" /></button>
+                    ><Squares2x2Icon class="h-5 w-5" aria-hidden="true" focusable="false" /></button>
                     <button
                         type="button"
                         on:click={() => (viewMode = 'list')}
+                        on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); viewMode = 'list' } }}
                         class={`p-1 rounded ${
                             viewMode === 'list' ? 'bg-brand-surface dark:bg-dark-surface shadow' : ''
                         }`}
                         aria-label="List View"
                         aria-pressed={viewMode === 'list'}
-                    ><Bars3Icon class="h-5 w-5" /></button>
+                    ><Bars3Icon class="h-5 w-5" aria-hidden="true" focusable="false" /></button>
                 </div>
             </div>
         </div>
@@ -195,7 +201,7 @@
                     <button
                         type="button"
                         on:click={() => (activeCategory = category)}
-                        on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (activeCategory = category)}
+                        on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activeCategory = category } }}
                         aria-pressed={activeCategory === category}
                         aria-label={`Category ${category}`}
                         class={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${
@@ -273,22 +279,22 @@
                 type="button"
                 variant="secondary"
                 on:click={() => (currentPage = Math.max(1, currentPage - 1))}
-                on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (currentPage = Math.max(1, currentPage - 1))}
+                on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); currentPage = Math.max(1, currentPage - 1) } }}
                 disabled={currentPage === 1}
                 aria-label="Previous page"
             >
-                <ChevronLeftIcon class="h-5 w-5" />
+                <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
             </Button>
             <span class="text-sm font-medium">Page {currentPage} of {totalPages}</span>
             <Button
                 type="button"
                 variant="secondary"
                 on:click={() => (currentPage = Math.min(totalPages, currentPage + 1))}
-                on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (currentPage = Math.min(totalPages, currentPage + 1))}
+                on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); currentPage = Math.min(totalPages, currentPage + 1) } }}
                 disabled={currentPage === totalPages}
                 aria-label="Next page"
             >
-                <ChevronRightIcon class="h-5 w-5" />
+                <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
             </Button>
         </div>
     </Card>

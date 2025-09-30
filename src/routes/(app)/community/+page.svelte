@@ -1,6 +1,7 @@
 <script lang="ts">
-  // Community placeholder
+  import Community from '$lib/components/Community.svelte';
 </script>
 
-<h2 class="text-2xl font-bold">Community</h2>
-<p class="mt-2">Community hub placeholder.</p>
+<main>
+  <Community />
+</main>
