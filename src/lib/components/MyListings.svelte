@@ -83,7 +83,7 @@
 <div class="p-4 sm:p-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h1 class="text-2xl font-bold text-brand-text-primary mb-4 sm:mb-0">My Listings</h1>
-        <Button type="button" on:click={() => (showCreateModal = true)} aria-label="Create a new listing">
+        <Button type="button" on:click={() => (showCreateModal = true)} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (showCreateModal = true)} aria-label="Create a new listing">
             <PlusIcon class="w-5 h-5 mr-2" />
             Create Listing
         </Button>

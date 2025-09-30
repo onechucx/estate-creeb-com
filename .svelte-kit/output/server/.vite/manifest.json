@@ -287,10 +287,10 @@
     "imports": [
       "_ssr.js",
       "_stores.js",
-      "_MagnifyingGlassIcon.js",
       "_exports.js",
       "_utils.js",
       "_state.svelte.js",
+      "_MagnifyingGlassIcon.js",
       "_InformationCircleIcon.js"
     ],
     "css": [

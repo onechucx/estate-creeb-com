@@ -41,7 +41,7 @@
                     />
                     {#if editMode}
                         <div>
-                            <Button variant="secondary">Change Photo</Button>
+                            <Button type="button" variant="secondary" aria-label="Change profile photo">Change Photo</Button>
                             <p class="text-xs text-brand-text-secondary mt-2">
                                 JPG, GIF or PNG. 1MB max.
                             </p>

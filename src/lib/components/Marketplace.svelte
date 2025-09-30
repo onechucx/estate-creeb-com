@@ -195,7 +195,9 @@
                     <button
                         type="button"
                         on:click={() => (activeCategory = category)}
+                        on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (activeCategory = category)}
                         aria-pressed={activeCategory === category}
+                        aria-label={`Category ${category}`}
                         class={`whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${
                             activeCategory === category
                                 ? 'border-brand-primary text-brand-primary dark:border-dark-primary'
@@ -211,7 +213,7 @@
 
     {#if isAuthenticated}
         <div class="flex justify-end">
-                <Button
+            <Button
                 type="button"
                 variant="secondary"
                 on:click={() => setActiveView('MY_LISTINGS')}
@@ -271,6 +273,7 @@
                 type="button"
                 variant="secondary"
                 on:click={() => (currentPage = Math.max(1, currentPage - 1))}
+                on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (currentPage = Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
                 aria-label="Previous page"
             >
@@ -281,6 +284,7 @@
                 type="button"
                 variant="secondary"
                 on:click={() => (currentPage = Math.min(totalPages, currentPage + 1))}
+                on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && (currentPage = Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
                 aria-label="Next page"
             >

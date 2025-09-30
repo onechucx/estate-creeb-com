@@ -41,8 +41,41 @@
     const actionNavItems: NavItem[] = [{ view: 'CREATE_HUB', label: 'Create New...', icon: PlusCircleIcon, roles: ['User', 'Partner', 'Administrator'] }];
     const adminNavItems: NavItem[] = [{ view: 'ADMIN_PANEL', label: 'Administrator', icon: ChartPieIcon, roles: ['Administrator'] }];
 
+    import { goto } from '$app/navigation';
+
+    function viewToPath(view: AppView) {
+        switch (view) {
+            case 'DASHBOARD':
+                return '/dashboard';
+            case 'ESTATE':
+                return '/estate-management';
+            case 'COMMUNITY':
+                return '/community';
+            case 'PROFILE':
+                return '/profile';
+            case 'WALLETS':
+                return '/wallets';
+            case 'INBOX':
+                return '/inbox';
+            case 'MARKETPLACE':
+                return '/marketplace';
+            case 'SETTINGS':
+                return '/settings';
+            case 'SUPPORT':
+                return '/support';
+            case 'ADMIN_PANEL':
+                return '/admin-panel';
+            case 'CREATE_HUB':
+                return '/create-hub';
+            default:
+                return '/';
+        }
+    }
+
     function setActiveView(view: AppView) {
         activeView.set(view);
+        const path = viewToPath(view);
+        if (path) goto(path);
     }
 
     $: visibleNavItems = navItems.filter((item) => item.roles.includes(role));
@@ -78,10 +111,12 @@
                         type="button"
                         class={itemClass(isActive)}
                         on:click={() => setActiveView(item.view)}
+                        on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView(item.view)}
                         aria-pressed={isActive}
                         aria-current={isActive ? 'page' : undefined}
+                        aria-label={item.label}
                     >
-                        <svelte:component this={item.icon} class="h-6 w-6 mr-4" aria-hidden="true" />
+                        <svelte:component this={item.icon} class="h-6 w-6 mr-4" aria-hidden="true" focusable="false" />
                         <span class="font-medium">{item.label}</span>
                     </button>
                 </li>
@@ -93,18 +128,20 @@
             <ul class="space-y-1">
                 {#each visibleActionNavItems as item}
                     {@const isDisabled = item.view === 'CREATE_HUB' && role !== 'Administrator' && !(subs.community || subs.estate)}
-                    <li>
-                        <button
-                            type="button"
-                            class={actionItemClass(isDisabled)}
-                            on:click={!isDisabled ? () => setActiveView(item.view) : undefined}
-                            title={isDisabled ? 'An active subscription is required for this feature.' : ''}
-                            aria-disabled={isDisabled}
-                        >
-                            <svelte:component this={item.icon} class="h-6 w-6 mr-4" />
-                            <span class="font-medium">{item.label}</span>
-                        </button>
-                    </li>
+                        <li>
+                            <button
+                                type="button"
+                                class={actionItemClass(isDisabled)}
+                                on:click={!isDisabled ? () => setActiveView(item.view) : undefined}
+                                on:keydown={(e) => !isDisabled && (e.key === 'Enter' || e.key === ' ') && setActiveView(item.view)}
+                                title={isDisabled ? 'An active subscription is required for this feature.' : ''}
+                                aria-disabled={isDisabled}
+                                aria-label={item.label}
+                            >
+                                <svelte:component this={item.icon} class="h-6 w-6 mr-4" aria-hidden="true" focusable="false" />
+                                <span class="font-medium">{item.label}</span>
+                            </button>
+                        </li>
                 {/each}
             </ul>
         {/if}
@@ -114,12 +151,12 @@
             <ul class="space-y-1">
                 {#each visibleAdminNavItems as item}
                     {@const isActive = active === item.view}
-                    <li>
-                        <button type="button" class={itemClass(isActive)} on:click={() => setActiveView(item.view)} aria-pressed={isActive}>
-                            <svelte:component this={item.icon} class="h-6 w-6 mr-4" />
-                            <span class="font-medium">{item.label}</span>
-                        </button>
-                    </li>
+                        <li>
+                            <button type="button" class={itemClass(isActive)} on:click={() => setActiveView(item.view)} on:keydown={(e) => (e.key === 'Enter' || e.key === ' ') && setActiveView(item.view)} aria-pressed={isActive} aria-label={item.label}>
+                                <svelte:component this={item.icon} class="h-6 w-6 mr-4" aria-hidden="true" focusable="false" />
+                                <span class="font-medium">{item.label}</span>
+                            </button>
+                        </li>
                 {/each}
             </ul>
         {/if}

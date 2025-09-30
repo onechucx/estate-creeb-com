@@ -1,11 +1,11 @@
 import { c as create_ssr_component, a as spread, e as escape_object, b as each, d as add_attribute, v as validate_component, f as escape, m as missing_component, g as createEventDispatcher } from "../../chunks/ssr.js";
 import { a as activeView, u as userRole, b as userSubscriptions } from "../../chunks/stores.js";
-import { M as MagnifyingGlassIcon } from "../../chunks/MagnifyingGlassIcon.js";
 import "@sveltejs/kit/internal";
 import "../../chunks/exports.js";
 import "../../chunks/utils.js";
 import "@sveltejs/kit/internal/server";
 import "../../chunks/state.svelte.js";
+import { M as MagnifyingGlassIcon } from "../../chunks/MagnifyingGlassIcon.js";
 import { I as InformationCircleIcon } from "../../chunks/InformationCircleIcon.js";
 const BellIcon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   return `<svg${spread(
@@ -310,11 +310,12 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   visibleAdminNavItems = adminNavItems.filter((item) => item.roles.includes(role));
   return `<aside class="w-64 bg-brand-surface dark:bg-dark-surface flex-shrink-0 p-4 border-r border-brand-border dark:border-dark-border flex flex-col"><div class="flex items-center mb-10 p-2" data-svelte-h="svelte-yzvunl"><svg aria-hidden="true" focusable="false" class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"></path></svg> <h1 class="text-2xl font-bold text-brand-primary dark:text-dark-text-primary ml-2">Creeb</h1></div> <nav class="flex-1" aria-label="Main navigation"><ul class="space-y-1">${each(visibleNavItems, (item) => {
     let isActive = active === item.view;
-    return ` <li><button type="button"${add_attribute("class", itemClass(isActive), 0)}${add_attribute("aria-pressed", isActive, 0)}${add_attribute("aria-current", isActive ? "page" : void 0, 0)}>${validate_component(item.icon || missing_component, "svelte:component").$$render(
+    return ` <li><button type="button"${add_attribute("class", itemClass(isActive), 0)}${add_attribute("aria-pressed", isActive, 0)}${add_attribute("aria-current", isActive ? "page" : void 0, 0)}${add_attribute("aria-label", item.label, 0)}>${validate_component(item.icon || missing_component, "svelte:component").$$render(
       $$result,
       {
         class: "h-6 w-6 mr-4",
-        "aria-hidden": "true"
+        "aria-hidden": "true",
+        focusable: "false"
       },
       {},
       {}
@@ -325,10 +326,28 @@ const Sidebar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       "title",
       isDisabled ? "An active subscription is required for this feature." : "",
       0
-    )}${add_attribute("aria-disabled", isDisabled, 0)}>${validate_component(item.icon || missing_component, "svelte:component").$$render($$result, { class: "h-6 w-6 mr-4" }, {}, {})} <span class="font-medium">${escape(item.label)}</span></button> </li>`;
+    )}${add_attribute("aria-disabled", isDisabled, 0)}${add_attribute("aria-label", item.label, 0)}>${validate_component(item.icon || missing_component, "svelte:component").$$render(
+      $$result,
+      {
+        class: "h-6 w-6 mr-4",
+        "aria-hidden": "true",
+        focusable: "false"
+      },
+      {},
+      {}
+    )} <span class="font-medium">${escape(item.label)}</span></button> </li>`;
   })}</ul>` : ``} ${visibleAdminNavItems.length > 0 ? `<hr class="my-6 border-brand-border dark:border-dark-border"> <ul class="space-y-1">${each(visibleAdminNavItems, (item) => {
     let isActive = active === item.view;
-    return ` <li><button type="button"${add_attribute("class", itemClass(isActive), 0)}${add_attribute("aria-pressed", isActive, 0)}>${validate_component(item.icon || missing_component, "svelte:component").$$render($$result, { class: "h-6 w-6 mr-4" }, {}, {})} <span class="font-medium">${escape(item.label)}</span></button> </li>`;
+    return ` <li><button type="button"${add_attribute("class", itemClass(isActive), 0)}${add_attribute("aria-pressed", isActive, 0)}${add_attribute("aria-label", item.label, 0)}>${validate_component(item.icon || missing_component, "svelte:component").$$render(
+      $$result,
+      {
+        class: "h-6 w-6 mr-4",
+        "aria-hidden": "true",
+        focusable: "false"
+      },
+      {},
+      {}
+    )} <span class="font-medium">${escape(item.label)}</span></button> </li>`;
   })}</ul>` : ``}</nav></aside>`;
 });
 const Header = create_ssr_component(($$result, $$props, $$bindings, slots) => {

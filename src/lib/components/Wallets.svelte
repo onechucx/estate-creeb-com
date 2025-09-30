@@ -107,15 +107,15 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
         <h1 class="text-2xl font-bold text-brand-text-primary mb-4 sm:mb-0">Wallets</h1>
         <div class="flex items-center space-x-2">
-            <Button variant="secondary">
+            <Button type="button" variant="secondary" aria-label="Deposit funds">
                 <ArrowDown class="w-5 h-5 mr-2" />
                 Deposit
             </Button>
-            <Button variant="secondary">
+            <Button type="button" variant="secondary" aria-label="Withdraw funds">
                 <ArrowUp class="w-5 h-5 mr-2" />
                 Withdraw
             </Button>
-            <Button>
+            <Button type="button" aria-label="Send funds">
                 <ArrowsRightLeft class="w-5 h-5 mr-2" />
                 Send
             </Button>
@@ -138,17 +138,17 @@
                         </div>
                         <div class="flex space-x-1 bg-gray-200 dark:bg-gray-700 rounded-lg p-1">
                             {#each wallets as wallet}
-                                <Button
-                                            type="button"
-                                            on:click={() => (selectedWallet = wallet)}
-                                            aria-pressed={selectedWallet.id === wallet.id}
-                                            aria-label={`Select ${wallet.currency} wallet`}
-                                            class="!text-xs !py-1 !px-3 {selectedWallet.id === wallet.id
-                                                    ? 'bg-brand-surface dark:bg-dark-surface shadow'
-                                                    : 'bg-transparent border-transparent'}"
-                                        >
-                                        {wallet.currency}
-                                    </Button>
+                                            <Button
+                                                type="button"
+                                                on:click={() => (selectedWallet = wallet)}
+                                                aria-pressed={selectedWallet.id === wallet.id}
+                                                aria-label={`Select ${wallet.currency} wallet`}
+                                                class="!text-xs !py-1 !px-3 {selectedWallet.id === wallet.id
+                                                        ? 'bg-brand-surface dark:bg-dark-surface shadow'
+                                                        : 'bg-transparent border-transparent'}"
+                                            >
+                                                {wallet.currency}
+                                            </Button>
                             {/each}
                         </div>
                     </div>

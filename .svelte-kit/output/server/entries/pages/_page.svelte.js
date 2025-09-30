@@ -196,7 +196,7 @@ const Marketplace = create_ssr_component(($$result, $$props, $$bindings, slots) 
         `p-1 rounded ${""}`,
         0
       )} aria-label="List View"${add_attribute("aria-pressed", viewMode === "list", 0)}>${validate_component(Bars3Icon, "Bars3Icon").$$render($$result, { class: "h-5 w-5" }, {}, {})}</button></div></div></div> <div class="mt-4 border-b border-brand-border dark:border-dark-border"><nav class="-mb-px flex space-x-4 overflow-x-auto">${each(categories, (category) => {
-        return `<button type="button"${add_attribute("aria-pressed", activeCategory === category, 0)}${add_attribute(
+        return `<button type="button"${add_attribute("aria-pressed", activeCategory === category, 0)}${add_attribute("aria-label", `Category ${category}`, 0)}${add_attribute(
           "class",
           `whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm ${activeCategory === category ? "border-brand-primary text-brand-primary dark:border-dark-primary" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"}`,
           0

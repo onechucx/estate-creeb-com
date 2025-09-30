@@ -141,22 +141,48 @@ const Wallets = create_ssr_component(($$result, $$props, $$bindings, slots) => {
         return { icon: PlusIcon, class: "text-gray-500" };
     }
   };
-  return `<div class="p-4 sm:p-6"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6"><h1 class="text-2xl font-bold text-brand-text-primary mb-4 sm:mb-0" data-svelte-h="svelte-1lmjfyy">Wallets</h1> <div class="flex items-center space-x-2">${validate_component(Button, "Button").$$render($$result, { variant: "secondary" }, {}, {
-    default: () => {
-      return `${validate_component(ArrowDownIcon, "ArrowDown").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
+  return `<div class="p-4 sm:p-6"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6"><h1 class="text-2xl font-bold text-brand-text-primary mb-4 sm:mb-0" data-svelte-h="svelte-1lmjfyy">Wallets</h1> <div class="flex items-center space-x-2">${validate_component(Button, "Button").$$render(
+    $$result,
+    {
+      type: "button",
+      variant: "secondary",
+      "aria-label": "Deposit funds"
+    },
+    {},
+    {
+      default: () => {
+        return `${validate_component(ArrowDownIcon, "ArrowDown").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
                 Deposit`;
+      }
     }
-  })} ${validate_component(Button, "Button").$$render($$result, { variant: "secondary" }, {}, {
-    default: () => {
-      return `${validate_component(ArrowUpIcon, "ArrowUp").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
+  )} ${validate_component(Button, "Button").$$render(
+    $$result,
+    {
+      type: "button",
+      variant: "secondary",
+      "aria-label": "Withdraw funds"
+    },
+    {},
+    {
+      default: () => {
+        return `${validate_component(ArrowUpIcon, "ArrowUp").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
                 Withdraw`;
+      }
     }
-  })} ${validate_component(Button, "Button").$$render($$result, {}, {}, {
-    default: () => {
-      return `${validate_component(ArrowsRightLeftIcon, "ArrowsRightLeft").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
+  )} ${validate_component(Button, "Button").$$render(
+    $$result,
+    {
+      type: "button",
+      "aria-label": "Send funds"
+    },
+    {},
+    {
+      default: () => {
+        return `${validate_component(ArrowsRightLeftIcon, "ArrowsRightLeft").$$render($$result, { class: "w-5 h-5 mr-2" }, {}, {})}
                 Send`;
+      }
     }
-  })}</div></div> <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-2">${validate_component(Card, "Card").$$render($$result, {}, {}, {
+  )}</div></div> <div class="grid grid-cols-1 lg:grid-cols-3 gap-6"><div class="lg:col-span-2">${validate_component(Card, "Card").$$render($$result, {}, {}, {
     default: () => {
       return `<div class="p-4"><div class="flex justify-between items-center mb-4"><div><p class="text-sm text-brand-text-secondary">${escape(selectedWallet.currency)} Balance</p> <p class="text-3xl font-bold text-brand-text-primary">${escape(selectedWallet.symbol)}${escape(selectedWallet.balance.toLocaleString("en-US", {
         minimumFractionDigits: 2,

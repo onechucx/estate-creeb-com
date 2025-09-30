@@ -29,6 +29,7 @@ declare module '$env/static/private' {
 	export const ACE_STUDIO_PATH: string;
 	export const ALLUSERSPROFILE: string;
 	export const APPDATA: string;
+	export const BASE_URL: string;
 	export const CHROME_CRASHPAD_PIPE_NAME: string;
 	export const COLOR: string;
 	export const COLORTERM: string;
@@ -37,6 +38,7 @@ declare module '$env/static/private' {
 	export const COMPUTERNAME: string;
 	export const ComSpec: string;
 	export const configsetroot: string;
+	export const DEV: string;
 	export const DriverData: string;
 	export const EDITOR: string;
 	export const EFC_6868_1262719628: string;
@@ -56,6 +58,7 @@ declare module '$env/static/private' {
 	export const LANG: string;
 	export const LOCALAPPDATA: string;
 	export const LOGONSERVER: string;
+	export const MODE: string;
 	export const NDI_RUNTIME_DIR_V2: string;
 	export const NDI_RUNTIME_DIR_V3: string;
 	export const NDI_RUNTIME_DIR_V4: string;
@@ -63,6 +66,7 @@ declare module '$env/static/private' {
 	export const NDI_RUNTIME_DIR_V6: string;
 	export const NODE: string;
 	export const NODE_ENV: string;
+	export const NODE_EXE: string;
 	export const npm_command: string;
 	export const npm_config_cache: string;
 	export const npm_config_globalconfig: string;
@@ -82,6 +86,9 @@ declare module '$env/static/private' {
 	export const npm_package_json: string;
 	export const npm_package_name: string;
 	export const npm_package_version: string;
+	export const NPM_PREFIX_JS: string;
+	export const NPM_PREFIX_NPX_CLI_JS: string;
+	export const NPX_CLI_JS: string;
 	export const NUMBER_OF_PROCESSORS: string;
 	export const OneDrive: string;
 	export const OneDriveConsumer: string;
@@ -89,10 +96,12 @@ declare module '$env/static/private' {
 	export const OS: string;
 	export const Path: string;
 	export const PATHEXT: string;
+	export const PORT: string;
 	export const PROCESSOR_ARCHITECTURE: string;
 	export const PROCESSOR_IDENTIFIER: string;
 	export const PROCESSOR_LEVEL: string;
 	export const PROCESSOR_REVISION: string;
+	export const PROD: string;
 	export const ProgramData: string;
 	export const ProgramFiles: string;
 	export const ProgramW6432: string;
@@ -105,11 +114,13 @@ declare module '$env/static/private' {
 	export const TEMP: string;
 	export const TERM_PROGRAM: string;
 	export const TERM_PROGRAM_VERSION: string;
+	export const TEST: string;
 	export const TMP: string;
 	export const USERDOMAIN: string;
 	export const USERDOMAIN_ROAMINGPROFILE: string;
 	export const USERNAME: string;
 	export const USERPROFILE: string;
+	export const VITEST: string;
 	export const VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
@@ -151,6 +162,7 @@ declare module '$env/dynamic/private' {
 		ACE_STUDIO_PATH: string;
 		ALLUSERSPROFILE: string;
 		APPDATA: string;
+		BASE_URL: string;
 		CHROME_CRASHPAD_PIPE_NAME: string;
 		COLOR: string;
 		COLORTERM: string;
@@ -159,6 +171,7 @@ declare module '$env/dynamic/private' {
 		COMPUTERNAME: string;
 		ComSpec: string;
 		configsetroot: string;
+		DEV: string;
 		DriverData: string;
 		EDITOR: string;
 		EFC_6868_1262719628: string;
@@ -178,6 +191,7 @@ declare module '$env/dynamic/private' {
 		LANG: string;
 		LOCALAPPDATA: string;
 		LOGONSERVER: string;
+		MODE: string;
 		NDI_RUNTIME_DIR_V2: string;
 		NDI_RUNTIME_DIR_V3: string;
 		NDI_RUNTIME_DIR_V4: string;
@@ -185,6 +199,7 @@ declare module '$env/dynamic/private' {
 		NDI_RUNTIME_DIR_V6: string;
 		NODE: string;
 		NODE_ENV: string;
+		NODE_EXE: string;
 		npm_command: string;
 		npm_config_cache: string;
 		npm_config_globalconfig: string;
@@ -204,6 +219,9 @@ declare module '$env/dynamic/private' {
 		npm_package_json: string;
 		npm_package_name: string;
 		npm_package_version: string;
+		NPM_PREFIX_JS: string;
+		NPM_PREFIX_NPX_CLI_JS: string;
+		NPX_CLI_JS: string;
 		NUMBER_OF_PROCESSORS: string;
 		OneDrive: string;
 		OneDriveConsumer: string;
@@ -211,10 +229,12 @@ declare module '$env/dynamic/private' {
 		OS: string;
 		Path: string;
 		PATHEXT: string;
+		PORT: string;
 		PROCESSOR_ARCHITECTURE: string;
 		PROCESSOR_IDENTIFIER: string;
 		PROCESSOR_LEVEL: string;
 		PROCESSOR_REVISION: string;
+		PROD: string;
 		ProgramData: string;
 		ProgramFiles: string;
 		ProgramW6432: string;
@@ -227,11 +247,13 @@ declare module '$env/dynamic/private' {
 		TEMP: string;
 		TERM_PROGRAM: string;
 		TERM_PROGRAM_VERSION: string;
+		TEST: string;
 		TMP: string;
 		USERDOMAIN: string;
 		USERDOMAIN_ROAMINGPROFILE: string;
 		USERNAME: string;
 		USERPROFILE: string;
+		VITEST: string;
 		VSCODE_GIT_ASKPASS_EXTRA_ARGS: string;
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
