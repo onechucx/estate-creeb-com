@@ -16,25 +16,28 @@ export const nodes = [
 	() => import('./nodes/12'),
 	() => import('./nodes/13'),
 	() => import('./nodes/14'),
-	() => import('./nodes/15')
+	() => import('./nodes/15'),
+	() => import('./nodes/16'),
+	() => import('./nodes/17')
 ];
 
 export const server_loads = [];
 
 export const dictionary = {
-		"/": [3],
-		"/(app)/admin-panel": [4,[2]],
-		"/(app)/community": [5,[2]],
-		"/(app)/dashboard": [6,[2]],
-		"/(app)/estate-management": [7,[2]],
-		"/(app)/inbox": [8,[2]],
-		"/(app)/marketplace": [9,[2]],
-		"/(app)/my-listings": [10,[2]],
-		"/(app)/profile": [11,[2]],
-		"/(app)/settings": [12,[2]],
-		"/(app)/support": [13,[2]],
-		"/(app)/vendor/[name]": [14,[2]],
-		"/(app)/wallets": [15,[2]]
+		"/": [4],
+		"/(app)/admin-panel": [5,[2]],
+		"/(app)/community": [6,[2]],
+		"/(app)/dashboard": [7,[2]],
+		"/(app)/estate-management": [8,[2]],
+		"/(app)/inbox": [9,[2]],
+		"/(app)/marketplace": [10,[2]],
+		"/(app)/my-listings": [11,[2]],
+		"/(app)/profile": [12,[2]],
+		"/(app)/settings": [13,[2]],
+		"/(app)/support": [14,[2]],
+		"/test": [17,[3]],
+		"/(app)/vendor/[name]": [15,[2]],
+		"/(app)/wallets": [16,[2]]
 	};
 
 export const hooks = {

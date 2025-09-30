@@ -1,0 +1,9 @@
+<!-- Minimal layout to isolate crash issue -->
+<script lang="ts">
+    import "../app.css";
+</script>
+
+<div>
+    <p>Simple layout test</p>
+    <slot />
+</div>

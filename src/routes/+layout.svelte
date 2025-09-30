@@ -1,12 +1,20 @@
-<script lang="ts">  
-    import PublicHeader from '$lib/components/PublicHeader.svelte';
-    import LoginModal from '$lib/components/LoginModal.svelte';
-    import Toast from '$lib/components/Toast.svelte';
-    import type { ToastMessage } from '$lib/types';
-    import "../app.css";
+<script lang="ts">  <!-- Minimal layout to isolate crash issue -->
 
-    let toastMessage: ToastMessage | null = null;
-    let showLoginModal = false;
+    import PublicHeader from '$lib/components/PublicHeader.svelte';<script lang="ts">
+
+    import LoginModal from '$lib/components/LoginModal.svelte';    import "../app.css";
+
+    import Toast from '$lib/components/Toast.svelte';</script>
+
+    import type { ToastMessage } from '$lib/types';
+
+    import "../app.css";<div>
+
+    <p>Simple layout test</p>
+
+    let toastMessage: ToastMessage | null = null;    <slot />
+
+    let showLoginModal = false;</div>
 
     function handleLoginClick() {
         showLoginModal = true;
@@ -21,5 +29,3 @@
 <slot />
 <Toast message={toastMessage} />
 <LoginModal open={showLoginModal} onClose={handleCloseLogin} />
-
- 

@@ -20,7 +20,7 @@ function svelteUntrackShim() {
 			}
 			return null;
 		},
-	load(id: string) {
+		load(id: string) {
 			if (id.endsWith('?svelte-untrack-shim')) {
 				// export a tiny wrapper that re-exports everything and defines untrack
                 const original = id.replace('?svelte-untrack-shim', '').replace(/\\/g, '/');

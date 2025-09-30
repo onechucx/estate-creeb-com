@@ -27,7 +27,7 @@ export {};
 
 declare module "$app/types" {
 	export interface AppTypes {
-		RouteId(): "/(app)" | "/" | "/(app)/admin-panel" | "/(app)/community" | "/(app)/dashboard" | "/(app)/estate-management" | "/favicon.ico" | "/(app)/inbox" | "/(app)/marketplace" | "/(app)/my-listings" | "/(app)/profile" | "/(app)/settings" | "/(app)/support" | "/(app)/vendor" | "/(app)/vendor/[name]" | "/(app)/wallets";
+		RouteId(): "/(app)" | "/" | "/(app)/admin-panel" | "/(app)/community" | "/(app)/dashboard" | "/(app)/estate-management" | "/favicon.ico" | "/(app)/inbox" | "/(app)/marketplace" | "/(app)/my-listings" | "/(app)/profile" | "/(app)/settings" | "/(app)/support" | "/test" | "/(app)/vendor" | "/(app)/vendor/[name]" | "/(app)/wallets";
 		RouteParams(): {
 			"/(app)/vendor/[name]": { name: string }
 		};
@@ -45,12 +45,13 @@ declare module "$app/types" {
 			"/(app)/profile": Record<string, never>;
 			"/(app)/settings": Record<string, never>;
 			"/(app)/support": Record<string, never>;
+			"/test": Record<string, never>;
 			"/(app)/vendor": { name?: string };
 			"/(app)/vendor/[name]": { name: string };
 			"/(app)/wallets": Record<string, never>
 		};
-		Pathname(): "/" | "/admin-panel" | "/admin-panel/" | "/community" | "/community/" | "/dashboard" | "/dashboard/" | "/estate-management" | "/estate-management/" | "/favicon.ico" | "/favicon.ico/" | "/inbox" | "/inbox/" | "/marketplace" | "/marketplace/" | "/my-listings" | "/my-listings/" | "/profile" | "/profile/" | "/settings" | "/settings/" | "/support" | "/support/" | "/vendor" | "/vendor/" | `/vendor/${string}` & {} | `/vendor/${string}/` & {} | "/wallets" | "/wallets/";
+		Pathname(): "/" | "/admin-panel" | "/admin-panel/" | "/community" | "/community/" | "/dashboard" | "/dashboard/" | "/estate-management" | "/estate-management/" | "/favicon.ico" | "/favicon.ico/" | "/inbox" | "/inbox/" | "/marketplace" | "/marketplace/" | "/my-listings" | "/my-listings/" | "/profile" | "/profile/" | "/settings" | "/settings/" | "/support" | "/support/" | "/test" | "/test/" | "/vendor" | "/vendor/" | `/vendor/${string}` & {} | `/vendor/${string}/` & {} | "/wallets" | "/wallets/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/favicon.png" | string & {};
+		Asset(): "/favicon.png" | "/placeholder.svg" | string & {};
 	}
 }
