@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import { CreationRequest, KYCSubmission, Vendor, Listing, ManagedUser, GlobalAd, Post, PropertyHolding, OtherHolding, Wallet, Transaction, VirtualCard, PayoutAccount, SupportTicket, UserConversation, CommunityInfo, LoanProduct, PiggyProduct, LoanApplication, PropertyForSale, CommunityTransaction, EstateInfo, EstateMember, Amenity, Incident, EstateFee, BillPaymentStatus, Occupant, Post as EstatePost, EstateEvent, DueFrequency, CommunityMember, PaymentStatus } from './types';
 import { CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
@@ -80,29 +82,6 @@ export const upcomingBirthdays = [
     { name: 'Diana Prince', date: 'Nov 5', avatar: 'https://picsum.photos/seed/diana/40/40' },
 ];
 
-export const mockStatementData = {
-    community: {
-        name: 'Demo Community',
-        logo: 'https://picsum.photos/seed/demo/100/100',
-        address: '456 Demo Lane, Innovation City',
-        loans: [{ id: 'LN001', type: 'Business Loan', amount: 500000, repaid: 100000, interest: 8, maturity: '2024-10-21' }],
-        projects: [{ id: 'PROJ001', name: 'Project Phoenix', contribution: 100000, status: 'Ongoing' }],
-        savings: [{ id: 'SV001', productName: 'Flex Save', principal: 150000, interestRate: 10, maturity: '2025-01-15' }]
-    },
-    estate: {
-        name: 'Demo Estate',
-        logo: 'https://picsum.photos/seed/estate-demo/100/100',
-        address: '123 Showcase Avenue, Creeb City',
-        bills: [{ id: 'B001', title: 'Monthly Service Charge', amount: 25000, status: 'Paid' as PaymentStatus }],
-        occupants: ['Jane Doe', 'Junior Doe'],
-    },
-    invoices: [
-        { id: 'INV-R-023', description: 'Rubby Purchase (Batch Q4 2023)', date: '2023-10-25', amount: 50000, entity: 'community' },
-        { id: 'INV-P-451', description: 'Project Phoenix Initial Investment', date: '2023-09-15', amount: 100000, entity: 'community' },
-        { id: 'INV-E-987', description: 'Special Gate Access Fob', date: '2023-11-01', amount: 15000, entity: 'estate' },
-    ]
-};
-
 export const mockUserProperties: PropertyHolding[] = [
     {id: 'ph1', propertyId: 'EPROP01', propertyName: 'Demo Estate 4-Bed Duplex', estateId: 'demo', variantName: 'Standard Unit', units: 1},
     {id: 'ph2', propertyId: 'PROP001', propertyName: 'Sunshine Villa Plots', estateId: 'community-owned-estate', variantName: 'Full Plot', units: 2},
@@ -142,8 +121,13 @@ export const initialWallets: Wallet[] = [
 ];
 
 export const mockTransactions: Transaction[] = [
-  { id: 'TXN741852', type: 'Credit', description: 'Funded from Wema Bank', amount: 150000, date: '2023-10-26', status: 'Completed', details: { "Payment Method": "Bank Transfer", "Sender": "John Doe" } },
-  { id: 'TXN951753', type: 'Debit', description: 'Project Alpha Investment', amount: 75000, date: '2023-10-25', status: 'Completed', details: { "Project": "Project Alpha", "Recipient": "Community Wallet" } },
+  { id: 'TXN741852', type: 'Credit', description: 'Funded from Wema Bank', amount: 150000, date: pastDate(30), status: 'Completed', details: { "Payment Method": "Bank Transfer", "Sender": "John Doe" } },
+  { id: 'TXN951753', type: 'Debit', description: 'Project Alpha Investment', amount: 75000, date: pastDate(25), status: 'Completed', details: { "Project": "Project Alpha", "Recipient": "Community Wallet" } },
+  { id: 'TXN123456', type: 'Credit', description: 'Salary Deposit', amount: 350000, date: pastDate(15), status: 'Completed', details: { "Sender": "Creeb Inc." } },
+  { id: 'TXN789012', type: 'Debit', description: 'Marketplace Purchase: 2022 Toyota Camry', amount: 125000, date: pastDate(12), status: 'Pending', details: { "Item": "2022 Toyota Camry", "Vendor": "John Doe" } },
+  { id: 'TXN345678', type: 'Debit', description: 'Airtime Purchase', amount: 5000, date: pastDate(10), status: 'Completed', details: { "Network": "MTN", "Recipient": "+2348012345678" } },
+  { id: 'TXN901234', type: 'Credit', description: 'Loan Payout: Emergency Loan', amount: 50000, date: pastDate(5), status: 'Completed', details: { "Loan ID": "LN001" } },
+  { id: 'TXN567890', type: 'Debit', description: 'Subscription Fee: Community', amount: 50000, date: pastDate(2), status: 'Completed', details: { "Subscription": "Community Annual" } },
 ];
 
 export const mockPayoutAccounts: PayoutAccount[] = [
@@ -618,3 +602,28 @@ export const mockEstatePosts: EstatePost[] = [
 ];
 
 export const initialPaymentStatus: BillPaymentStatus[] = [ { billId: 'B001', residentName: 'John Doe', status: 'Paid' }, { billId: 'B001', residentName: 'Jane Smith', status: 'Unpaid' }, { billId: 'B001', residentName: 'Alice Johnson', status: 'Overdue' }, { billId: 'B002', residentName: 'John Doe', status: 'Paid' }, { billId: 'B002', residentName: 'Jane Smith', status: 'Paid' }, { billId: 'B002', residentName: 'Alice Johnson', status: 'Unpaid' }, ];
+
+export const mockStatementData = {
+    openingBalance: 500000,
+    walletTransactions: mockTransactions,
+    community: {
+        name: 'Demo Community',
+        logo: 'https://picsum.photos/seed/demo/100/100',
+        address: '456 Demo Lane, Innovation City',
+        loans: [{ id: 'LN001', type: 'Business Loan', amount: 500000, repaid: 100000, interest: 8, maturity: futureDate(365) }],
+        projects: [{ id: 'PROJ001', name: 'Project Phoenix', contribution: 100000, status: 'Ongoing' as const }],
+        savings: [{ id: 'SV001', productName: 'Flex Save', principal: 150000, interestRate: 10, maturity: futureDate(180) }]
+    },
+    estate: {
+        name: 'Demo Estate',
+        logo: 'https://picsum.photos/seed/estate-demo/100/100',
+        address: '123 Showcase Avenue, Creeb City',
+        bills: [{ id: 'B001', title: 'Monthly Service Charge', amount: 25000, status: 'Paid' as PaymentStatus }],
+        occupants: ['Jane Doe', 'Junior Doe'],
+    },
+    invoices: [
+        { id: 'INV-R-023', description: 'Rubby Purchase (Batch Q4 2023)', date: pastDate(25), amount: 50000, entity: 'community' as const },
+        { id: 'INV-P-451', description: 'Project Phoenix Initial Investment', date: pastDate(45), amount: 100000, entity: 'community' as const },
+        { id: 'INV-E-987', description: 'Special Gate Access Fob', date: pastDate(2), amount: 15000, entity: 'estate' as const },
+    ]
+};

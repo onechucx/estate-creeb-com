@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
@@ -1245,7 +1246,7 @@ const IncidentLogView: React.FC<{
     return (<Card><div className="overflow-x-auto"><table className="w-full text-sm"><thead><tr className="text-left bg-gray-50 dark:bg-dark-surface/50"><th className="p-2 font-semibold">Incident</th><th className="p-2 font-semibold">Reported By</th><th className="p-2 font-semibold">Location</th><th className="p-2 font-semibold">Date</th><th className="p-2 font-semibold">Status</th></tr></thead><tbody>{occupantReportedIncidents.map(inc => (<tr key={inc.id} className="border-t dark:border-dark-border"><td className="p-2">{inc.description}</td><td className="p-2">{inc.occupantName}</td><td className="p-2">{inc.location}</td><td className="p-2">{new Date(inc.date).toLocaleDateString()}</td><td className="p-2">{inc.status}</td></tr>))}</tbody></table></div></Card>);
 };
 
-export const EstateManagement: React.FC<EstateManagementProps> = ({ userRole, showToast, onStartMessage }) => {
+export const EstateManagement: React.FC<EstateManagementProps> = ({ userRole, showToast, onStartMessage, isEstateSubscribed }) => {
     const [estates, setEstates] = useState(initialFullEstates);
     const [selectedEstateId, setSelectedEstateId] = useState<string | null>(null);
 

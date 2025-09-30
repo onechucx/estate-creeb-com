@@ -1,3 +1,5 @@
+
+
 import React, { useState, useMemo, useEffect } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
@@ -15,7 +17,7 @@ interface DashboardProps {
 }
 
 const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockStatementData }> = ({ onClose, data }) => {
-    const [options, setOptions] = useState({ loans: true, projects: true, savings: true, formalInvoices: false });
+    const [options, setOptions] = useState({ wallet: true, loans: true, projects: true, savings: true, formalInvoices: false });
     const [startDate, setStartDate] = useState(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
     const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
     
@@ -24,35 +26,71 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
     const generateStatementHtml = () => {
         const theme = document.documentElement.className;
 
-        const communitySection = `
-            <div class="mb-8 p-4 border rounded dark:border-dark-border bg-brand-surface dark:bg-dark-surface">
-                <div class="flex items-center mb-4"><img src="${data.community.logo}" alt="Community Logo" class="h-12 w-12 rounded-full mr-4"/><div><h3 class="text-xl font-bold">${data.community.name}</h3><p class="text-xs text-gray-500">${data.community.address}</p></div></div>
-                ${options.loans ? `<h4 class="font-bold mb-2">Loan Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.loans.map(l => `<tr class="border-t dark:border-dark-border"><td class="p-2">${l.type}</td><td class="p-2">₦${l.amount.toLocaleString()}</td><td class="p-2">${l.interest}% Interest</td><td class="p-2">Due: ${l.maturity}</td></tr>`).join('')}</tbody></table>` : ''}
-                ${options.projects ? `<h4 class="font-bold mb-2">Project Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.projects.map(p => `<tr class="border-t dark:border-dark-border"><td class="p-2">${p.name}</td><td class="p-2">Contribution: ₦${p.contribution.toLocaleString()}</td><td class="p-2">${p.status}</td></tr>`).join('')}</tbody></table>` : ''}
-                ${options.savings ? `<h4 class="font-bold mb-2">Savings Summary</h4><table class="min-w-full text-sm"><tbody>${data.community.savings.map(s => `<tr class="border-t dark:border-dark-border"><td class="p-2">${s.productName}</td><td class="p-2">Principal: ₦${s.principal.toLocaleString()}</td><td class="p-2">${s.interestRate}% Interest</td><td class="p-2">Matures: ${s.maturity}</td></tr>`).join('')}</tbody></table>` : ''}
-            </div>
-        `;
+        let balance = data.openingBalance;
+        const totalDebit = data.walletTransactions.filter(t => t.type === 'Debit').reduce((sum, t) => sum + t.amount, 0);
+        const totalCredit = data.walletTransactions.filter(t => t.type === 'Credit').reduce((sum, t) => sum + t.amount, 0);
+        const closingBalance = data.openingBalance + totalCredit - totalDebit;
+
+        const walletSection = options.wallet ? `
+            <section class="mb-8">
+                <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Naira Wallet Statement</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-6">
+                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Opening Balance</p><p class="font-bold text-lg text-brand-text-primary">₦${data.openingBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
+                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Inflow</p><p class="font-bold text-lg text-green-600 dark:text-green-400">+ ₦${totalCredit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
+                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Outflow</p><p class="font-bold text-lg text-red-600 dark:text-red-400">- ₦${totalDebit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
+                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Closing Balance</p><p class="font-bold text-lg text-brand-text-primary">₦${closingBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
+                </div>
+                <h4 class="font-semibold mb-2 text-brand-text-primary">Transaction History</h4>
+                <div class="border dark:border-dark-border rounded-lg overflow-hidden">
+                    <table class="min-w-full text-sm">
+                        <thead class="bg-gray-50 dark:bg-dark-surface/50"><tr class="text-left text-brand-text-secondary"><th class="p-3 font-semibold">Date</th><th class="p-3 font-semibold">Description</th><th class="p-3 font-semibold text-right">Debit</th><th class="p-3 font-semibold text-right">Credit</th><th class="p-3 font-semibold text-right">Balance</th></tr></thead>
+                        <tbody class="divide-y dark:divide-dark-border">
+                        ${data.walletTransactions.map(tx => {
+                            const debit = tx.type === 'Debit' ? tx.amount : 0;
+                            const credit = tx.type === 'Credit' ? tx.amount : 0;
+                            balance += credit - debit;
+                            return `<tr class="bg-brand-surface dark:bg-dark-surface"><td class="p-3 whitespace-nowrap">${new Date(tx.date).toLocaleDateString()}</td><td class="p-3">${tx.description}</td><td class="p-3 text-right font-mono text-red-600 dark:text-red-400">${debit > 0 ? `₦${debit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td><td class="p-3 text-right font-mono text-green-600 dark:text-green-400">${credit > 0 ? `₦${credit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td><td class="p-3 text-right font-mono font-semibold">₦${balance.toLocaleString('en-US', {minimumFractionDigits: 2})}</td></tr>`
+                        }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </section>` : '';
+            
+        const holdingsSection = (options.loans || options.projects || options.savings) ? `
+             <section class="mb-8">
+                <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Community Holdings Summary</h3>
+                 <div class="p-4 border rounded dark:border-dark-border bg-brand-surface dark:bg-dark-surface">
+                    <div class="flex items-center mb-4"><img src="${data.community.logo}" alt="Community Logo" class="h-12 w-12 rounded-full mr-4"/><div><h3 class="text-xl font-bold text-brand-text-primary">${data.community.name}</h3><p class="text-xs text-brand-text-secondary">${data.community.address}</p></div></div>
+                    ${options.loans ? `<h4 class="font-bold mb-2 text-brand-text-primary">Loan Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.loans.map(l => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${l.type}</td><td class="p-2 text-brand-text-secondary">₦${l.amount.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${l.interest}% Interest</td><td class="p-2 text-brand-text-secondary">Due: ${new Date(l.maturity).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>` : ''}
+                    ${options.projects ? `<h4 class="font-bold mb-2 text-brand-text-primary">Project Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.projects.map(p => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${p.name}</td><td class="p-2 text-brand-text-secondary">Contribution: ₦${p.contribution.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${p.status}</td></tr>`).join('')}</tbody></table>` : ''}
+                    ${options.savings ? `<h4 class="font-bold mb-2 text-brand-text-primary">Savings Summary</h4><table class="min-w-full text-sm"><tbody>${data.community.savings.map(s => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${s.productName}</td><td class="p-2 text-brand-text-secondary">Principal: ₦${s.principal.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${s.interestRate}% Interest</td><td class="p-2 text-brand-text-secondary">Matures: ${new Date(s.maturity).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>` : ''}
+                </div>
+            </section>` : '';
         
         const invoicesSection = (options.formalInvoices && data.invoices) ? `
-            <div class="mb-8 p-4 border rounded dark:border-dark-border bg-brand-surface dark:bg-dark-surface">
-                <h3 class="text-xl font-bold mb-4">Formal Invoices</h3>
-                <div class="space-y-4">${data.invoices.map(invoice => `<div class="p-3 border rounded dark:border-dark-border flex items-start justify-between"><div><p class="font-bold">${invoice.description}</p><p class="text-xs text-gray-500">ID: ${invoice.id} | Date: ${invoice.date}</p><p class="font-semibold text-brand-primary mt-1">₦${invoice.amount.toLocaleString()}</p></div><div class="text-right flex-shrink-0"><img src="${invoice.entity === 'community' ? data.community.logo : data.estate.logo}" alt="${invoice.entity} Logo" class="h-10 w-10 rounded-full ml-4" /><p class="text-xs text-gray-400 mt-1">${invoice.entity === 'community' ? data.community.name : data.estate.name}</p></div></div>`).join('')}</div>
-            </div>` : '';
+            <section class="mb-8">
+                <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Formal Invoices</h3>
+                <div class="space-y-4">${data.invoices.map(invoice => `<div class="p-3 border rounded dark:border-dark-border flex items-start justify-between"><div><p class="font-bold text-brand-text-primary">${invoice.description}</p><p class="text-xs text-gray-500">ID: ${invoice.id} | Date: ${new Date(invoice.date).toLocaleDateString()}</p><p class="font-semibold text-brand-primary mt-1">₦${invoice.amount.toLocaleString()}</p></div><div class="text-right flex-shrink-0"><img src="${invoice.entity === 'community' ? data.community.logo : data.estate.logo}" alt="${invoice.entity} Logo" class="h-10 w-10 rounded-full ml-4" /><p class="text-xs text-gray-400 mt-1">${invoice.entity === 'community' ? data.community.name : data.estate.name}</p></div></div>`).join('')}</div>
+            </section>` : '';
 
         return `
             <!DOCTYPE html><html lang="en" class="${theme}"><head><meta charset="UTF-8" /><title>Account Statement</title><script src="https://cdn.tailwindcss.com"></script>
             <style>
                 html.light { --brand-primary: #1E3A8A; --brand-secondary: #3B82F6; --brand-accent: #10B981; --brand-background: #F9FAFB; --brand-surface: #FFFFFF; --brand-text-primary: #1F2937; --brand-text-secondary: #64748B; --brand-border: #E5E7EB; }
+                html.dark { --brand-primary: #3B82F6; --brand-secondary: #1E3A8A; --brand-accent: #10B981; --brand-background: #111827; --brand-surface: #1F2937; --brand-text-primary: #F9FAFB; --brand-text-secondary: #94A3B8; --brand-border: #374151; }
                 html.ocean { --brand-primary: #006d77; --brand-secondary: #83c5be; --brand-accent: #ffddd2; --brand-background: #edf6f9; --brand-surface: #ffffff; --brand-text-primary: #2c3e50; --brand-text-secondary: #8e9aaf; --brand-border: #e0fbfc; }
                 html.forest { --brand-primary: #2d6a4f; --brand-secondary: #74c69d; --brand-accent: #d95f02; --brand-background: #fdf0d5; --brand-surface: #f8f9fa; --brand-text-primary: #403d39; --brand-text-secondary: #7f7f7f; --brand-border: #d8f3dc; }
                 html.sunset { --brand-primary: #d90429; --brand-secondary: #ff9e00; --brand-accent: #ffc300; --brand-background: #fff1e6; --brand-surface: #ffffff; --brand-text-primary: #212529; --brand-text-secondary: #6c757d; --brand-border: #fae0e4; }
-                @media print { .no-print { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+                html.rose { --brand-primary: #be185d; --brand-secondary: #f9a8d4; --brand-accent: #6ee7b7; --brand-background: #fdf2f8; --brand-surface: #ffffff; --brand-text-primary: #374151; --brand-text-secondary: #9ca3af; --brand-border: #fbcfe8; }
+                html.royal { --brand-primary: #f59e0b; --brand-secondary: #fcd34d; --brand-accent: #a855f7; --brand-background: #1e1b4b; --brand-surface: #312e81; --brand-text-primary: #e5e7eb; --brand-text-secondary: #9ca3af; --brand-border: #4338ca; }
+                html.mint { --brand-primary: #059669; --brand-secondary: #6ee7b7; --brand-accent: #fb923c; --brand-background: #f0fdf4; --brand-surface: #ffffff; --brand-text-primary: #1e293b; --brand-text-secondary: #64748b; --brand-border: #d1fae5; }
+                @media print { .no-print { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .print-shadow-none { box-shadow: none !important; } }
             </style>
-            <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'brand-primary': 'var(--brand-primary)', 'brand-secondary': 'var(--brand-secondary)', 'brand-accent': 'var(--brand-accent)', 'brand-background': 'var(--brand-background)', 'brand-surface': 'var(--brand-surface)', 'brand-text-primary': 'var(--brand-text-primary)', 'brand-text-secondary': 'var(--brand-text-secondary)', 'brand-border': 'var(--brand-border)', dark: { primary: '#3B82F6', secondary: '#1E3A8A', accent: '#10B981', background: '#111827', surface: '#1F2937', 'text-primary': '#F9FAFB', 'text-secondary': '#94A3B8', border: '#374151' } }}},}</script></head>
-            <body class="bg-brand-background dark:bg-dark-background text-brand-text-primary dark:text-dark-text-primary font-sans">
-                <div class="max-w-4xl mx-auto my-8 p-8 bg-brand-surface dark:bg-dark-surface shadow-lg">
-                    <header class="flex items-center justify-between mb-4 border-b pb-4 dark:border-dark-border"><div class="flex items-center"><svg class="h-8 w-8 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" /></svg><h2 class="text-2xl font-bold ml-2">Account Statement</h2></div><div class="text-right"><p class="font-bold">John Doe</p><p class="text-xs text-gray-500">For period: ${startDate} to ${endDate}</p></div></header>
-                    <main>${communitySection}${invoicesSection}</main>
+            <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'brand-primary': 'var(--brand-primary)', 'brand-secondary': 'var(--brand-secondary)', 'brand-accent': 'var(--brand-accent)', 'brand-background': 'var(--brand-background)', 'brand-surface': 'var(--brand-surface)', 'brand-text-primary': 'var(--brand-text-primary)', 'brand-text-secondary': 'var(--brand-text-secondary)', 'brand-border': 'var(--brand-border)' }}},}</script></head>
+            <body class="bg-brand-background text-brand-text-primary font-sans">
+                <div class="max-w-4xl mx-auto my-8 p-8 bg-brand-surface shadow-lg print-shadow-none border border-brand-border">
+                    <header class="flex items-center justify-between mb-8 border-b pb-4 dark:border-dark-border"><div class="flex items-center"><svg class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" /></svg><h2 class="text-3xl font-bold ml-3 text-brand-text-primary">Account Statement</h2></div><div class="text-right"><p class="font-bold text-brand-text-primary">John Doe</p><p class="text-xs text-brand-text-secondary">For period: ${startDate} to ${endDate}</p><p class="text-xs text-brand-text-secondary">Generated: ${new Date().toLocaleString()}</p></div></header>
+                    <main>${walletSection}${holdingsSection}${invoicesSection}</main>
                     <footer class="text-center text-xs text-gray-500 pt-6 border-t dark:border-dark-border mt-8"><p>This statement was generated electronically from the Creeb platform.</p><p>Powered by Creeb.vip</p></footer>
                 </div>
                 <div class="text-center my-8 no-print"><button onclick="window.print()" class="px-6 py-2 bg-brand-primary text-white rounded-lg font-semibold">Print Statement</button></div>
@@ -71,7 +109,7 @@ const StatementRequestModal: React.FC<{ onClose: () => void, data: typeof mockSt
         onClose();
     };
 
-    const simplifiedOptions = { loans: options.loans, projects: options.projects, savings: options.savings, formalInvoices: options.formalInvoices };
+    const simplifiedOptions = { wallet: options.wallet, loans: options.loans, projects: options.projects, savings: options.savings, formalInvoices: options.formalInvoices };
     
     return (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
