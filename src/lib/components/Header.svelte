@@ -64,10 +64,13 @@
 
         <div class="relative">
             <button
+                id="user-menu-toggle"
                 type="button"
                 class="flex items-center space-x-3"
                 on:click={() => (isDropdownOpen = !isDropdownOpen)}
+                on:keydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isDropdownOpen = !isDropdownOpen } }}
                 aria-haspopup="true"
+                aria-controls="user-menu"
                 aria-expanded={isDropdownOpen}
                 aria-label="Toggle user menu"
                 title="Toggle user menu"
@@ -82,7 +85,7 @@
                 </div>
             </button>
             {#if isDropdownOpen}
-                <div class="absolute right-0 mt-2 w-48 bg-brand-surface dark:bg-dark-surface rounded-md shadow-lg py-1 z-50 border border-brand-border dark:border-dark-border">
+                <div id="user-menu" class="absolute right-0 mt-2 w-48 bg-brand-surface dark:bg-dark-surface rounded-md shadow-lg py-1 z-50 border border-brand-border dark:border-dark-border">
                     <div class="px-4 py-2">
                         <label for="switch-role" class="text-xs text-gray-500 dark:text-dark-text-secondary">Switch Role</label>
                             <select id="switch-role" bind:value={role} on:change={() => setUserRole(role)} class="w-full text-sm bg-transparent focus:outline-none dark:text-dark-text-primary">
