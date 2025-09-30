@@ -76,7 +76,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
       const root = window.document.documentElement;
-      root.classList.remove('light', 'dark', 'ocean', 'forest', 'sunset', 'rose', 'royal', 'mint');
+      root.classList.remove('light', 'dark', 'coconut', 'forest', 'sunset', 'rose', 'royal', 'mint');
       root.classList.add(appSettings.theme);
       
       if (appSettings.fontColor) {

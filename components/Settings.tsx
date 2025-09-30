@@ -57,7 +57,7 @@ export const Settings: React.FC<SettingsProps> = ({ settings, setSettings }) => 
 
     const themes = [
         { name: 'light', displayName: 'Default Light', isDark: false, colors: ['#1E3A8A', '#3B82F6', '#10B981'] },
-        { name: 'ocean', displayName: 'Ocean', isDark: false, colors: ['#006d77', '#83c5be', '#ffddd2'] },
+        { name: 'coconut', displayName: 'Coconut', isDark: false, colors: ['#8B5E3C', '#D2B48C', '#4F7942'] },
         { name: 'forest', displayName: 'Forest', isDark: false, colors: ['#2d6a4f', '#74c69d', '#d95f02'] },
         { name: 'sunset', displayName: 'Sunset', isDark: false, colors: ['#d90429', '#ff9e00', '#ffc300'] },
         { name: 'rose', displayName: 'Rose', isDark: false, colors: ['#be185d', '#f9a8d4', '#6ee7b7'] },

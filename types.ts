@@ -748,7 +748,7 @@ export interface ToastMessage {
     type: 'success' | 'error' | 'info';
 }
 
-export type Theme = 'light' | 'dark' | 'ocean' | 'forest' | 'sunset' | 'rose' | 'royal' | 'mint';
+export type Theme = 'light' | 'dark' | 'coconut' | 'forest' | 'sunset' | 'rose' | 'royal' | 'mint';
 export type FontSize = 'sm' | 'base' | 'lg';
 
 export interface AppSettings {
