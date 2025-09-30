@@ -1,0 +1,7 @@
+{
+	"/": [],
+	"/(app)/dashboard": [],
+	"/favicon.ico": [
+		"src/routes/favicon.ico/+server.ts"
+	]
+}
