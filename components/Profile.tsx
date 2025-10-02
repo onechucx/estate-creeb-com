@@ -3,7 +3,7 @@ import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { AtSymbolIcon, PhoneIcon, HomeIcon, UserIcon, BellAlertIcon, ArchiveBoxIcon, DocumentTextIcon, BanknotesIcon, ShieldCheckIcon, CreditCardIcon, CheckCircleIcon, UserGroupIcon, IdentificationIcon, ArrowUpOnSquareIcon, ClockIcon, InformationCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { CreationRequest, RequestStatus, PayoutAccount, UserRole, KYCStatus, ToastMessage, UserSubscriptions } from '../types';
-import { mockFullCommunities } from './Community';
+import { mockFullCommunities } from '../data';
 import { mockApplications as mockApplicationsData } from '../data';
 
 

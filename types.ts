@@ -308,6 +308,7 @@ export interface Project {
     projectAccountant?: string;
     category: string;
     isPublic: boolean;
+    status: 'Enrolling' | 'Active' | 'Completed' | 'Paused';
     currency: 'NGN' | 'USDT';
     unitPrice: number;
     totalUnits: number; // For fixed amount type
@@ -463,6 +464,19 @@ export interface CommunityTransaction {
         principal?: number;
         interest?: number;
     }
+}
+
+export interface HubPortfolio {
+    hubId: string;
+    hubName: string;
+    hubType: 'Community' | 'Estate';
+    assets: {
+        rubbies: number;
+        properties: number;
+        projects: number;
+        loans: number;
+        savings: number;
+    };
 }
 
 export interface CommunityInfo {
@@ -870,4 +884,23 @@ export interface ManagedUser {
             date?: string; // ISO String
         };
     };
+}
+
+// API-specific types
+export interface DashboardSummary {
+    loans: { value: string; change: string; };
+    properties: { value: string; change: string; };
+    rubbies: { value: string; change: string; };
+    projects: { value: string; change: string; };
+}
+
+export interface PortfolioPerformanceDataPoint {
+    name: string;
+    value: number;
+}
+
+export interface Birthday {
+    name: string;
+    date: string;
+    avatar: string;
 }

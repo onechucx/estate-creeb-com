@@ -1,168 +1,29 @@
-
-
 import React, { useState, useMemo, useEffect } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
 import { PostCard } from './Community';
-import { Post, PropertyHolding, GlobalAd, OtherHolding, AppView, ToastMessage } from '../types';
-import { ArrowUpRightIcon, BanknotesIcon, BuildingOffice2Icon, CubeIcon, RocketLaunchIcon, CakeIcon, DocumentChartBarIcon, XMarkIcon, PlusIcon, PhotoIcon, TrashIcon, ChevronLeftIcon, ChevronRightIcon, EnvelopeIcon } from '@heroicons/react/24/outline';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
+import { Post, PropertyHolding, GlobalAd, OtherHolding, AppView, ToastMessage, HubPortfolio, DashboardSummary, PortfolioPerformanceDataPoint, Birthday } from '../types';
+import { ArrowUpRightIcon, BanknotesIcon, BuildingOffice2Icon, CubeIcon, RocketLaunchIcon, CakeIcon, DocumentChartBarIcon, XMarkIcon, PlusIcon, TrashIcon, ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell } from 'recharts';
 import { AdSection } from './AdSection';
-import { dashboardChartData, mockGlobalPosts, upcomingBirthdays, mockStatementData, mockUserProperties, mockGlobalAd, mockOtherHoldings as mockOtherHoldingsData } from '../data';
+import { mockGlobalAd } from '../data';
+import { 
+    getDashboardSummary, 
+    getPortfolioPerformance, 
+    getPortfolioOverview, 
+    getOtherHoldings, 
+    getGlobalTimeline, 
+    getUpcomingBirthdays, 
+    getUserProperties,
+    saveOtherHolding,
+    deleteOtherHolding
+} from '../api';
 
 
 interface DashboardProps {
   setActiveView: (view: AppView) => void;
   showToast: (message: string, type?: ToastMessage['type']) => void;
 }
-
-const StatementRequestModal: React.FC<{ 
-    onClose: () => void, 
-    data: typeof mockStatementData,
-    showToast: (message: string, type?: ToastMessage['type']) => void;
-}> = ({ onClose, data, showToast }) => {
-    const [options, setOptions] = useState({ wallet: true, cardTransactions: true, loans: true, savings: true });
-    const [startDate, setStartDate] = useState(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
-    const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
-    const [email, setEmail] = useState('john.doe@example.com');
-    
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => setOptions({ ...options, [e.target.name]: e.target.checked });
-
-    const generateStatementHtml = (recipientEmail: string) => {
-        const theme = document.documentElement.className;
-
-        let balance = data.openingBalance;
-        const totalDebit = data.walletTransactions.filter(t => t.type === 'Debit').reduce((sum, t) => sum + t.amount, 0);
-        const totalCredit = data.walletTransactions.filter(t => t.type === 'Credit').reduce((sum, t) => sum + t.amount, 0);
-        const closingBalance = data.openingBalance + totalCredit - totalDebit;
-
-        const walletSection = options.wallet ? `
-            <section class="mb-8">
-                <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Naira Wallet Statement</h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center mb-6">
-                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Opening Balance</p><p class="font-bold text-lg text-brand-text-primary">₦${data.openingBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
-                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Inflow</p><p class="font-bold text-lg text-green-600 dark:text-green-400">+ ₦${totalCredit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
-                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Outflow</p><p class="font-bold text-lg text-red-600 dark:text-red-400">- ₦${totalDebit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
-                    <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Closing Balance</p><p class="font-bold text-lg text-brand-text-primary">₦${closingBalance.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
-                </div>
-                <h4 class="font-semibold mb-2 text-brand-text-primary">Transaction History</h4>
-                <div class="border dark:border-dark-border rounded-lg overflow-hidden">
-                    <table class="min-w-full text-sm">
-                        <thead class="bg-gray-50 dark:bg-dark-surface/50"><tr class="text-left text-brand-text-secondary"><th class="p-3 font-semibold">Date</th><th class="p-3 font-semibold">Description</th><th class="p-3 font-semibold text-right">Debit</th><th class="p-3 font-semibold text-right">Credit</th><th class="p-3 font-semibold text-right">Balance</th></tr></thead>
-                        <tbody class="divide-y dark:divide-dark-border">
-                        ${data.walletTransactions.map(tx => {
-                            const debit = tx.type === 'Debit' ? tx.amount : 0;
-                            const credit = tx.type === 'Credit' ? tx.amount : 0;
-                            balance += credit - debit;
-                            return `<tr class="bg-brand-surface dark:bg-dark-surface"><td class="p-3 whitespace-nowrap">${new Date(tx.date).toLocaleDateString()}</td><td class="p-3">${tx.description}</td><td class="p-3 text-right font-mono text-red-600 dark:text-red-400">${debit > 0 ? `₦${debit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td><td class="p-3 text-right font-mono text-green-600 dark:text-green-400">${credit > 0 ? `₦${credit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td><td class="p-3 text-right font-mono font-semibold">₦${balance.toLocaleString('en-US', {minimumFractionDigits: 2})}</td></tr>`
-                        }).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            </section>` : '';
-        
-        const cardTransactionsSection = options.cardTransactions && data.cardTransactions ? `
-            <section class="mb-8">
-                <h3 class="text-xl font-bold border-b-2 border-green-500 dark:border-green-400 pb-2 mb-4 text-brand-text-primary">Virtual Card Statement</h3>
-                 <div class="grid grid-cols-2 gap-4 text-center mb-6">
-                    ${(() => {
-                        const totalCardDebit = data.cardTransactions.filter(t => t.type === 'Debit').reduce((sum, t) => sum + t.amount, 0);
-                        const totalCardCredit = data.cardTransactions.filter(t => t.type === 'Credit').reduce((sum, t) => sum + t.amount, 0);
-                        return `
-                            <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Spending</p><p class="font-bold text-lg text-red-600 dark:text-red-400">- $${totalCardDebit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
-                            <div class="p-3 bg-gray-50 dark:bg-dark-surface/50 rounded-lg"><p class="text-xs text-brand-text-secondary">Total Credits/Refunds</p><p class="font-bold text-lg text-green-600 dark:text-green-400">+ $${totalCardCredit.toLocaleString('en-US', {minimumFractionDigits: 2})}</p></div>
-                        `;
-                    })()}
-                </div>
-                <h4 class="font-semibold mb-2 text-brand-text-primary">Card Transaction History</h4>
-                <div class="border dark:border-dark-border rounded-lg overflow-hidden">
-                    <table class="min-w-full text-sm">
-                        <thead class="bg-gray-50 dark:bg-dark-surface/50"><tr class="text-left text-brand-text-secondary"><th class="p-3 font-semibold">Date</th><th class="p-3 font-semibold">Description</th><th class="p-3 font-semibold text-right">Debit</th><th class="p-3 font-semibold text-right">Credit</th></tr></thead>
-                        <tbody class="divide-y dark:divide-dark-border">
-                        ${data.cardTransactions.map(tx => {
-                            const debit = tx.type === 'Debit' ? tx.amount : 0;
-                            const credit = tx.type === 'Credit' ? tx.amount : 0;
-                            return `<tr class="bg-brand-surface dark:bg-dark-surface"><td class="p-3 whitespace-nowrap">${new Date(tx.date).toLocaleDateString()}</td><td class="p-3">${tx.description}</td><td class="p-3 text-right font-mono text-red-600 dark:text-red-400">${debit > 0 ? `$${debit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td><td class="p-3 text-right font-mono text-green-600 dark:text-green-400">${credit > 0 ? `$${credit.toLocaleString('en-US', {minimumFractionDigits: 2})}` : '-'}</td></tr>`
-                        }).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-        ` : '';
-            
-        const holdingsSection = (options.loans || options.savings) ? `
-             <section class="mb-8">
-                <h3 class="text-xl font-bold border-b-2 border-brand-primary dark:border-dark-primary pb-2 mb-4 text-brand-text-primary">Community Holdings Summary</h3>
-                 <div class="p-4 border rounded dark:border-dark-border bg-brand-surface dark:bg-dark-surface">
-                    <div class="flex items-center mb-4"><img src="${data.community.logo}" alt="Community Logo" class="h-12 w-12 rounded-full mr-4"/><div><h3 class="text-xl font-bold text-brand-text-primary">${data.community.name}</h3><p class="text-xs text-brand-text-secondary">${data.community.address}</p></div></div>
-                    ${options.loans ? `<h4 class="font-bold mb-2 text-brand-text-primary">Loan Summary</h4><table class="min-w-full text-sm mb-4"><tbody>${data.community.loans.map(l => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${l.type}</td><td class="p-2 text-brand-text-secondary">₦${l.amount.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${l.interest}% Interest</td><td class="p-2 text-brand-text-secondary">Due: ${new Date(l.maturity).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>` : ''}
-                    ${options.savings ? `<h4 class="font-bold mb-2 text-brand-text-primary">Savings Summary</h4><table class="min-w-full text-sm"><tbody>${data.community.savings.map(s => `<tr class="border-t dark:border-dark-border"><td class="p-2 text-brand-text-primary">${s.productName}</td><td class="p-2 text-brand-text-secondary">Principal: ₦${s.principal.toLocaleString()}</td><td class="p-2 text-brand-text-secondary">${s.interestRate}% Interest</td><td class="p-2 text-brand-text-secondary">Matures: ${new Date(s.maturity).toLocaleDateString()}</td></tr>`).join('')}</tbody></table>` : ''}
-                </div>
-            </section>` : '';
-        
-
-        return `
-            <!DOCTYPE html><html lang="en" class="${theme}"><head><meta charset="UTF-8" /><title>Account Statement</title><script src="https://cdn.tailwindcss.com"></script>
-            <style>
-                html.light { --brand-primary: #1E3A8A; --brand-secondary: #3B82F6; --brand-accent: #10B981; --brand-background: #F9FAFB; --brand-surface: #FFFFFF; --brand-text-primary: #1F2937; --brand-text-secondary: #64748B; --brand-border: #E5E7EB; }
-                html.dark { --brand-primary: #3B82F6; --brand-secondary: #1E3A8A; --brand-accent: #10B981; --brand-background: #111827; --brand-surface: #1F2937; --brand-text-primary: #F9FAFB; --brand-text-secondary: #94A3B8; --brand-border: #374151; }
-                html.ocean { --brand-primary: #006d77; --brand-secondary: #83c5be; --brand-accent: #ffddd2; --brand-background: #edf6f9; --brand-surface: #ffffff; --brand-text-primary: #2c3e50; --brand-text-secondary: #8e9aaf; --brand-border: #e0fbfc; }
-                html.forest { --brand-primary: #2d6a4f; --brand-secondary: #74c69d; --brand-accent: #d95f02; --brand-background: #fdf0d5; --brand-surface: #f8f9fa; --brand-text-primary: #403d39; --brand-text-secondary: #7f7f7f; --brand-border: #d8f3dc; }
-                html.sunset { --brand-primary: #d90429; --brand-secondary: #ff9e00; --brand-accent: #ffc300; --brand-background: #fff1e6; --brand-surface: #ffffff; --brand-text-primary: #212529; --brand-text-secondary: #6c757d; --brand-border: #fae0e4; }
-                html.rose { --brand-primary: #be185d; --brand-secondary: #f9a8d4; --brand-accent: #6ee7b7; --brand-background: #fdf2f8; --brand-surface: #ffffff; --brand-text-primary: #374151; --brand-text-secondary: #9ca3af; --brand-border: #fbcfe8; }
-                html.royal { --brand-primary: #f59e0b; --brand-secondary: #fcd34d; --brand-accent: #a855f7; --brand-background: #1e1b4b; --brand-surface: #312e81; --brand-text-primary: #e5e7eb; --brand-text-secondary: #9ca3af; --brand-border: #4338ca; }
-                html.mint { --brand-primary: #059669; --brand-secondary: #6ee7b7; --brand-accent: #fb923c; --brand-background: #f0fdf4; --brand-surface: #ffffff; --brand-text-primary: #1e293b; --brand-text-secondary: #64748b; --brand-border: #d1fae5; }
-                @media print { .no-print { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .print-shadow-none { box-shadow: none !important; } }
-            </style>
-            <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'brand-primary': 'var(--brand-primary)', 'brand-secondary': 'var(--brand-secondary)', 'brand-accent': 'var(--brand-accent)', 'brand-background': 'var(--brand-background)', 'brand-surface': 'var(--brand-surface)', 'brand-text-primary': 'var(--brand-text-primary)', 'brand-text-secondary': 'var(--brand-text-secondary)', 'brand-border': 'var(--brand-border)' }}},}</script></head>
-            <body class="bg-brand-background text-brand-text-primary font-sans">
-                <div class="max-w-4xl mx-auto my-8 p-8 bg-brand-surface shadow-lg print-shadow-none border border-brand-border">
-                    <header class="flex items-center justify-between mb-8 border-b pb-4 dark:border-dark-border"><div class="flex items-center"><svg class="h-10 w-10 text-brand-primary dark:text-dark-primary" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z" /></svg><h2 class="text-3xl font-bold ml-3 text-brand-text-primary">Account Statement</h2></div><div class="text-right"><p class="font-bold text-brand-text-primary">John Doe</p><p class="text-xs text-brand-text-secondary">For period: ${startDate} to ${endDate}</p><p class="text-xs text-brand-text-secondary">Sent to: ${recipientEmail}</p></div></header>
-                    <main>${walletSection}${cardTransactionsSection}${holdingsSection}</main>
-                    <footer class="text-center text-xs text-gray-500 pt-6 border-t dark:border-dark-border mt-8"><p>This statement was generated electronically from the Creeb platform.</p><p>Powered by Creeb.vip</p></footer>
-                </div>
-                <div class="text-center my-8 no-print"><button onclick="window.print()" class="px-6 py-2 bg-brand-primary text-white rounded-lg font-semibold">Print Statement</button></div>
-            </body></html>`;
-    };
-
-    const handleGenerate = () => {
-        const statementHtml = generateStatementHtml(email);
-        const statementWindow = window.open("", "_blank");
-        if (statementWindow) {
-            statementWindow.document.write(statementHtml);
-            statementWindow.document.close();
-        } else {
-            alert("Please allow pop-ups to view your statement.");
-        }
-        showToast(`Statement successfully sent to ${email}`, 'success');
-        onClose();
-    };
-
-    const simplifiedOptions = { wallet: "Wallet Transactions", cardTransactions: "Card Transactions", loans: "Loan Holdings", savings: "Savings Holdings" };
-    
-    return (
-        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-            <Card className="w-full max-w-lg">
-                <div className="flex justify-between items-center mb-4"><h2 className="text-xl font-bold dark:text-dark-text-primary">Generate Statement of Account</h2><button onClick={onClose}><XMarkIcon className="h-6 w-6"/></button></div>
-                <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4"><input type="date" title="Start Date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full p-2 border rounded dark:bg-dark-surface dark:border-dark-border" /><input type="date" title="End Date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full p-2 border rounded dark:bg-dark-surface dark:border-dark-border" /></div>
-                    
-                    <div>
-                         <label htmlFor="email" className="text-sm font-semibold px-2">Send statement to:</label>
-                         <div className="relative mt-1">
-                            <EnvelopeIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2"/>
-                            <input type="email" id="email" value={email} onChange={e => setEmail(e.target.value)} className="w-full p-2 pl-10 border rounded dark:bg-dark-surface dark:border-dark-border" required />
-                         </div>
-                    </div>
-                    
-                    <fieldset className="space-y-2 border p-3 rounded dark:border-dark-border"><legend className="text-sm font-semibold px-2">Include in statement:</legend>{Object.entries(simplifiedOptions).map(([key, label]) => (<label key={key} className="flex items-center"><input type="checkbox" name={key} checked={options[key as keyof typeof options]} onChange={handleCheckboxChange} className="h-4 w-4 rounded text-brand-primary focus:ring-brand-primary" /><span className="ml-2 text-sm dark:text-dark-text-secondary">{label}</span></label>))}</fieldset>
-                    <Button onClick={handleGenerate} className="w-full">Generate & Send</Button>
-                </div>
-            </Card>
-        </div>
-    );
-};
-
 
 const MetricCard: React.FC<{
   title: string;
@@ -209,19 +70,6 @@ const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?:
   }
   return null;
 };
-
-interface HubPortfolio {
-    hubId: string;
-    hubName: string;
-    hubType: 'Community' | 'Estate';
-    assets: {
-        rubbies: number;
-        properties: number;
-        projects: number;
-        loans: number;
-        savings: number;
-    };
-}
 
 const PortfolioOverview: React.FC<{ portfolios: HubPortfolio[]; otherHoldings: OtherHolding[] }> = ({ portfolios, otherHoldings }) => {
     const [selectedHubId, setSelectedHubId] = useState('all');
@@ -320,8 +168,8 @@ const PortfolioOverview: React.FC<{ portfolios: HubPortfolio[]; otherHoldings: O
 const HoldingDetailModal: React.FC<{
     holding: OtherHolding | 'new' | null;
     onClose: () => void;
-    onSave: (holding: OtherHolding) => void;
-    onDelete?: (id: string) => void;
+    onSave: (holding: OtherHolding | Omit<OtherHolding, 'id'>) => Promise<void>;
+    onDelete?: (id: string) => Promise<void>;
 }> = ({ holding, onClose, onSave, onDelete }) => {
     const isNew = holding === 'new';
     const [formData, setFormData] = useState<Omit<OtherHolding, 'id'>>(() => {
@@ -359,13 +207,13 @@ const HoldingDetailModal: React.FC<{
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        onSave({
-            id: isNew ? `oh-${Date.now()}` : (holding as OtherHolding).id,
-            ...formData,
-            value: Number(formData.value) || 0,
-        });
+        const saveData: OtherHolding | Omit<OtherHolding, 'id'> = isNew ?
+            { ...formData, value: Number(formData.value) || 0 } :
+            { id: (holding as OtherHolding).id, ...formData, value: Number(formData.value) || 0 };
+        
+        await onSave(saveData);
         onClose();
     };
 
@@ -404,7 +252,7 @@ const HoldingDetailModal: React.FC<{
                     </div>
                  </div>
                  <div className="pt-4 mt-4 border-t flex justify-between">
-                    {!isNew && onDelete && <Button variant="danger" onClick={() => onDelete((holding as OtherHolding).id)}>Delete Holding</Button>}
+                    {!isNew && onDelete && <Button variant="danger" onClick={async () => { await onDelete((holding as OtherHolding).id); onClose(); }}>Delete Holding</Button>}
                     <div className="flex-1 flex justify-end gap-2"><Button variant="secondary" onClick={onClose}>Cancel</Button><Button type="submit" form="holding-form">Save</Button></div>
                  </div>
             </Card>
@@ -434,57 +282,104 @@ const OtherHoldingsPanel: React.FC<{ holdings: OtherHolding[]; onEditHolding: (h
 );
 
 export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }) => {
-    const [isStatementModalOpen, setIsStatementModalOpen] = useState(false);
-    const [otherHoldings, setOtherHoldings] = useState<OtherHolding[]>(mockOtherHoldingsData);
+    const [summary, setSummary] = useState<DashboardSummary | null>(null);
+    const [performanceData, setPerformanceData] = useState<PortfolioPerformanceDataPoint[]>([]);
+    const [hubPortfolios, setHubPortfolios] = useState<HubPortfolio[]>([]);
+    const [otherHoldings, setOtherHoldings] = useState<OtherHolding[]>([]);
+    const [userProperties, setUserProperties] = useState<PropertyHolding[]>([]);
+    const [globalPosts, setGlobalPosts] = useState<Post[]>([]);
+    const [birthdays, setBirthdays] = useState<Birthday[]>([]);
     const [editingHolding, setEditingHolding] = useState<OtherHolding | 'new' | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    const userHubPortfolios: HubPortfolio[] = [
-        {
-            hubId: 'demo_community',
-            hubName: 'Demo Community',
-            hubType: 'Community',
-            assets: {
-                rubbies: 60000,
-                properties: 15000000,
-                projects: 1000000,
-                loans: 50000,
-                savings: 150000,
-            }
-        },
-        {
-            hubId: 'prime_estate',
-            hubName: 'Prime Gardens Estate',
-            hubType: 'Estate',
-            assets: {
-                rubbies: 0,
-                properties: 85000000,
-                projects: 0,
-                loans: 0,
-                savings: 250000,
-            }
+    const fetchData = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+            const [
+                summaryRes,
+                performanceRes,
+                hubsRes,
+                otherHoldingsRes,
+                propertiesRes,
+                postsRes,
+                birthdaysRes
+            ] = await Promise.all([
+                getDashboardSummary(),
+                getPortfolioPerformance(),
+                getPortfolioOverview(),
+                getOtherHoldings(),
+                getUserProperties(),
+                getGlobalTimeline(),
+                getUpcomingBirthdays()
+            ]);
+
+            setSummary(summaryRes);
+            setPerformanceData(performanceRes);
+            setHubPortfolios(hubsRes);
+            setOtherHoldings(otherHoldingsRes);
+            setUserProperties(propertiesRes);
+            setGlobalPosts(postsRes);
+            setBirthdays(birthdaysRes);
+
+        } catch (err: any) {
+            setError(err.message || 'Failed to fetch dashboard data. Please try again later.');
+            showToast('Could not load dashboard data.', 'error');
+        } finally {
+            setIsLoading(false);
         }
-    ];
+    };
 
-    const handleSaveHolding = (holding: OtherHolding) => {
-        setOtherHoldings(prev => {
-            const exists = prev.some(h => h.id === holding.id);
-            if (exists) {
-                return prev.map(h => h.id === holding.id ? holding : h);
-            }
-            return [holding, ...prev];
-        });
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleSaveHolding = async (holdingData: OtherHolding | Omit<OtherHolding, 'id'>) => {
+        try {
+            const savedHolding = await saveOtherHolding(holdingData);
+            setOtherHoldings(prev => {
+                const exists = prev.some(h => h.id === savedHolding.id);
+                if (exists) {
+                    return prev.map(h => h.id === savedHolding.id ? savedHolding : h);
+                }
+                return [savedHolding, ...prev];
+            });
+            showToast('Holding saved successfully!', 'success');
+        } catch (err) {
+            showToast('Failed to save holding.', 'error');
+        }
     };
     
-    const handleDeleteHolding = (id: string) => {
+    const handleDeleteHolding = async (id: string) => {
         if (window.confirm('Are you sure you want to delete this holding?')) {
-            setOtherHoldings(prev => prev.filter(h => h.id !== id));
-            setEditingHolding(null);
+            try {
+                await deleteOtherHolding(id);
+                setOtherHoldings(prev => prev.filter(h => h.id !== id));
+                showToast('Holding deleted successfully.', 'success');
+            } catch (err) {
+                 showToast('Failed to delete holding.', 'error');
+            }
         }
     };
+    
+    if (isLoading) {
+        return <div className="text-center py-20">Loading Dashboard...</div>;
+    }
+    
+    if (error) {
+        return (
+            <Card className="text-center py-20 bg-red-50 border-red-200">
+                <ExclamationTriangleIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-red-800">Failed to Load Dashboard</h3>
+                <p className="text-red-600 mt-2">{error}</p>
+                <Button onClick={fetchData} className="mt-6">Retry</Button>
+            </Card>
+        );
+    }
 
   return (
     <>
-    {isStatementModalOpen && <StatementRequestModal onClose={() => setIsStatementModalOpen(false)} data={mockStatementData} showToast={showToast} />}
     {editingHolding && <HoldingDetailModal holding={editingHolding} onClose={() => setEditingHolding(null)} onSave={handleSaveHolding} onDelete={handleDeleteHolding} />}
 
     <div className="space-y-8">
@@ -494,10 +389,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard title="Loans" value="$12,500" change="+5.2%" icon={BanknotesIcon} color="blue" />
-        <MetricCard title="Properties" value={`${mockUserProperties.length} Holdings`} change="+1" icon={BuildingOffice2Icon} color="green" />
-        <MetricCard title="Rubbies" value="1,200 R" change="+10%" icon={CubeIcon} color="purple" />
-        <MetricCard title="Projects" value="5 Active" change="+2" icon={RocketLaunchIcon} color="yellow" />
+        <MetricCard title="Loans" value={summary?.loans.value || '$0'} change={summary?.loans.change || '+0%'} icon={BanknotesIcon} color="blue" />
+        <MetricCard title="Properties" value={summary?.properties.value || '0'} change={summary?.properties.change || '+0'} icon={BuildingOffice2Icon} color="green" />
+        <MetricCard title="Rubbies" value={summary?.rubbies.value || '0 R'} change={summary?.rubbies.change || '+0%'} icon={CubeIcon} color="purple" />
+        <MetricCard title="Projects" value={summary?.projects.value || '0'} change={summary?.projects.change || '+0'} icon={RocketLaunchIcon} color="yellow" />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -506,7 +401,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }
                 <h3 className="font-bold text-lg dark:text-dark-text-primary">Portfolio Performance</h3>
                 <div className="h-80 mt-4">
                     <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={dashboardChartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                        <LineChart data={performanceData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-brand-border)" className="dark:stroke-dark-border" />
                             <XAxis dataKey="name" stroke="var(--color-brand-text-secondary)" className="dark:stroke-dark-text-secondary" />
                             <YAxis stroke="var(--color-brand-text-secondary)" className="dark:stroke-dark-text-secondary" />
@@ -520,7 +415,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }
             <Card className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                  <h3 className="text-xl font-bold mb-4 dark:text-dark-text-primary">My Properties</h3>
                  <div className="flex space-x-4 overflow-x-auto pb-4 -mb-4">
-                    {mockUserProperties.map(prop => (
+                    {userProperties.map(prop => (
                         <div key={prop.id} className="group relative flex-shrink-0 w-64 bg-brand-surface rounded-lg shadow-sm overflow-hidden border border-brand-border transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                             <div className="overflow-hidden rounded-t-lg">
                                 <img src={`https://picsum.photos/seed/${prop.propertyId}/400/200`} alt={prop.propertyName} className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-110"/>
@@ -546,19 +441,19 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }
             <OtherHoldingsPanel holdings={otherHoldings} onEditHolding={setEditingHolding} />
             <div>
                  <h3 className="text-xl font-bold mb-4 dark:text-dark-text-primary">Global Timeline</h3>
-                 {mockGlobalPosts.map(post => <PostCard key={post.id} post={post} isSubscribed={true} />)}
+                 {globalPosts.map(post => <PostCard key={post.id} post={post} isSubscribed={true} />)}
             </div>
         </div>
         
         <div className="space-y-6">
-            <PortfolioOverview portfolios={userHubPortfolios} otherHoldings={otherHoldings} />
+            <PortfolioOverview portfolios={hubPortfolios} otherHoldings={otherHoldings} />
             <Card className="transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
                 <h3 className="font-bold text-lg mb-4 flex items-center dark:text-dark-text-primary">
                     <CakeIcon className="h-6 w-6 mr-2 text-pink-500" />
                     Upcoming Birthdays
                 </h3>
                 <ul className="space-y-3">
-                    {upcomingBirthdays.map(b => (
+                    {birthdays.map(b => (
                         <li key={b.name} className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <img src={b.avatar} alt={b.name} className="h-10 w-10 rounded-full mr-3"/>
@@ -576,7 +471,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ setActiveView, showToast }
               <h3 className="font-bold text-lg mb-4 dark:text-dark-text-primary">Quick Actions</h3>
               <div className="space-y-3">
                 <Button onClick={() => setActiveView(AppView.WALLETS)} className="w-full justify-center">Fund Wallet</Button>
-                <Button onClick={() => setIsStatementModalOpen(true)} variant="secondary" className="w-full justify-center"><DocumentChartBarIcon className="h-5 w-5 mr-2"/>Request Statement</Button>
+                <Button onClick={() => showToast('Statement request feature is temporarily unavailable.', 'info')} variant="secondary" className="w-full justify-center"><DocumentChartBarIcon className="h-5 w-5 mr-2"/>Request Statement</Button>
                 <Button onClick={() => setActiveView(AppView.COMMUNITY)} variant="secondary" className="w-full justify-center">View Community</Button>
               </div>
             </Card>

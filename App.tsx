@@ -150,7 +150,7 @@ const App: React.FC = () => {
       case AppView.INBOX:
         return <Inbox recipient={messageRecipient} setRecipient={setMessageRecipient} />;
       case AppView.CREATE_HUB:
-        return <CreateHub showToast={showToast} setRequests={setRequests} isSubscribed={userSubscriptions.community || userSubscriptions.estate} />;
+        return <CreateHub showToast={showToast} setRequests={setRequests} userSubscriptions={userSubscriptions} />;
       case AppView.VENDOR_PROFILE:
         return viewedVendorName ? <VendorProfile vendorName={viewedVendorName} setActiveView={setActiveView} listings={listings} onStartMessage={handleStartMessage} /> : <Marketplace showToast={showToast} isAuthenticated={true} setActiveView={setActiveView} onViewVendor={handleViewVendor} isCommunitySubscribed={userSubscriptions.community} listings={listings} onStartMessage={handleStartMessage} />;
       default:

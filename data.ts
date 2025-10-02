@@ -1,12 +1,7 @@
-
 import React from 'react';
 import { CreationRequest, KYCSubmission, Vendor, Listing, ManagedUser, GlobalAd, Post, PropertyHolding, OtherHolding, Wallet, Transaction, VirtualCard, PayoutAccount, SupportTicket, UserConversation, CommunityInfo, LoanProduct, PiggyProduct, LoanApplication, PropertyForSale, CommunityTransaction, EstateInfo, EstateMember, Amenity, Incident, EstateFee, BillPaymentStatus, Occupant, Post as EstatePost, EstateEvent, DueFrequency, CommunityMember, PaymentStatus } from './types';
 import { CurrencyDollarIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import { pastDate, futureDate, generateCardNumber, generateCVV, generateExpiry, generateMembershipNumber } from './utils';
-
-// FIX: Define projectStartDate to be used in mock project data.
-const projectStartDate = new Date();
-projectStartDate.setMonth(projectStartDate.getMonth() - 2);
 
 // --- Mock Data from App.tsx ---
 export const initialRequests: CreationRequest[] = [
@@ -57,39 +52,6 @@ export const initialGlobalAds: GlobalAd[] = [
 
 
 // --- Mock Data from Dashboard.tsx ---
-export const dashboardChartData = [
-  { name: 'Jan', value: 4000 },
-  { name: 'Feb', value: 3000 },
-  { name: 'Mar', value: 5000 },
-  { name: 'Apr', value: 4500 },
-  { name: 'May', value: 6000 },
-  { name: 'Jun', value: 5500 },
-];
-
-export const mockGlobalPosts: Post[] = [
-    {
-        id: 'g1',
-        author: 'Global Admin',
-        authorAvatar: 'https://picsum.photos/seed/g-admin/48/48',
-        content: "Welcome to the global feed! Posts here are visible to everyone, regardless of community.",
-        timestamp: '1d ago',
-        likes: 150,
-        comments: 23,
-        reposts: 11,
-    },
-];
-
-export const upcomingBirthdays = [
-    { name: 'Alice Johnson', date: 'Oct 28', avatar: 'https://picsum.photos/seed/alice/40/40' },
-    { name: 'Bob Williams', date: 'Nov 2', avatar: 'https://picsum.photos/seed/bob/40/40' },
-    { name: 'Diana Prince', date: 'Nov 5', avatar: 'https://picsum.photos/seed/diana/40/40' },
-];
-
-export const mockUserProperties: PropertyHolding[] = [
-    {id: 'ph1', propertyId: 'EPROP01', propertyName: 'Demo Estate 4-Bed Duplex', estateId: 'demo', variantName: 'Standard Unit', units: 1},
-    {id: 'ph2', propertyId: 'PROP001', propertyName: 'Sunshine Villa Plots', estateId: 'community-owned-estate', variantName: 'Full Plot', units: 2},
-];
-
 export const mockGlobalAd: GlobalAd = {
     id: 'GAD001',
     title: 'Upgrade to a Partner Account',
@@ -100,11 +62,6 @@ export const mockGlobalAd: GlobalAd = {
     impressions: 1000,
     clicks: 50,
 };
-
-export const mockOtherHoldings: OtherHolding[] = [
-    { id: 'oh1', name: 'Beachfront Property in Lekki', shortDescription: 'Vacation rental property.', longDescription: 'A beautiful 3-bedroom beachfront property located in Lekki Phase 1, perfect for weekend getaways and generating rental income.', value: 250000000, images: ['https://picsum.photos/seed/oh1-1/600/400', 'https://picsum.photos/seed/oh1-2/600/400', 'https://picsum.photos/seed/oh1-3/600/400'] },
-    { id: 'oh2', name: 'Commercial Land in Ikeja', shortDescription: 'Undeveloped land for commercial use.', longDescription: '2 acres of prime commercial land located in the industrial area of Ikeja. Zoned for mixed-use development.', value: 450000000, images: ['https://picsum.photos/seed/oh2-1/600/400'] }
-];
 
 
 // --- Mock Data from Wallets.tsx ---
@@ -235,36 +192,6 @@ export const initialConversations: UserConversation[] = [
 // --- Mock Data from Community.tsx ---
 const memberStatuses = ['Active', 'Suspended', 'Invited'] as const;
 const paymentStatuses = ['Paid', 'Unpaid', 'Overdue'] as const;
-
-// FIX: Define and export mockStatementData for use in Dashboard.tsx.
-export const mockStatementData = {
-  openingBalance: 100000,
-  walletTransactions: mockTransactions.slice(0, 5), // take a few
-  cardTransactions: mockCardTransactions,
-  community: {
-    logo: 'https://picsum.photos/seed/demo/48/48',
-    name: 'Demo Community',
-    address: '123 Community Hub, Innovation City',
-    loans: [
-      {id: 'L001', type: 'Emergency Loan', amount: 50000, interest: 15, maturity: futureDate(320)},
-    ],
-    projects: [
-      {id: 'PROJ001', name: 'Project Phoenix', contribution: 100000, status: 'Ongoing' as 'Ongoing' | 'Completed'},
-    ],
-    savings: [
-      {id: 'S001', productName: 'Flex Save', principal: 150000, interestRate: 10, maturity: futureDate(265)},
-    ],
-  },
-  estate: {
-    logo: 'https://picsum.photos/seed/estate-demo/48/48',
-    name: 'Demo Estate',
-  },
-  invoices: [
-    {id: 'INV001', description: 'Annual Membership Dues', amount: 5500, date: pastDate(30), entity: 'community' as 'community' | 'estate'},
-    {id: 'INV002', description: 'Monthly Service Charge', amount: 25000, date: pastDate(5), entity: 'estate' as 'community' | 'estate'},
-  ]
-};
-
 
 export const mockLoanProducts: LoanProduct[] = [
     { id: 'LP001', name: 'Emergency Loan', description: 'Quick access funds for emergencies, up to ₦100,000.', interestRate: 15, maxAmount: 100000, maxTenure: 12 },
@@ -418,6 +345,7 @@ export const mockFullCommunities: Record<string, CommunityInfo> = {
                 projectManager: 'Charles Xavier', 
                 category: 'Real Estate', 
                 isPublic: true, 
+                status: 'Enrolling',
                 currency: 'NGN', 
                 unitPrice: 10000, 
                 totalUnits: 1000000, 
@@ -447,10 +375,10 @@ export const mockFullCommunities: Record<string, CommunityInfo> = {
                     { id: 'FIN003', type: 'Revenue', description: 'Initial Plot Sale', amount: 1500000, date: pastDate(30) },
                 ],
                 participants: [
-                    { userId: 'd_admin1', fullName: 'Diana Prince', units: 500, totalContribution: 50000, joinDate: pastDate(59) },
-                    { userId: 'd_user1', fullName: 'John Doe', units: 100, totalContribution: 100000, joinDate: pastDate(58) },
-                    { userId: 'd_user2', fullName: 'Scott Summers', units: 250, totalContribution: 250000, joinDate: pastDate(50) },
-                    { userId: 'd_user3', fullName: 'Jean Grey', units: 20, totalContribution: 20000, joinDate: pastDate(45) },
+                    { userId: 'd_admin1', fullName: 'Diana Prince', units: 500, totalContribution: 5000000, joinDate: pastDate(59) },
+                    { userId: 'd_user1', fullName: 'John Doe', units: 100, totalContribution: 1000000, joinDate: pastDate(58) },
+                    { userId: 'd_user2', fullName: 'Scott Summers', units: 250, totalContribution: 2500000, joinDate: pastDate(50) },
+                    { userId: 'd_user3', fullName: 'Jean Grey', units: 20, totalContribution: 200000, joinDate: pastDate(45) },
                 ],
                 comments: [
                     {
@@ -471,7 +399,9 @@ export const mockFullCommunities: Record<string, CommunityInfo> = {
                     }
                 ]
             },
-            { id: 'PROJ002', name: 'Tech Innovators Fund', supervisor: 'Diana Prince', projectManager: 'Bruce Wayne', category: 'Tech Startup', isPublic: true, currency: 'NGN', unitPrice: 5000, totalUnits: 5000, targetAmount: 25000000, minContribution: 50000, enrollmentCloseDate: futureDate(60), isResellable: false, withdrawalNoticeDays: 90, profitModel: 'Payout', description: 'Investing in promising early-stage technology startups.', enrollmentType: 'TargetBased', startDate: projectStartDate.toISOString(), tiers: [], milestones: [], updates: [], financials: [], participants: [] },
+            { id: 'PROJ002', name: 'Tech Innovators Fund', supervisor: 'Diana Prince', projectManager: 'Bruce Wayne', category: 'Tech Startup', isPublic: true, status: 'Enrolling', currency: 'NGN', unitPrice: 5000, totalUnits: 5000, targetAmount: 25000000, minContribution: 50000, enrollmentCloseDate: futureDate(60), isResellable: false, withdrawalNoticeDays: 90, profitModel: 'Payout', description: 'Investing in promising early-stage technology startups.', enrollmentType: 'TargetBased', startDate: pastDate(30), tiers: [], milestones: [], updates: [], financials: [], participants: [] },
+            { id: 'PROJ003', name: 'Agro-Business Expansion', supervisor: 'Diana Prince', projectManager: 'Clark Kent', category: 'Agriculture', isPublic: true, status: 'Active', currency: 'NGN', unitPrice: 25000, totalUnits: 1000, targetAmount: 25000000, minContribution: 50000, enrollmentCloseDate: pastDate(30), isResellable: true, withdrawalNoticeDays: 60, profitModel: 'Payout', description: 'Expanding our existing farm with new crops and equipment.', enrollmentType: 'TargetBased', startDate: pastDate(180), tiers: [], milestones: [], updates: [], financials: [], participants: [{ userId: 'd_user1', fullName: 'John Doe', units: 4, totalContribution: 100000, joinDate: pastDate(100) }] },
+            { id: 'PROJ004', name: 'Old Real Estate Project', supervisor: 'Diana Prince', projectManager: 'Peter Parker', category: 'Real Estate', isPublic: false, status: 'Completed', currency: 'NGN', unitPrice: 5000, totalUnits: 2000, targetAmount: 10000000, minContribution: 10000, enrollmentCloseDate: pastDate(400), isResellable: false, withdrawalNoticeDays: 0, profitModel: 'Reinvest', description: 'A completed housing project from last year.', enrollmentType: 'TargetBased', startDate: pastDate(730), tiers: [], milestones: [], updates: [], financials: [], participants: [] },
         ],
         loanProducts: mockLoanProducts,
         loanApplications: mockLoanApplications,

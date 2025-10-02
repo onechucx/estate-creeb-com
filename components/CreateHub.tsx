@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Card } from './common/Card';
 import { Button } from './common/Button';
-import { ToastMessage, RequestType, CreationRequest } from '../types';
+import { ToastMessage, RequestType, CreationRequest, UserSubscriptions } from '../types';
 import { UsersIcon, BuildingLibraryIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline';
 
 interface CreateHubProps {
     showToast: (message: string, type?: ToastMessage['type']) => void;
     setRequests: React.Dispatch<React.SetStateAction<CreationRequest[]>>;
-    // FIX: Changed prop from 'userSubscriptions' object to 'isSubscribed' boolean to match usage in App.tsx.
-    isSubscribed: boolean;
+    userSubscriptions: UserSubscriptions;
 }
 
 const CreationCard: React.FC<{
@@ -145,8 +144,9 @@ const ListEstateForm: React.FC<{
     );
 };
 
-export const CreateHub: React.FC<CreateHubProps> = ({ showToast, setRequests, isSubscribed }) => {
+export const CreateHub: React.FC<CreateHubProps> = ({ showToast, setRequests, userSubscriptions }) => {
     const [view, setView] = useState<'hub' | 'community_form' | 'estate_form'>('hub');
+    const isSubscribed = userSubscriptions.community || userSubscriptions.estate;
 
     const renderContent = () => {
         switch (view) {
